@@ -1,0 +1,67 @@
+.Dashboard {
+    margin: 10px auto;
+    width: 80%;
+    gap: 20px;
+}
+
+.totalItems, .totalBorrowedItems {
+    width: 300px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #219ebc;
+    border-radius: 5px;
+}
+
+
+/* table */
+.tableContainer {
+    margin: 20px auto;
+    width: 80%;
+    overflow-x: auto;
+  
+  }
+  
+  .styledTable {
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 18px;
+    text-align: left;
+    width: 100%;
+  }
+  
+  .styledTable thead tr {
+    background-color: #ffb703;
+    color: #ffffff;
+    text-align: left;
+  }
+  
+  .styledTable th,
+  .styledTable td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+  }
+  
+  .styledTable tbody tr {
+    border-bottom: 1px solid #dddddd;
+  }
+  
+  .styledTable tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+  }
+  
+  .styledTable tbody tr:last-of-type {
+    border-bottom: 2px solid #ffb703;
+  }
+  
+  .styledTable tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+  }
+  
+
+  .serialNumber {
+    width: 100px;
+    text-align: center;
+  }
