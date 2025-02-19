@@ -4,7 +4,7 @@ const QRCode = require("qrcode");
 const createItem = async (req, res) => {
     const { serialNumber, unit, brand, category, status, quantity } = req.body;
 
-    const fontend_link = `https://capstone-project-sand-gamma.vercel.app//${serialNumber}`
+    const fontend_link = `https://capstone-project-sand-gamma.vercel.app/item/${serialNumber}`
     const link = `http://localhost:3000/item/${serialNumber}`
     // console.log(unit)
     const qrImage = await QRCode.toDataURL(fontend_link);
