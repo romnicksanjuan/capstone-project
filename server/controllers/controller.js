@@ -15,7 +15,7 @@ const createItem = async (req, res) => {
     console.log(qrBuffer)
 
     const newItem = new Item({
-        serialNumber, unit, brand, category, status, quantity, link: link, qr_code_image: {
+        serialNumber, unit, brand, category, status, quantity, link: server_link, qr_code_image: {
             data: qrBuffer,
             contentType: 'image/png'
         }
