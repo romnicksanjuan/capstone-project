@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Navbar from './Navbar'
 import styles from '../css/Dashboard.module.css'
+import DOMAIN from '../config/config'
 
 function Dashboard() {
   const [totalItems, setTotalItems] = useState(0)
@@ -11,7 +12,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch('http://localhost:3001/total-items', {
+        const response = await fetch(`${DOMAIN}/total-items`, {
           method: 'GET'
         }); // Fetch from backend
         if (!response.ok) {
@@ -32,7 +33,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch('http://localhost:3001/total-borrowed-items', {
+        const response = await fetch(`${DOMAIN}/total-borrowed-items`, {
           method: 'GET'
         }); // Fetch from backend
         if (!response.ok) {
@@ -52,7 +53,7 @@ function Dashboard() {
   //   display borrowed items
   useEffect(() => {
     const fetchBorrowedItems = async () => {
-      const response = await fetch('http://localhost:3001/fetch-borrowed-items', {
+      const response = await fetch(`${DOMAIN}/fetch-borrowed-items`, {
         method: 'GET'
       })
 
@@ -74,7 +75,7 @@ function Dashboard() {
     }
     try {
       setData(data.filter(i => i._id !== item._id))
-      const response = await fetch(`http://localhost:3001/return-item/${item._id}`, {
+      const response = await fetch(`${DOMAIN}/return-item/${item._id}`, {
         method: 'PUT'
       })
 

@@ -114,11 +114,28 @@ const searchItem = async (req, res) => {
 
     const search = await Item.find({ unit: { $regex: query, $options: 'i' } })
 
+    console.log(search)
+
+
+
+    const items = search.map((item) => {
+        const base64Image = item.qr_code_image.data.toString('base64');
+        const image = `data:${item.qr_code_image.contentType};base64,${base64Image}`
+        return {
+            item,
+            qr_code_image: {
+                data: image,
+                contentType: item.qr_code_image.contentType
+            },
+            dateAdded: item.dateAdded.toLocaleDateString('en-US')
+        }
+    })
+
     if (!search) {
         return res.json({ message: 'Item Not Found' })
     }
 
-    res.json(search)
+    res.json({ items: items })
 }
 
 // property page

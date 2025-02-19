@@ -36,10 +36,11 @@
     color: white;
     font-size: 18px;
     transition: color 0.3s;
+    font-weight: bold;
   }
   
   .navbarLinks li a:hover {
-    color: #8ecae6;
+    color: #50b3e1;
   }
   
   /* Responsive: Stack links vertically on small screens */

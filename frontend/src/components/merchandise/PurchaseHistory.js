@@ -3,6 +3,7 @@ import Navbar from '../Navbar'
 import style from '../../css/Items.module.css'
 import { useEffect } from 'react'
 import { useState } from 'react'
+import DOMAIN from '../../config/config'
 
 const PurchaseHistory = () => {
     const [purchaseHistory, setPurChaseHistory] = useState([])
@@ -10,7 +11,7 @@ const PurchaseHistory = () => {
     useEffect(() => {
         const getAllPurchaseHistory = async () => {
             try {
-                const response = await fetch('http://localhost:3001/get-purchase-history')
+                const response = await fetch(`${DOMAIN}/get-purchase-history`)
                 if (!response.ok) {
                     console.log('Error')
                     return;

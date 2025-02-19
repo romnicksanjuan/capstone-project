@@ -1,6 +1,12 @@
 import React from 'react'
 import styles from '../css/Navbar.module.css'
-import image from '../images/logo.png'
+import image from '../images/ctc logo.png'
+import { RiDashboardHorizontalFill } from "react-icons/ri";
+import { HiCollection } from "react-icons/hi";
+import { RiChatHistoryFill } from "react-icons/ri";
+import { FaShoppingBag } from "react-icons/fa";
+import { IoIosListBox } from "react-icons/io";
+
 
 const Navbar = () => {
     return (
@@ -8,30 +14,50 @@ const Navbar = () => {
         <>
             <nav className={styles.navbar}>
                 <div className={styles.navbarLogo}>
-                    <img src={image} />
+                    <img style={{ }} src={image} />
                 </div>
                 <div>
-                    <h2 style={{ fontSize: '30px', textAlign:'center' }}>Property and Merchandise Hub Management
+                    <h2 style={{ fontSize: '30px', textAlign: 'center' }}>Property and Merchandise Hub Management
                         System with QR Code Tracking of Ceguera Technological Colleges</h2>
                 </div>
 
-                <div className={styles.navbarLogo}>
+                <div style={{ visibility: "hidden" }} className={styles.navbarLogo}>
                     <img src={image} />
                 </div>
             </nav>
 
             <div className={styles.pages}>
 
-            
+
 
 
                 <ul className={styles.navbarLinks}>
-                    <li><a href="/">Dashboard</a></li>
-                    <li><a href="/items">Items</a></li>
-                    <li><a href="/borrowed-items">Borrowed-Items</a></li>
-                    <li><a href="/history">History</a></li>
-                    <li><a href="/merchandise">Merchandise</a></li>
-                    <li><a href="/get-purchase-history">Purchase History</a></li>
+                    <li>
+                        <a style={{ display: 'flex', alignItems: 'center' }} href="/">
+                            < RiDashboardHorizontalFill size={30} color='white' />
+                            <p>  Dashboard</p>
+                        </a></li>
+                    <li><a style={{ display: 'flex', alignItems: 'center' }} href="/items">
+                        <IoIosListBox size={30} color='white' />
+                        <p>Items</p>
+                    </a></li>
+                    <li><a style={{ display: 'flex', alignItems: 'center' }} href="/borrowed-items">
+                        <HiCollection size={30} color='white' />
+                        <p>Borrowed-Items</p>
+                    </a></li>
+                    <li><a style={{ display: 'flex', alignItems: 'center' }} href="/history">
+                        <RiChatHistoryFill size={30} color='white' />
+                        <p>History</p>
+                    </a></li>
+                    <li><a style={{ display: 'flex', alignItems: 'center' }} href="/merchandise">
+                        <FaShoppingBag size={29} color='white' />
+                        <p>Merchandise</p>
+
+                    </a></li>
+                    <li><a style={{ display: 'flex', alignItems: 'center' }} href="/get-purchase-history">
+                        <RiChatHistoryFill size={30} color='white' />
+                        <p> Purchase History</p>
+                    </a></li>
                 </ul>
             </div>
 

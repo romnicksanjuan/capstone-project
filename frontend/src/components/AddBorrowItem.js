@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import style from '../css/AddBorrowItem.module.css'
+import DOMAIN from '../config/config'
 
 
 const AddBorrowItem = () => {
@@ -19,7 +20,7 @@ const AddBorrowItem = () => {
         e.preventDefault()
 
         try {
-            const response = await fetch('http://localhost:3001/add-borrow-item', {
+            const response = await fetch(`${DOMAIN}/add-borrow-item`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -42,8 +43,8 @@ const AddBorrowItem = () => {
     return (
         <div>
             <form onSubmit={handleSubmit} style={{
-                position: 'absolute', top: '20%', left: '40%', backgroundColor: 'orange',
-                padding: '30px'
+                position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'orange',
+              padding: '30px 30px 35px 30px', height: 'auto', width: '450px', gap: '20px', border: '1px solid black', borderRadius:'5px'
             }}>
 
 

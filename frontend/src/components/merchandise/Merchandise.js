@@ -3,6 +3,7 @@ import Navbar from '../Navbar'
 import style from '../../css/Items.module.css'
 import { useNavigate } from 'react-router-dom'
 import CreateProduct from './CreateProduct'
+import DOMAIN from '../../config/config'
 
 const Merchandise = () => {
   const [isClick, setIsClick] = useState(false)
@@ -35,7 +36,7 @@ const Merchandise = () => {
 
   useEffect(() => {
     const getMerchandise = async () => {
-      const response = await fetch('http://localhost:3001/get-merchandise', {
+      const response = await fetch(`${DOMAIN}/get-merchandise`, {
         method: 'GET'
       })
 
@@ -67,7 +68,7 @@ const Merchandise = () => {
     console.log(quantity)
 
     try {
-      const response = await fetch(`http://localhost:3001/purchase-history/${itemId}`, {
+      const response = await fetch(`${DOMAIN}/purchase-history/${itemId}`, {
         method: 'post',
         headers: {
           'Content-Type': 'application/json'
@@ -103,7 +104,7 @@ const Merchandise = () => {
   const handleDelete = async (item) => {
     if (!window.confirm('Are you sure you want to delete this item?')) return;
     try {
-      const response = await fetch(`http://localhost:3001/delete-merchandise/${item._id}`, {
+      const response = await fetch(`${DOMAIN}/delete-merchandise/${item._id}`, {
         method: 'DELETE',
 
       })
@@ -129,6 +130,9 @@ const Merchandise = () => {
 
   const handleExitEdit = () => {
     setEditingItemId(null)
+    setMerchandiseName('')
+    setPrice(0)
+    setStock(0)
   }
 
 
@@ -136,7 +140,7 @@ const Merchandise = () => {
     e.preventDefault()
     if (!window.confirm('Are you sure you want to update this item?')) return
     try {
-      const response = await fetch(`http://localhost:3001/edit-merchandise/${editingItemId}`, {
+      const response = await fetch(`${DOMAIN}/edit-merchandise/${editingItemId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -179,7 +183,7 @@ const Merchandise = () => {
     formData.append('image', image)
 
     try {
-      const response = await fetch('http://localhost:3001/create-product', {
+      const response = await fetch(`${DOMAIN}/create-product`, {
         method: 'POST',
         body: formData
       });
@@ -207,7 +211,8 @@ const Merchandise = () => {
             backgroundColor: "#219ebc",
             color: "#fff",
             cursor: "pointer",
-            width: '120px'
+            width: '120px',
+            fontSize: '15px'
           }}
           onClick={() => handleShowForm()}
         >
@@ -217,12 +222,12 @@ const Merchandise = () => {
 
         {showForm ? <form onSubmit={handleSubmit} style={{
           position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'orange',
-          padding: '30px', height: '450px', width: '400px', gap: '20px'
+          padding: '30px', height: 'auto', width: '450px', gap: '20px', border: '1px solid black', borderRadius: '5px'
         }}>
 
 
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button style={{ textAlign: 'end' }} onClick={handleButtonClick}>x</button>
+            <button style={{ textAlign: 'center', fontSize: '20px', width: '35px' }} onClick={handleButtonClick}>x</button>
           </div>
 
           <div>
@@ -270,7 +275,7 @@ const Merchandise = () => {
                            <input className={style.input} type="number" id="quantity" name="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                          </div> */}
 
-          <button style={{ height: '35px', width: '100%', border: 'none', fontSize: '15px', borderRadius: '5px', }} type="submit">Submit</button>
+          <button style={{ height: '40px', width: '100%', border: 'none', fontSize: '20px', borderRadius: '5px', }} type="submit">Submit</button>
         </form> : ''}
 
         <table className={style.styledTable}>
@@ -318,10 +323,10 @@ const Merchandise = () => {
 
         {isClick ? <div style={{
           position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'orange',
-          padding: '30px', height: 'auto', width: '350px', gap: '20px'
+          padding: '35px 30px', height: 'auto', width: '450px', gap: '20px', border: '1px solid black', borderRadius: '5px'
         }}>
 
-          <button style={{ position: 'absolute', right: '5px', top: '5px' }} onClick={() => setIsClick(!isClick)}>X</button>
+          <button style={{ position: 'absolute', right: '7px', top: '7px',fontSize: '20px', width: '35px' }} onClick={() => setIsClick(!isClick)}>X</button>
           <form onSubmit={hanndleSubmit}>
             {errorMessage && <p style={{ fontSize: '17px', padding: '5px', color: 'white', backgroundColor: 'red', textAlign: 'center' }}>{errorMessage}</p>}
             <div>
@@ -336,8 +341,8 @@ const Merchandise = () => {
 
             <div>
               <label htmlFor="size">Size:</label><br />
-              <select id="size" value={size} onChange={(e) => setSize(e.target.value)} style={{ height: '30px', width: '100px', fontSize: '15px', margin: '10px 0 10px 0' }}>
-                <option value="">Select Size</option>
+              <select id="size" value={size} onChange={(e) => setSize(e.target.value)} style={{ height: '40px', width: 'auto', fontSize: '20px', margin: '10px 0 10px 0' }}>
+                <option disabled value="">-- Select Size --</option>
                 <option value="Small">Small</option>
                 <option value="Medium">Medium</option>
                 <option value="Large">Large</option>
@@ -352,7 +357,7 @@ const Merchandise = () => {
 
 
             <div>
-              <button style={{ height: '35px', width: '100%', border: 'none', fontSize: '15px', borderRadius: '5px', }} type="submit">Submit</button>
+              <button style={{ height: '40px', width: '100%', border: 'none', fontSize: '20px', borderRadius: '5px', }} type="submit">Submit</button>
             </div>
           </form>
         </div> : ''}
@@ -362,15 +367,13 @@ const Merchandise = () => {
         {editingItemId && (
           <form onSubmit={handleSubmitEdit} style={{
             position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'orange',
-            padding: '30px', height: '400px', width: '400px', gap: '20px'
+            padding: '30px', height: 'auto', width: '400px', gap: '20px', border: '1px solid black', borderRadius: '5px'
           }}>
 
 
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <button style={{ textAlign: 'end' }} onClick={handleExitEdit}>x</button>
+              <button style={{ textAlign: 'center', fontSize: '20px', width: '35px' }} onClick={handleExitEdit}>x</button>
             </div>
-
-            <h2 style={{ textAlign: 'center', color: 'white' }}>Edit Merchandise</h2>
 
             <div>
               <label htmlFor="merchandise-name">Merchandise Name:</label><br />
@@ -409,7 +412,7 @@ const Merchandise = () => {
 
 
 
-            <button style={{ height: '35px', width: '100%', border: 'none', fontSize: '15px', borderRadius: '5px', }} type="submit">Submit</button>
+            <button style={{ height: '40px', width: '100%', border: 'none', fontSize: '20px', borderRadius: '5px', }} type="submit">Submit</button>
           </form>
         )}
       </div>

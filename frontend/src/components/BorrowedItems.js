@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import styles from '../css/BorrowedItems.module.css'
+import DOMAIN from '../config/config';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -30,7 +31,7 @@ const BorrowedItems = () => {
 
   useEffect(() => {
     const fetchBorrowedItems = async () => {
-      const response = await fetch('http://localhost:3001/fetch-borrowed-items', {
+      const response = await fetch(`${DOMAIN}/fetch-borrowed-items`, {
         method: 'GET'
       })
 
@@ -49,7 +50,7 @@ const BorrowedItems = () => {
 
     try {
       setData(data.filter(i => i._id !== item._id))
-      const response = await fetch(`http://localhost:3001/return-item/${item._id}`, {
+      const response = await fetch(`${DOMAIN}/return-item/${item._id}`, {
         method: 'PUT'
       })
 
@@ -69,7 +70,7 @@ const BorrowedItems = () => {
     e.preventDefault()
 
     try {
-      const response = await fetch('http://localhost:3001/add-borrow-item', {
+      const response = await fetch(`${DOMAIN}/add-borrow-item`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -103,9 +104,9 @@ const BorrowedItems = () => {
 
       {showForm && <form onSubmit={handleSubmit} style={{
         position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'orange',
-        padding: '30px', height: 'auto', width: '350px', gap: '20px'
+        padding: '50px 30px', height: 'auto', width: '450px', gap: '20px', border: '1px solid black', borderRadius: '5px'
       }}>
-        <button onClick={() => handleCancel()} style={{ position: 'absolute', right: '5px', top: '5px' }}>X</button>
+        <button onClick={() => handleCancel()} style={{ position: 'absolute', right: '10px', top: '10px' ,fontSize:'20px', width:'35px'}}>X</button>
         {error && <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'red', height: '40px', }}>
           <p style={{ color: 'white', textAlign: 'center' }}>{error}</p>
         </div>}
@@ -137,7 +138,7 @@ const BorrowedItems = () => {
                            <input className={style.input} type="number" id="quantity" name="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                        </div> */}
 
-        <button style={{ height: '35px', width: '100%', border: 'none', fontSize: '15px', borderRadius: '5px', }} type="submit">Submit</button>
+        <button style={{ height: '40px', width: '100%', border: 'none', fontSize: '20px', borderRadius: '5px', }} type="submit">Submit</button>
       </form>}
 
 
@@ -158,6 +159,7 @@ const BorrowedItems = () => {
             backgroundColor: "#219ebc",
             color: "#fff",
             cursor: "pointer",
+            fontSize:'15px'
           }} onClick={handleButtonClick}>Create Transaction</button>
         </div>
         <table className={styles.styledTable}>

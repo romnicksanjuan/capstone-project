@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import style from '../css/Items.module.css'
 import Navbar from './Navbar';
+import DOMAIN from '../config/config';
 
 const Items = () => {
 
@@ -23,12 +24,12 @@ const Items = () => {
 
   // search
   const searchItem = async () => {
-    console.log('hellow')
+
     try {
-      const response = await fetch(`http://localhost:3001/search?query=${query}`, { method: 'GET' })
+      const response = await fetch(`${DOMAIN}/search?query=${query}`, { method: 'GET' })
 
       const data = await response.json()
-      setData(data)
+      setData(data.items)
 
     } catch (error) {
       console.log(error)
@@ -71,7 +72,7 @@ const Items = () => {
 
 
       try {
-        const response = await fetch('http://localhost:3001/display-items'); // Fetch from backend
+        const response = await fetch(`${DOMAIN}/display-items`); // Fetch from backend
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -96,7 +97,7 @@ const Items = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3001/create-item', {
+      const response = await fetch(`${DOMAIN}/create-item`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -144,7 +145,7 @@ const Items = () => {
     e.preventDefault()
 
     try {
-      const response = await fetch(`http://localhost:3001/edit-item/${editingItemId}`, {
+      const response = await fetch(`${DOMAIN}/edit-item/${editingItemId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -176,7 +177,7 @@ const Items = () => {
   const handleDelete = async (item) => {
     if (!window.confirm('Are you sure you want to delete this item?')) return;
     try {
-      const response = await fetch(`http://localhost:3001/delete-item/${item.item._id}`, {
+      const response = await fetch(`${DOMAIN}/delete-item/${item.item._id}`, {
         method: 'DELETE',
 
       })
@@ -205,6 +206,7 @@ const Items = () => {
                 width: "300px",
                 borderRadius: "5px",
                 border: "1px solid #ccc",
+                fontSize: '15px'
 
               }}
             />
@@ -220,7 +222,8 @@ const Items = () => {
                 backgroundColor: "#219ebc",
                 color: "#fff",
                 cursor: "pointer",
-                width: '120px'
+                width: '120px',
+                fontSize: '15px'
               }}
 
               onClick={() => searchItem()}
@@ -240,7 +243,8 @@ const Items = () => {
             backgroundColor: "#219ebc",
             color: "#fff",
             cursor: "pointer",
-            width: '120px'
+            width: '120px',
+            fontSize: '15px'
           }}
             onClick={handleButtonClick}
           >Add Item</button>
@@ -250,12 +254,12 @@ const Items = () => {
           {showForm && (
             <form onSubmit={handleSubmit} style={{
               position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'orange',
-              padding: '30px', height: '500px', width: '400px', gap: '20px'
+              padding: '30px 30px 35px 30px', height: 'auto', width: '450px', gap: '20px', border: '1px solid black', borderRadius: '5px'
             }}>
 
 
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <button style={{ textAlign: 'end' }} onClick={handleButtonClick}>x</button>
+                <button style={{ textAlign: 'center', fontSize: '20px', width: '35px' }} onClick={handleButtonClick}>x</button>
               </div>
 
               <div>
@@ -279,7 +283,7 @@ const Items = () => {
                   id="category"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  style={{ marginLeft: '10px', marginRight: '10px', height: '30px', marginTop: '5px', marginBottom: '10px' }}
+                  style={{ marginLeft: '10px', marginRight: '10px', height: '40px', marginTop: '5px', marginBottom: '10px', fontSize: '20px' }}
                 >
                   <option value="" disabled>
                     -- Choose a Category --
@@ -302,7 +306,7 @@ const Items = () => {
                 <input className={style.input} type="number" id="quantity" name="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
               </div> */}
 
-              <button style={{ height: '35px', width: '100%', border: 'none', fontSize: '15px', borderRadius: '5px', }} type="submit">Submit</button>
+              <button style={{ height: '40px', width: '100%', border: 'none', fontSize: '20px', borderRadius: '5px', }} type="submit">Submit</button>
             </form>
           )}
 
@@ -314,12 +318,12 @@ const Items = () => {
           {editingItemId && (
             <form onSubmit={handleSubmitEdit} style={{
               position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'orange',
-              padding: '30px', height: '500px', width: '400px', gap: '20px'
+              padding: '30px', height: 'auto', width: '450px', gap: '20px', border: '1px solid black', borderRadius: '5px'
             }}>
 
 
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <button style={{ textAlign: 'end' }} onClick={handleExitEdit}>x</button>
+                <button style={{ textAlign: 'center', fontSize: '20px', width: '35px' }} onClick={handleExitEdit}>x</button>
               </div>
 
               <div>
@@ -344,7 +348,7 @@ const Items = () => {
                   id="category"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  style={{ marginLeft: '10px', marginRight: '10px', height: '30px', marginTop: '5px', marginBottom: '10px' }}
+                  style={{ marginLeft: '10px', marginRight: '10px', height: '40px', marginTop: '5px', marginBottom: '10px', fontSize: '20px' }}
                 >
                   <option value="" disabled>
                     -- Choose a Category --
@@ -364,7 +368,7 @@ const Items = () => {
 
 
 
-              <button style={{ height: '35px', width: '100%', border: 'none', fontSize: '15px', borderRadius: '5px', }} type="submit">Submit</button>
+              <button style={{ height: '40px', width: '100%', border: 'none', fontSize: '20px', borderRadius: '5px', }} type="submit">Submit</button>
             </form>
           )}
 

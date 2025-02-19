@@ -106,7 +106,7 @@ const purchaseHistory = async (req, res) => {
 const getAllPurchaseHistory = async (req, res) => {
     try {
         const getAll = await purchaseHistoryModel.find({}).populate('itemId')
-        // console.log(getAll)
+        console.log(getAll)
 
         if (!getAll) {
             console.log('no purchase history')
