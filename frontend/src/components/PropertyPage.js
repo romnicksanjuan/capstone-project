@@ -41,9 +41,9 @@ const PropertyPage = () => {
             }} >
             </div>
             <div>
-                <h2 style={{ fontSize: '50px', color: 'rgb(255, 187, 0)', WebkitTextStroke: "2px black", fontWeight: 'bold' }}>Property of Ceguera Technological Colleges</h2>
-                <h4 style={{ color: 'white', fontSize: '35px', WebkitTextStroke: "2px black", textAlign: 'center' }}>Serial Number: {item.serialNumber}</h4>
-                <h4 style={{ color: 'white', fontSize: '35px', textAlign: 'center', WebkitTextStroke: "2px black" }}>Unit: {item.unit}</h4>
+                <h2 style={{ fontSize: '50px', color: 'white', fontWeight: 'bold' }}>Property of Ceguera Technological Colleges</h2>
+                <h4 style={{ color: 'white', fontSize: '35px', textAlign: 'center' }}>Serial Number: {item.serialNumber}</h4>
+                <h4 style={{ color: 'white', fontSize: '35px', textAlign: 'center' }}>Unit: {item.unit}</h4>
             </div>
         </div>
     )
