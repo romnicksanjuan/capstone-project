@@ -4,10 +4,10 @@ const QRCode = require("qrcode");
 const createItem = async (req, res) => {
     const { serialNumber, unit, brand, category, status, quantity } = req.body;
 
-    const server_link = `https://capstone-project-server-seven.vercel.app/${serialNumber}`
+    const fontend_link = `https://capstone-project-sand-gamma.vercel.app//${serialNumber}`
     const link = `http://localhost:3000/item/${serialNumber}`
     // console.log(unit)
-    const qrImage = await QRCode.toDataURL(server_link);
+    const qrImage = await QRCode.toDataURL(fontend_link);
 
     // Convert base64 to buffer
     const base64Data = qrImage.replace(/^data:image\/png;base64,/, ""); // Remove base64 header
@@ -15,7 +15,7 @@ const createItem = async (req, res) => {
     console.log(qrBuffer)
 
     const newItem = new Item({
-        serialNumber, unit, brand, category, status, quantity, link: server_link, qr_code_image: {
+        serialNumber, unit, brand, category, status, quantity, link: fontend_link, qr_code_image: {
             data: qrBuffer,
             contentType: 'image/png'
         }
