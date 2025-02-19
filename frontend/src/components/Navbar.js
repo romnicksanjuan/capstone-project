@@ -39,7 +39,7 @@ const Navbar = () => {
                         </a></li>
                     <li><a style={{ display: 'flex', alignItems: 'center' }} href="/items">
                         <IoIosListBox size={30} color='white' />
-                        <p>Items</p>
+                        <p>Inventory</p>
                     </a></li>
                     <li><a style={{ display: 'flex', alignItems: 'center' }} href="/borrowed-items">
                         <HiCollection size={30} color='white' />
