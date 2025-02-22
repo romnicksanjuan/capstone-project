@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from '../css/Navbar.module.css'
 import image from '../images/ctc logo.png'
 import { RiDashboardHorizontalFill } from "react-icons/ri";
@@ -14,7 +14,7 @@ const Navbar = () => {
         <>
             <nav className={styles.navbar}>
                 <div className={styles.navbarLogo}>
-                    <img style={{ }} src={image} />
+                    <img style={{}} src={image} />
                 </div>
                 <div>
                     <h2 style={{ fontSize: '30px', textAlign: 'center' }}>Property and Merchandise Hub Management
@@ -34,28 +34,31 @@ const Navbar = () => {
                 <ul className={styles.navbarLinks}>
                     <li>
                         <a style={{ display: 'flex', alignItems: 'center' }} href="/">
-                            < RiDashboardHorizontalFill size={30} color='white' />
+                            < RiDashboardHorizontalFill
+                                size={30}
+                                className='icon'
+                            />
                             <p>  Dashboard</p>
                         </a></li>
                     <li><a style={{ display: 'flex', alignItems: 'center' }} href="/items">
-                        <IoIosListBox size={30} color='white' />
+                        <IoIosListBox size={30} className='icon' />
                         <p>Inventory</p>
                     </a></li>
                     <li><a style={{ display: 'flex', alignItems: 'center' }} href="/borrowed-items">
-                        <HiCollection size={30} color='white' />
+                        <HiCollection size={30}className='icon' />
                         <p>Borrowed-Items</p>
                     </a></li>
                     <li><a style={{ display: 'flex', alignItems: 'center' }} href="/history">
-                        <RiChatHistoryFill size={30} color='white' />
+                        <RiChatHistoryFill size={30} className='icon' />
                         <p>History</p>
                     </a></li>
                     <li><a style={{ display: 'flex', alignItems: 'center' }} href="/merchandise">
-                        <FaShoppingBag size={29} color='white' />
+                        <FaShoppingBag size={29} className='icon' />
                         <p>Merchandise</p>
 
                     </a></li>
                     <li><a style={{ display: 'flex', alignItems: 'center' }} href="/get-purchase-history">
-                        <RiChatHistoryFill size={30} color='white' />
+                        <RiChatHistoryFill size={30} className='icon' />
                         <p> Purchase History</p>
                     </a></li>
                 </ul>

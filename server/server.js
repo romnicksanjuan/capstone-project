@@ -6,17 +6,18 @@ const app = express()
 
 const port = 3001
 
-
+const hosted_server = 'https://capstone-project-sand-gamma.vercel.app'
+const local_domain = 'http://localhost:3000'
 
 mongoose.connect('mongodb+srv://romnick:1234@romnickdb.e14diyv.mongodb.net/capstone')
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
-  app.use(cors({
-    origin: 'https://capstone-project-sand-gamma.vercel.app',
-    methods: ['POST', 'DELETE', 'PUT', 'GET'],
-    credentials: true
-  }));
+app.use(cors({
+  origin: hosted_server,
+  methods: ['POST', 'DELETE', 'PUT', 'GET'],
+  credentials: true
+}));
 app.use(express.json()); // Ensure this line is included
 app.use('/', router)
 
