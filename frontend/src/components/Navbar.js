@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styles from '../css/Navbar.module.css'
-import image from '../images/ctc logo.png'
+import image from '../images/ctc_logo.png'
 import { RiDashboardHorizontalFill } from "react-icons/ri";
 import { HiCollection } from "react-icons/hi";
 import { RiChatHistoryFill } from "react-icons/ri";
