@@ -14,7 +14,7 @@ mongoose.connect('mongodb+srv://romnick:1234@romnickdb.e14diyv.mongodb.net/capst
   .catch((err) => console.error('MongoDB connection error:', err));
 
 app.use(cors({
-  origin: local_domain,
+  origin: hosted_server,
   methods: ['POST', 'DELETE', 'PUT', 'GET'],
   credentials: true
 }));
