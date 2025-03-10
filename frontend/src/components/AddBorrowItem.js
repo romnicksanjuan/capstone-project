@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import style from '../css/AddBorrowItem.module.css'
 import DOMAIN from '../config/config'
 
-
+const token = localStorage.getItem("token")
 const AddBorrowItem = () => {
     const [serialNumber, setSerialNumber] = useState('')
     const [brand, setBrand] = useState('')
@@ -23,7 +23,8 @@ const AddBorrowItem = () => {
             const response = await fetch(`${DOMAIN}/add-borrow-item`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({ serialNumber, borrower, mobileNumber, purpose })
             })

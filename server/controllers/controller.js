@@ -30,6 +30,7 @@ const createItem = async (req, res) => {
 }
 
 const fetchItems = async (req, res) => {
+    // console.log("decoded:", req.admin)
     try {
         const items = await Item.find({});
         const totalCounts = await Item.countDocuments()

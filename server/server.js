@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const router = require('./routes/routes.js')
 const mongoose = require('mongoose')
+const { middleware } = require("./middleware/auth.js")
 const app = express()
 
 const port = 3001
@@ -18,8 +19,10 @@ app.use(cors({
   methods: ['POST', 'DELETE', 'PUT', 'GET'],
   credentials: true
 }));
+app.use(middleware)
 app.use(express.json()); // Ensure this line is included
 app.use('/', router)
+
 
 // app.get('/', (req, res) => {
 //     res.send('hello world')

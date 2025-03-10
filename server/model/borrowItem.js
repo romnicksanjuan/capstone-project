@@ -1,11 +1,7 @@
 const mongoose = require('mongoose');
 
 const borrowedItem = new mongoose.Schema({
-  unitId:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Item',
-    required: true
-  },
+  item: { type: mongoose.Schema.Types.Mixed, required: true },
   serialNumber: {
     type: String,
     required: true

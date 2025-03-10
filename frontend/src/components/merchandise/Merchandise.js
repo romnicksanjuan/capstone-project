@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import CreateProduct from './CreateProduct'
 import DOMAIN from '../../config/config'
 
+const token = localStorage.getItem("token")
 const Merchandise = () => {
   const [isClick, setIsClick] = useState(false)
   const [merchandise, setMerchandise] = useState([])
@@ -33,12 +34,21 @@ const Merchandise = () => {
     setImage(e.target.files[0]);
   };
 
-
+  // get merchandise
   useEffect(() => {
+    const token = localStorage.getItem("token")
+    console.log(token)
     const getMerchandise = async () => {
       const response = await fetch(`${DOMAIN}/get-merchandise`, {
-        method: 'GET'
+        method: 'GET',
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
       })
+
+      if (!response.ok) {
+        console.log(response.statusText)
+      }
 
       const data = await response.json()
       console.log(data)
@@ -71,7 +81,8 @@ const Merchandise = () => {
       const response = await fetch(`${DOMAIN}/purchase-history/${itemId}`, {
         method: 'post',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ fullname, program, size, quantity })
       })
@@ -106,7 +117,9 @@ const Merchandise = () => {
     try {
       const response = await fetch(`${DOMAIN}/delete-merchandise/${item._id}`, {
         method: 'DELETE',
-
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
       })
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -143,7 +156,8 @@ const Merchandise = () => {
       const response = await fetch(`${DOMAIN}/edit-merchandise/${editingItemId}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ name: merchandiseName, price, stock })
       })
@@ -185,6 +199,9 @@ const Merchandise = () => {
     try {
       const response = await fetch(`${DOMAIN}/create-product`, {
         method: 'POST',
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
         body: formData
       });
 
@@ -326,7 +343,7 @@ const Merchandise = () => {
           padding: '35px 30px', height: 'auto', width: '450px', gap: '20px', border: '1px solid black', borderRadius: '5px'
         }}>
 
-          <button style={{ position: 'absolute', right: '7px', top: '7px',fontSize: '20px', width: '35px' }} onClick={() => setIsClick(!isClick)}>X</button>
+          <button style={{ position: 'absolute', right: '7px', top: '7px', fontSize: '20px', width: '35px' }} onClick={() => setIsClick(!isClick)}>X</button>
           <form onSubmit={hanndleSubmit}>
             {errorMessage && <p style={{ fontSize: '17px', padding: '5px', color: 'white', backgroundColor: 'red', textAlign: 'center' }}>{errorMessage}</p>}
             <div>

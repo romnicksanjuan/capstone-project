@@ -5,13 +5,19 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import DOMAIN from '../../config/config'
 
+const token = localStorage.getItem("token")
 const PurchaseHistory = () => {
     const [purchaseHistory, setPurChaseHistory] = useState([])
 
     useEffect(() => {
         const getAllPurchaseHistory = async () => {
             try {
-                const response = await fetch(`${DOMAIN}/get-purchase-history`)
+                const response = await fetch(`${DOMAIN}/get-purchase-history`,{
+                    method:"GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                      }
+                })
                 if (!response.ok) {
                     console.log('Error')
                     return;
@@ -55,14 +61,14 @@ const PurchaseHistory = () => {
                                     <img src={item.image.data} style={{ width: '100px', height: '100px' }} />
                                 </td> */}
                                 <td className={style.image}>
-                                    <img src={item.itemId.image} style={{ width: '100px', height: '100px' }} />
+                                    <img src={`data:image/jpeg;base64,${item.merchandise.image.data}`} style={{ width: '100px', height: '100px' }} />
                                 </td>
-                                 <td>{item.item.itemId.name}</td>
-                                 <td>{item.item.itemId.price}</td>
-                                <td>{item.item.fullname}</td>
-                                <td>{item.item.program}</td>
-                                <td>{item.item.size}</td>
-                                <td>{item.item.quantity}</td>
+                                 <td>{item.merchandise.name}</td>
+                                 <td>{item.merchandise.price}</td>
+                                <td>{item.fullname}</td>
+                                <td>{item.program}</td>
+                                <td>{item.size}</td>
+                                <td>{item.quantity}</td>
                                 <td>{item.purchaseDate}</td>
                             </tr>
                         ))}

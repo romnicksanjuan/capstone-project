@@ -86,7 +86,7 @@ const Login = () => {
                             type='password' placeholder='Enter Password' />
                     </div>
 
-                    <p style={{padding:'5px 0', margin:'0', cursor:'pointer',}} onClick={() => navigate('/forgot-password')}>Forgot Password</p>
+                    <p style={{padding:'5px 0', margin:'0', fontSize:'1.2rem', color:'black', cursor:'pointer',}} onClick={() => navigate('/forgot-password')}>Forgot Password</p>
 
                     <div style={{ width: '100%', display: 'grid' }}>
                         <button style={{

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const PurchaseHistorySchema = new mongoose.Schema({
-    itemId: { type: mongoose.Schema.Types.ObjectId, ref: 'Merchandise' },
+    merchandise: { type: mongoose.Schema.Types.Mixed, required: true },
     fullname: {
         type: String,
         required: true

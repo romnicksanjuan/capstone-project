@@ -2,16 +2,23 @@ import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import styles from '../css/History.module.css'
 import DOMAIN from '../config/config'
+
+const token = localStorage.getItem("token")
+
 const History = () => {
     const [data, setData] = useState([])
+
     useEffect(() => {
         const fetchBorrowedItems = async () => {
             const response = await fetch(`${DOMAIN}/fetch-history`, {
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
             })
 
             const data = await response.json()
-            console.log(data)
+            console.log("debugging", data)
             setData(data)
         }
 
@@ -42,12 +49,12 @@ const History = () => {
                             <tr key={index}>
                                 {/* <td className={styles.serialNumber}>{item.number}</td> */}
                                 <td>{item.serialNumber}</td>
-                                <td>{item.unit}</td>
-                                <td>{item.brand}</td>
+                                <td>{item.item.unit}</td>
+                                <td>{item.item.brand}</td>
                                 <td>{item.borrower}</td>
                                 <td>{item.mobileNumber}</td>
                                 <td>{item.purpose}</td>
-                                <td>{item.status}</td>
+                                <td>{item.item.status}</td>
                                 <td>{item.dateBorrowed}</td>
                                 <td>{item.dateReturned}</td>
                             </tr>

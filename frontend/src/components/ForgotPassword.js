@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Domain from '../config/config'
 import { useNavigate } from "react-router-dom"
 
+const token = localStorage.getItem("token")
 const ForgotPassword = () => {
     const navigate = useNavigate()
     const [email, setEmail] = useState("")
@@ -18,7 +19,8 @@ const ForgotPassword = () => {
             const response = await fetch(`${Domain}/admin/forgot-password`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                     "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({ email, newPassword, confirmPassword })
             })

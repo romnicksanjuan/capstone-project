@@ -2,18 +2,24 @@ import React, { useState, useEffect } from 'react'
 import Navbar from './Navbar'
 import styles from '../css/Dashboard.module.css'
 import DOMAIN from '../config/config'
+const token = localStorage.getItem("token")
 
 function Dashboard() {
   const [totalItems, setTotalItems] = useState(0)
   const [totalBorrowedItems, setTotalBorrowedItems] = useState(0)
   const [data, setData] = useState([])
 
+
+  // console.log("tokennnnn:",token)
   // display total items
   useEffect(() => {
     const fetchItems = async () => {
       try {
         const response = await fetch(`${DOMAIN}/total-items`, {
-          method: 'GET'
+          method: 'GET',
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
         }); // Fetch from backend
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -34,7 +40,10 @@ function Dashboard() {
     const fetchItems = async () => {
       try {
         const response = await fetch(`${DOMAIN}/total-borrowed-items`, {
-          method: 'GET'
+          method: 'GET',
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
         }); // Fetch from backend
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -54,7 +63,10 @@ function Dashboard() {
   useEffect(() => {
     const fetchBorrowedItems = async () => {
       const response = await fetch(`${DOMAIN}/fetch-borrowed-items`, {
-        method: 'GET'
+        method: 'GET',
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
       })
 
       const data = await response.json()
@@ -76,7 +88,10 @@ function Dashboard() {
     try {
       setData(data.filter(i => i._id !== item._id))
       const response = await fetch(`${DOMAIN}/return-item/${item._id}`, {
-        method: 'PUT'
+        method: 'PUT',
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
       })
 
 
@@ -108,7 +123,7 @@ function Dashboard() {
 
 
 
-        <h2 style={{color: "gray"}}>Borrowed Items</h2>
+        <h2 style={{ color: "gray" }}>Borrowed Items</h2>
         <table className={styles.styledTable}>
           <thead>
             <tr>

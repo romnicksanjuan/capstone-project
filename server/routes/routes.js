@@ -6,6 +6,10 @@ const { createProduct, getMerchandise, purchaseHistory, getAllPurchaseHistory, d
 const { createAdmin, loginAdmin, forgotPassword } = require('../controllers/adminController.js');
 
 
+// authehntication
+// const { middleware } = require("../middleware/auth.js")
+
+
 const router = express.Router();
 
 const storage = multer.memoryStorage();

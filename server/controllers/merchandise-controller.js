@@ -1,7 +1,8 @@
+const merchandise = require('../model/merchandise.js')
 const Merchandise = require('../model/merchandise.js')
 const purchaseHistoryModel = require('../model/purchase_history.js')
 
-const createProduct = async(req, res) => {
+const createProduct = async (req, res) => {
     const { name, price, stock } = req.body
 
     const newProduct = new Merchandise({
@@ -20,6 +21,7 @@ const createProduct = async(req, res) => {
 }
 
 const getMerchandise = async (req, res) => {
+    console.log("decoded:", req.admin)
     try {
         const getItems = await Merchandise.find({})
 
@@ -85,7 +87,7 @@ const purchaseHistory = async (req, res) => {
         }
 
         const newPurchaseHistory = new purchaseHistoryModel({
-            itemId: finditem._id,
+            merchandise: finditem,
             fullname: fullname,
             program: program,
             size: size,
@@ -105,7 +107,7 @@ const purchaseHistory = async (req, res) => {
 
 const getAllPurchaseHistory = async (req, res) => {
     try {
-        const getAll = await purchaseHistoryModel.find({}).populate('itemId')
+        const getAll = await purchaseHistoryModel.find({}).lean()
         console.log(getAll)
 
         if (!getAll) {
@@ -114,13 +116,14 @@ const getAllPurchaseHistory = async (req, res) => {
         }
         // console.log(getAll)
         const items = getAll.map((item) => {
-            const base64Image = item.itemId.image.data.toString('base64');
-            const image = `data:${item.itemId.image.contentType};base64,${base64Image}`
+            const base64Image = item.merchandise.image.data.toString('base64');
+            const image = `data:${item.merchandise.image.contentType};base64,${base64Image}`
+
 
             return {
-                item,
-                itemId: {
-                    image: image
+                ...item,
+                image: {
+                    data: image
                 },
                 purchaseDate: item.createdAt.toLocaleDateString('en-US')
             }

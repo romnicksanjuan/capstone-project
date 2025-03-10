@@ -25,7 +25,7 @@ const PropertyPage = () => {
     }, [])
     return (
         <div style={{ zIndex: -1, position: 'relative', width: '100%', height: '100vh', margin: '0 auto', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFDF00' }}>
-            <div style={{
+            {/* <div style={{
                 position: 'absolute',
                 backgroundImage: `url("${image}")`,
                 backgroundSize: 'contain',
@@ -44,7 +44,7 @@ const PropertyPage = () => {
                 <h2 style={{ fontSize: '50px', color: 'rgb(255, 187, 0)', WebkitTextStroke: "1px black", fontWeight: 'bold', textAlign: 'center', }}>Property of Ceguera Technological Colleges</h2>
                 <h4 style={{ color: 'white', fontSize: '35px', WebkitTextStroke: "1px black", textAlign: 'center' }}>Serial Number: {item.serialNumber}</h4>
                 <h4 style={{ color: 'white', fontSize: '35px', textAlign: 'center', WebkitTextStroke: "1px black" }}>Unit: {item.unit}</h4>
-            </div>
+            </div> */}
         </div>
     )
 }

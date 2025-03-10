@@ -3,6 +3,7 @@ import style from '../css/Items.module.css'
 import Navbar from './Navbar';
 import DOMAIN from '../config/config';
 
+const token = localStorage.getItem("token")
 const Items = () => {
 
   const [query, setQuery] = useState("");
@@ -26,7 +27,12 @@ const Items = () => {
   const searchItem = async () => {
 
     try {
-      const response = await fetch(`${DOMAIN}/search?query=${query}`, { method: 'GET' })
+      const response = await fetch(`${DOMAIN}/search?query=${query}`, { 
+        method: 'GET',
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+       })
 
       const data = await response.json()
       setData(data.items)
@@ -56,6 +62,19 @@ const Items = () => {
   const [status, setStatus] = useState('')
   const [quantity, setQuantity] = useState(1)
   const [qrCode, setQrCode] = useState('')
+  // const [token, setToken] = useState("")
+
+  // useEffect(() => {
+  //   const checkToken = async () => {
+  //     const token = localStorage.getItem("token")
+  //     console.log("tokenn", token)
+  //     if (token) {
+  //       setToken(token)
+  //     }
+  //   }
+
+  //   checkToken()
+  // }, [])
 
   const handleButtonClick = () => {
     setShowForm(!showForm);
@@ -69,10 +88,15 @@ const Items = () => {
   // fetch items
   useEffect(() => {
     const fetchItems = async () => {
-
-
+      const token = localStorage.getItem("token")
       try {
-        const response = await fetch(`${DOMAIN}/display-items`); // Fetch from backend
+        const response = await fetch(`${DOMAIN}/display-items`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        }); // Fetch from backend
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -100,7 +124,8 @@ const Items = () => {
       const response = await fetch(`${DOMAIN}/create-item`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ serialNumber, unit, brand, category, status, quantity })
       });
@@ -148,7 +173,8 @@ const Items = () => {
       const response = await fetch(`${DOMAIN}/edit-item/${editingItemId}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ serialNumber, unit, brand, category, status, quantity })
       })
@@ -179,7 +205,9 @@ const Items = () => {
     try {
       const response = await fetch(`${DOMAIN}/delete-item/${item.item._id}`, {
         method: 'DELETE',
-
+        headers:{
+          "Authorization": `Bearer ${token}`
+        }
       })
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);

@@ -4,6 +4,7 @@ import styles from '../css/BorrowedItems.module.css'
 import DOMAIN from '../config/config';
 
 import { useNavigate } from 'react-router-dom';
+const token = localStorage.getItem("token")
 
 const BorrowedItems = () => {
   const [data, setData] = useState([])
@@ -32,7 +33,10 @@ const BorrowedItems = () => {
   useEffect(() => {
     const fetchBorrowedItems = async () => {
       const response = await fetch(`${DOMAIN}/fetch-borrowed-items`, {
-        method: 'GET'
+        method: 'GET',
+        headers: {
+          "Authorization": `Beare ${token}`
+        }
       })
 
       const data = await response.json()
@@ -51,7 +55,11 @@ const BorrowedItems = () => {
     try {
       setData(data.filter(i => i._id !== item._id))
       const response = await fetch(`${DOMAIN}/return-item/${item._id}`, {
-        method: 'PUT'
+        method: 'PUT',
+        headers: {
+          // 'Content-Type': 'application/json',
+          "Authorization": `Bearer ${token}`
+        },
       })
 
 
@@ -73,7 +81,8 @@ const BorrowedItems = () => {
       const response = await fetch(`${DOMAIN}/add-borrow-item`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ serialNumber, borrower, mobileNumber, purpose })
       })
@@ -106,7 +115,7 @@ const BorrowedItems = () => {
         position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'orange',
         padding: '50px 30px', height: 'auto', width: '450px', gap: '20px', border: '1px solid black', borderRadius: '5px'
       }}>
-        <button onClick={() => handleCancel()} style={{ position: 'absolute', right: '10px', top: '10px' ,fontSize:'20px', width:'35px'}}>X</button>
+        <button onClick={() => handleCancel()} style={{ position: 'absolute', right: '10px', top: '10px', fontSize: '20px', width: '35px' }}>X</button>
         {error && <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'red', height: '40px', }}>
           <p style={{ color: 'white', textAlign: 'center' }}>{error}</p>
         </div>}
@@ -159,7 +168,7 @@ const BorrowedItems = () => {
             backgroundColor: "#219ebc",
             color: "#fff",
             cursor: "pointer",
-            fontSize:'15px'
+            fontSize: '15px'
           }} onClick={handleButtonClick}>Create Transaction</button>
         </div>
         <table className={styles.styledTable}>
@@ -183,12 +192,12 @@ const BorrowedItems = () => {
               <tr key={index}>
                 {/* <td className={styles.serialNumber}>{item.number}</td> */}
                 <td>{item.serialNumber}</td>
-                <td>{item.unit}</td>
-                <td>{item.brand}</td>
+                <td>{item.item.unit}</td>
+                <td>{item.item.brand}</td>
                 <td>{item.borrower}</td>
                 <td>{item.mobileNumber}</td>
                 <td>{item.purpose}</td>
-                <td>{item.status}</td>
+                <td>{item.item.status}</td>
                 <td>{item.dateBorrowed}</td>
                 <td>
                   <button style={{

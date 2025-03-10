@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Navbar from '../Navbar';
 import style from '../../css/Items.module.css'
+
+const token = localStorage.getItem("token")
 function CreateProduct() {
     const [name, setName] = useState('')
     const [price, setPrice] = useState(0)
@@ -27,6 +29,9 @@ function CreateProduct() {
         try {
             const response = await fetch('http://localhost:3001/create-product', {
                 method: 'POST',
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
                 body: formData
             });
 

@@ -15,7 +15,7 @@ const addBorrowItem = async (req, res) => {
         }
 
         console.log(checkSerial._id)
-        const newBorrow = new borrowItem({ unitId: new mongoose.Types.ObjectId(checkSerial._id), serialNumber, borrower, mobileNumber, purpose })
+        const newBorrow = new borrowItem({ item: checkSerial, serialNumber, borrower, mobileNumber, purpose })
 
         const saveBorrowItem = newBorrow.save()
         console.log(newBorrow)
@@ -28,7 +28,7 @@ const addBorrowItem = async (req, res) => {
 
 const fetchBorrowedItems = async (req, res) => {
     try {
-        const fetch = await borrowItem.find({ action: 'Borrowed' }).populate('unitId')
+        const fetch = await borrowItem.find({ action: 'Borrowed' }).lean()
 
         console.log(fetch)
 
@@ -39,17 +39,8 @@ const fetchBorrowedItems = async (req, res) => {
 
         const borrowData = fetch.map((item) => {
             return {
-                _id: item._id,
-                serialNumber: item.unitId.serialNumber,
-                unit: item.unitId.unit,
-                brand: item.unitId.brand,
-                borrower: item.borrower,
-                mobileNumber: item.mobileNumber,
-                purpose: item.purpose,
-                status: item.unitId.status,
+                ...item,
                 dateBorrowed: item.dateBorrowed.toLocaleDateString('en-US'),
-                dateReturned: item.dateReturned,
-                action: item.action
             }
         })
 
@@ -93,23 +84,21 @@ const returnItem = async (req, res) => {
 
 const fetchHistory = async (req, res) => {
     try {
-        const history = await borrowItem.find({ action: 'Returned' }).populate('unitId')
+        const history = await borrowItem.find({ action: 'Returned' }).lean()
 
-        const historyData = history.map((item) => {
+        const historyData = await Promise.all(history.map(async (item) => {
+
+            const findItem = await Item.findById(item.unitId)
+
+
             return {
-                _id: item._id,
-                serialNumber: item.unitId.serialNumber,
-                unit: item.unitId.unit,
-                brand: item.unitId.brand,
-                borrower: item.borrower,
-                mobileNumber: item.mobileNumber,
-                purpose: item.purpose,
-                status: item.unitId.status,
+                ...item,
                 dateBorrowed: item.dateBorrowed.toLocaleDateString('en-US'),
-                dateReturned: item.dateReturned.toLocaleDateString('en-US'),
-                action: item.action
+                dateReturned: item.dateReturned.toLocaleDateString('en-US')
             }
-        })
+        }))
+
+        // console.log("data history: ", historyData)
 
         res.status(200).json(historyData)
     } catch (error) {
