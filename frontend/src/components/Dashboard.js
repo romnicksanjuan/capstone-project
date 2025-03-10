@@ -108,7 +108,7 @@ function Dashboard() {
 
 
 
-        <h2>Borrowed Items</h2>
+        <h2 style={{color: "gray"}}>Borrowed Items</h2>
         <table className={styles.styledTable}>
           <thead>
             <tr>

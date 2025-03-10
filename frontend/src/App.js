@@ -12,13 +12,16 @@ import CreateProduct from './components/merchandise/CreateProduct';
 import Merchandise from './components/merchandise/Merchandise.js';
 import PurchaseHistory from './components/merchandise/PurchaseHistory.js';
 import PropertyPage from './components/PropertyPage.js';
+import Login from './components/Login.js';
+import ForgotPassword from './components/ForgotPassword.js';
 
 function App() {
 // pota 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Dashboard />} />
+      <Route path='/' element={<Login />} />
+        <Route path='/Dashboard' element={<Dashboard />} />
         <Route path='/items' element={<Items />} />
         <Route path='/borrowed-items' element={<BorrowedItems />} />
         <Route path='/history' element={<History />} />
@@ -27,6 +30,7 @@ function App() {
         <Route path='/create-product' element={<CreateProduct />} />
         <Route path='/get-purchase-history' element={<PurchaseHistory />} />
         <Route path='/item/:sn' element={<PropertyPage />} />
+        <Route path='/forgot-password' element={<ForgotPassword />} />
       </Routes>
     </BrowserRouter>
   );

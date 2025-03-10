@@ -1,11 +1,11 @@
 .navbar {
-    width: 80%;
-    height: 150px;
+    width: 100%;
+    height: 130px;
     margin:  0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* padding: 10px 20px; */
+    padding: 5px 0;
     background-color: #FFDF00;
     color: white;
     position: relative;
@@ -13,68 +13,69 @@
   }
 
   .navbarLogo{
-    width: 15%;
+    width: 20%;
     display: flex;
-    justify-content: center;
+    justify-content: end;
     margin: 0 10px 0 10px;
   }
   
   .navbarLogo img {
-    height: 140px;
-    width: 140px;
+    height: auto;
+    width: 125px;
   }
   
   .navbarLinks {
     list-style: none;
     display: flex;
     gap: 15px;
-
-  }
-  
-  .navbarLinks li a {
-    text-decoration: none;
-    color: white;
-    font-size: 18px;
-    transition: color 0.3s;
-    font-weight: bold;
-  }
-  
-  .navbarLinks li a:hover {
-    color: white;
-  }
-
-  .navbarLinks li .icon:hover {
-    color: white;
-  }
-  
-  /* Responsive: Stack links vertically on small screens */
-  @media screen and (max-width: 768px) {
-    .navbarLinks {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    height: auto;
+    padding: 0 20px;
   }
 
   .pages{
-    width: 80%;
+    width: 100%;
     margin: 3px auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #0056b3; /* Dark Blue */
-    padding: 5px 0;
+    /* background-color: #0056b3; */
+    height: 80px;
     color: #fff;
     font-family: Arial, sans-serif;
     background-color: rgb(255, 187, 0);
     border-radius: 5px;
   }
-
-  .pages ul a {
-    /* text-decoration: none; */
+  .navbarLinks a {
+    text-decoration: none;
     color: gray;
-    font-size: 20px;
-    transition: color 0.3s ease;
-    margin-right: 10px;
+    font-size: 18px;
+    transition: color 0.3s;
+    /* font-weight: bold; */
   }
   
+  .navbarLinks a:hover {
+    color: white;
+    border-bottom: 0.1rem solid white;
+  }
+
+  .navbarLinks .icon:hover {
+    color: white;
+  }
+  
+  
+  div a:hover {
+    color: white;
+    border-bottom: 0.1rem solid white;
+  }
+
+  div .icon:hover {
+    color: white;
+  }
+
+  div a {
+    text-decoration: none;
+    color: gray;
+    font-size: 18px;
+    transition: color 0.3s;
+    /* font-weight: bold; */
+  }

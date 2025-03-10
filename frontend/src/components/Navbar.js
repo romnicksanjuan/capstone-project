@@ -5,11 +5,18 @@ import { HiCollection } from "react-icons/hi";
 import { RiChatHistoryFill } from "react-icons/ri";
 import { FaShoppingBag } from "react-icons/fa";
 import { IoIosListBox } from "react-icons/io";
-
+import { IoLogOut } from "react-icons/io5";
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
-    return (
 
+    const navigate = useNavigate()
+    const handleLogout = () => {
+        if (!window.confirm("Do you want to logout?")) return
+        localStorage.clear()
+        navigate('/')
+    }
+    return (
         <>
             <nav className={styles.navbar}>
                 <div className={styles.navbarLogo}>
@@ -27,40 +34,44 @@ const Navbar = () => {
 
             <div className={styles.pages}>
 
+                <nav className={styles.navbarLinks}>
+                    <a style={{ display: 'flex', alignItems: 'center', padding: '0' }} href="/Dashboard">
+                        < RiDashboardHorizontalFill
+                            size={25}
+                            className='icon'
+                        />
+                        <p style={{ padding: '0' }}>  Dashboard</p>
+                    </a>
 
-
-
-                <ul className={styles.navbarLinks}>
-                    <li>
-                        <a style={{ display: 'flex', alignItems: 'center' }} href="/">
-                            < RiDashboardHorizontalFill
-                                size={30}
-                                className='icon'
-                            />
-                            <p>  Dashboard</p>
-                        </a></li>
-                    <li><a style={{ display: 'flex', alignItems: 'center' }} href="/items">
+                    <a style={{ display: 'flex', alignItems: 'center' }} href="/items">
                         <IoIosListBox size={30} className='icon' />
-                        <p>Inventory</p>
-                    </a></li>
-                    <li><a style={{ display: 'flex', alignItems: 'center' }} href="/borrowed-items">
-                        <HiCollection size={30}className='icon' />
-                        <p>Borrowed-Items</p>
-                    </a></li>
-                    <li><a style={{ display: 'flex', alignItems: 'center' }} href="/history">
+                        <p style={{ padding: '0' }}>Inventory</p>
+                    </a>
+                    <a style={{ display: 'flex', alignItems: 'center' }} href="/borrowed-items">
+                        <HiCollection size={30} className='icon' />
+                        <p style={{ padding: '0' }}>Borrowed-Items</p>
+                    </a>
+                    <a style={{ display: 'flex', alignItems: 'center' }} href="/history">
                         <RiChatHistoryFill size={30} className='icon' />
-                        <p>History</p>
-                    </a></li>
-                    <li><a style={{ display: 'flex', alignItems: 'center' }} href="/merchandise">
+                        <p style={{ padding: '0' }}>History</p>
+                    </a>
+                    <a style={{ display: 'flex', alignItems: 'center' }} href="/merchandise">
                         <FaShoppingBag size={29} className='icon' />
-                        <p>Merchandise</p>
+                        <p style={{ padding: '0' }}>Merchandise</p>
 
-                    </a></li>
-                    <li><a style={{ display: 'flex', alignItems: 'center' }} href="/get-purchase-history">
+                    </a>
+                    <a style={{ display: 'flex', alignItems: 'center' }} href="/get-purchase-history">
                         <RiChatHistoryFill size={30} className='icon' />
-                        <p> Purchase History</p>
-                    </a></li>
-                </ul>
+                        <p style={{ padding: '0' }}> Purchase History</p>
+                    </a>
+                </nav>
+
+                <div style={{ padding: '0 20px' }}>
+                    <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={() => handleLogout()}>
+                        <IoLogOut size={30} className='icon' />
+                        <p style={{ padding: '0' }}> Logout</p>
+                    </a>
+                </div>
             </div>
 
         </>
