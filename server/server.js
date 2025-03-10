@@ -19,7 +19,15 @@ app.use(cors({
   methods: ['POST', 'DELETE', 'PUT', 'GET'],
   credentials: true
 }));
-app.use(middleware)
+
+// Apply middleware globally, but exclude specific routes
+app.use((req, res, next) => {
+  const openRoutes = ["/admin/create", "/admin/login"]; // Add routes that should be public
+  if (openRoutes.includes(req.path)) {
+      return next(); // Skip authentication for these routes
+  }
+  middleware(req, res, next);
+});
 app.use(express.json()); // Ensure this line is included
 app.use('/', router)
 
