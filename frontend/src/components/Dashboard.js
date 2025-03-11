@@ -2,24 +2,36 @@ import React, { useState, useEffect } from 'react'
 import Navbar from './Navbar'
 import styles from '../css/Dashboard.module.css'
 import DOMAIN from '../config/config'
-const token = localStorage.getItem("token")
+import { useNavigate } from 'react-router-dom'
+import Auth from './auth/Auth'
+// const token = localStorage.getItem("token")
 
 function Dashboard() {
   const [totalItems, setTotalItems] = useState(0)
   const [totalBorrowedItems, setTotalBorrowedItems] = useState(0)
   const [data, setData] = useState([])
+  // const [tokenExpired,setTokenExpired] = useState("")
 
+  // const navigate = useNavigate()
+
+  // useEffect(() => {
+  //   if (!token) {
+  //     navigate("/")
+  //     window.alert("You are not authorized, Please login")
+  //   }
+  // }, [])
 
   // console.log("tokennnnn:",token)
+
+  Auth()
+
   // display total items
   useEffect(() => {
     const fetchItems = async () => {
       try {
         const response = await fetch(`${DOMAIN}/total-items`, {
           method: 'GET',
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
+          credentials: "include",
         }); // Fetch from backend
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -41,9 +53,7 @@ function Dashboard() {
       try {
         const response = await fetch(`${DOMAIN}/total-borrowed-items`, {
           method: 'GET',
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
+          credentials: "include",
         }); // Fetch from backend
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -64,10 +74,13 @@ function Dashboard() {
     const fetchBorrowedItems = async () => {
       const response = await fetch(`${DOMAIN}/fetch-borrowed-items`, {
         method: 'GET',
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
+        credentials: "include",
       })
+
+      if (!response.ok) {
+        console.log(response.statusText)
+        return
+      }
 
       const data = await response.json()
       console.log(data)
@@ -89,9 +102,6 @@ function Dashboard() {
       setData(data.filter(i => i._id !== item._id))
       const response = await fetch(`${DOMAIN}/return-item/${item._id}`, {
         method: 'PUT',
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
       })
 
 
@@ -141,7 +151,7 @@ function Dashboard() {
           </thead>
 
           <tbody>
-            {data.map((item, index) => (
+            {data ? data.map((item, index) => (
               <tr key={index}>
                 {/* <td className={styles.serialNumber}>{item.number}</td> */}
                 <td>{item.serialNumber}</td>
@@ -161,7 +171,7 @@ function Dashboard() {
                   </button>
                 </td>
               </tr>
-            ))}
+            )) : ""}
           </tbody>
         </table>
 

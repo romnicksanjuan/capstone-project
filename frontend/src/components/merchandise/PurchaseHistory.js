@@ -4,19 +4,21 @@ import style from '../../css/Items.module.css'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import DOMAIN from '../../config/config'
+import Auth from '../auth/Auth'
 
 const token = localStorage.getItem("token")
 const PurchaseHistory = () => {
+    Auth()
     const [purchaseHistory, setPurChaseHistory] = useState([])
 
     useEffect(() => {
         const getAllPurchaseHistory = async () => {
             try {
-                const response = await fetch(`${DOMAIN}/get-purchase-history`,{
-                    method:"GET",
+                const response = await fetch(`${DOMAIN}/get-purchase-history`, {
+                    method: "GET",
                     headers: {
                         "Authorization": `Bearer ${token}`
-                      }
+                    }
                 })
                 if (!response.ok) {
                     console.log('Error')
@@ -63,8 +65,8 @@ const PurchaseHistory = () => {
                                 <td className={style.image}>
                                     <img src={`data:image/jpeg;base64,${item.merchandise.image.data}`} style={{ width: '100px', height: '100px' }} />
                                 </td>
-                                 <td>{item.merchandise.name}</td>
-                                 <td>{item.merchandise.price}</td>
+                                <td>{item.merchandise.name}</td>
+                                <td>{item.merchandise.price}</td>
                                 <td>{item.fullname}</td>
                                 <td>{item.program}</td>
                                 <td>{item.size}</td>

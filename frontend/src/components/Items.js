@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import style from '../css/Items.module.css'
 import Navbar from './Navbar';
 import DOMAIN from '../config/config';
+import Auth from './auth/Auth';
 
 const token = localStorage.getItem("token")
 const Items = () => {
-
+  Auth()
   const [query, setQuery] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [data, setData] = useState([])
@@ -27,12 +28,12 @@ const Items = () => {
   const searchItem = async () => {
 
     try {
-      const response = await fetch(`${DOMAIN}/search?query=${query}`, { 
+      const response = await fetch(`${DOMAIN}/search?query=${query}`, {
         method: 'GET',
         headers: {
           "Authorization": `Bearer ${token}`
         }
-       })
+      })
 
       const data = await response.json()
       setData(data.items)
@@ -205,7 +206,7 @@ const Items = () => {
     try {
       const response = await fetch(`${DOMAIN}/delete-item/${item.item._id}`, {
         method: 'DELETE',
-        headers:{
+        headers: {
           "Authorization": `Bearer ${token}`
         }
       })

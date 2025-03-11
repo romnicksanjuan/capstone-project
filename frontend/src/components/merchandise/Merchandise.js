@@ -4,9 +4,11 @@ import style from '../../css/Items.module.css'
 import { useNavigate } from 'react-router-dom'
 import CreateProduct from './CreateProduct'
 import DOMAIN from '../../config/config'
+import Auth from '../auth/Auth'
 
 const token = localStorage.getItem("token")
 const Merchandise = () => {
+  Auth()
   const [isClick, setIsClick] = useState(false)
   const [merchandise, setMerchandise] = useState([])
   const [itemId, setItemId] = useState(null)

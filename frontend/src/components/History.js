@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import styles from '../css/History.module.css'
 import DOMAIN from '../config/config'
+import Auth from './auth/Auth'
 
 const token = localStorage.getItem("token")
 
 const History = () => {
+    Auth()
     const [data, setData] = useState([])
 
     useEffect(() => {
