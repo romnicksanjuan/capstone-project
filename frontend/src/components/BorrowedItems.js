@@ -96,14 +96,14 @@ const BorrowedItems = () => {
       })
 
       const data = await response.json()
-      window.location.reload()
+     
       if (!response.ok) {
         setError(data.message)
         throw new Error(response.status);
       }
 
-
       setShowForm(false)
+      window.location.reload()
     } catch (error) {
       console.log(error)
     }
