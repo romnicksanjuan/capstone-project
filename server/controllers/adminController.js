@@ -46,9 +46,9 @@ const loginAdmin = async (req, res) => {
 
         res.cookie("token", token, {
             // withCredentials: true,
-            httpOnly: true,   // ✅ Prevents JavaScript access (for security)
-            secure: true,
-            sameSite: "Strict",
+            httpOnly: true,
+            secure: true,       // 🔥 Required for HTTPS
+            sameSite: 'None',    // 🔥 Required for cross-origin cookies
             // maxAge: 24 * 60 * 60 * 1000,
             maxAge: 60 * 1000
         })
