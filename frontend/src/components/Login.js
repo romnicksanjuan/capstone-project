@@ -31,10 +31,6 @@ const Login = () => {
             setSuccessMessage(data.message)
             setErrorMessage("")
 
-            const token = data.token
-            console.log(token)
-            localStorage.setItem("token", token)
-
             navigate("/dashboard")
         } catch (error) {
             console.log(error.message)
