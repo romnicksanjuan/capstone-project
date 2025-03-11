@@ -49,8 +49,8 @@ const loginAdmin = async (req, res) => {
             httpOnly: true,   // ✅ Prevents JavaScript access (for security)
             secure: true,
             sameSite: "Strict",
-            // maxAge: 24 * 60 * 60 * 1000,
-            maxAge: 60 * 1000
+            maxAge: 24 * 60 * 60 * 1000,
+            // maxAge: 60 * 1000
         })
         res.status(201).json({ success: true, message: "Login Successfull" })
 
