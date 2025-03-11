@@ -7,6 +7,7 @@ import DOMAIN from '../../config/config'
 
 const token = localStorage.getItem("token")
 const Merchandise = () => {
+  const navigate = useNavigate()
   const [isClick, setIsClick] = useState(false)
   const [merchandise, setMerchandise] = useState([])
   const [itemId, setItemId] = useState(null)
@@ -50,6 +51,13 @@ const Merchandise = () => {
       if (!response.ok) {
         console.log(response.statusText)
       }
+
+      if (response.statusText === "Unauthorized") {
+        // console.log("hayop ka",response.statusText)
+        alert("Session Expired, Please Login Again")
+        navigate("/")
+        return
+    }
 
       const data = await response.json()
       console.log(data)

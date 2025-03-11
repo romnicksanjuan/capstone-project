@@ -41,12 +41,12 @@ const BorrowedItems = () => {
         }
       })
       const data = await response.json()
-      if (!response.ok) {
-        console.log(data)
-        alert("pota ka")
+      if (response.statusText === "Unauthorized") {
+        // console.log("hayop ka",response.statusText)
+        alert("Session Expired, Please Login Again")
+        navigate("/")
         return
       }
-
 
       console.log(data)
       setData(data)

@@ -24,8 +24,8 @@ router.post("/logout", logout)
 
 // item
 router.post('/create-item', createItem)
-router.get('/display-items', middleware, fetchItems)
-router.put('/edit-item/:id', middleware, editITem)
+router.get('/display-items', middleware, fetchItems) // middleware
+router.put('/edit-item/:id', editITem)
 router.delete('/delete-item/:id', deleteitem)
 router.get('/total-items', totalItems)
 router.get('/search', searchItem)
@@ -33,18 +33,18 @@ router.get('/item/:sn', propertyPage)
 
 // borrow
 router.post('/add-borrow-item', addBorrowItem)
-router.get('/fetch-borrowed-items', middleware, fetchBorrowedItems)
+router.get('/fetch-borrowed-items', middleware, fetchBorrowedItems)// middleware
 router.get('/total-borrowed-items', totalBorrowedItems)
 router.put('/return-item/:id', returnItem)
-router.get('/fetch-history', fetchHistory)
+router.get('/fetch-history', middleware, fetchHistory)  // middleware
 
 // mechandise
 router.post('/create-product', upload.single('image'), createProduct)
-router.get('/get-merchandise',middleware, getMerchandise)
+router.get('/get-merchandise', middleware, getMerchandise)// middleware
 router.delete('/delete-merchandise/:id', deleteMerchandise)
 router.put('/edit-merchandise/:id', editMerchandise)
 router.post('/purchase-history/:id', purchaseHistory)
-router.get('/get-purchase-history',middleware, getAllPurchaseHistory)
+router.get('/get-purchase-history', middleware, getAllPurchaseHistory)// middleware
 
 
 module.exports = router;

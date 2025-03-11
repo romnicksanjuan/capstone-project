@@ -4,9 +4,11 @@ import style from '../../css/Items.module.css'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import DOMAIN from '../../config/config'
+import { useNavigate } from 'react-router-dom'
 
 const token = localStorage.getItem("token")
 const PurchaseHistory = () => {
+    const navigate = useNavigate()
     const [purchaseHistory, setPurChaseHistory] = useState([])
 
     useEffect(() => {
@@ -19,8 +21,16 @@ const PurchaseHistory = () => {
                         "Authorization": `Bearer ${token}`
                     }
                 })
+                if (response.statusText === "Unauthorized") {
+                    // console.log("hayop ka",response.statusText)
+                    alert("Session Expired, Please Login Again")
+                    navigate("/")
+                    return
+                  }
+
                 if (!response.ok) {
                     console.log('Error')
+                    console.log(response.statusText)
                     return;
                 }
                 const data = await response.json()

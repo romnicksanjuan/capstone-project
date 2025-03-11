@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import style from '../css/Items.module.css'
 import Navbar from './Navbar';
 import DOMAIN from '../config/config';
+import { useNavigate } from 'react-router-dom';
 
 const token = localStorage.getItem("token")
 const Items = () => {
+  const navigate = useNavigate()
   const [query, setQuery] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [data, setData] = useState([])
@@ -98,9 +100,19 @@ const Items = () => {
             "Authorization": `Bearer ${token}`
           }
         }); // Fetch from backend
+        
+        if (response.statusText === "Unauthorized") {
+          // console.log("hayop ka",response.statusText)
+          alert("Session Expired, Please Login Again")
+          navigate("/")
+          return
+        }
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
+
+       
         const data = await response.json(); // Parse JSON response
         console.log(data.items)
         if (query === '') {

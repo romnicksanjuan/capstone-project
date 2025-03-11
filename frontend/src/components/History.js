@@ -2,20 +2,30 @@ import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import styles from '../css/History.module.css'
 import DOMAIN from '../config/config'
+import { useNavigate } from 'react-router-dom'
 
 const token = localStorage.getItem("token")
 
 const History = () => {
+    const navigate = useNavigate()
     const [data, setData] = useState([])
 
     useEffect(() => {
         const fetchBorrowedItems = async () => {
             const response = await fetch(`${DOMAIN}/fetch-history`, {
                 method: 'GET',
+                credentials: "include",
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
             })
+
+            if (response.statusText === "Unauthorized") {
+                // console.log("hayop ka",response.statusText)
+                alert("Session Expired, Please Login Again")
+                navigate("/")
+                return
+            }
 
             const data = await response.json()
             console.log("debugging", data)

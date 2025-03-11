@@ -11,7 +11,7 @@ function Dashboard() {
   const [data, setData] = useState([])
   // const [tokenExpired,setTokenExpired] = useState("")
 
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
   // useEffect(() => {
   //   if (!token) {
@@ -33,6 +33,8 @@ function Dashboard() {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
+        console.log(response.statusText)
+       
 
         const data = await response.json();
         setTotalItems(data.total);
@@ -74,8 +76,10 @@ function Dashboard() {
         credentials: "include",
       })
 
-      if (!response.ok) {
-        console.log(response.statusText)
+      if (response.statusText === "Unauthorized") {
+        // console.log("hayop ka",response.statusText)
+        alert("Session Expired, Please Login Again")
+        navigate("/")
         return
       }
 
