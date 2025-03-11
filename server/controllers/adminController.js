@@ -48,7 +48,7 @@ const loginAdmin = async (req, res) => {
             // withCredentials: true,
             httpOnly: true,   // ✅ Prevents JavaScript access (for security)
             secure: true,
-            sameSite: "Lax",
+            sameSite: "Strict",
             // maxAge: 24 * 60 * 60 * 1000,
             maxAge: 60 * 1000
         })
