@@ -7,7 +7,8 @@ const { createAdmin, loginAdmin, forgotPassword } = require('../controllers/admi
 
 
 // authehntication
-// const { middleware } = require("../middleware/auth.js")
+const { middleware } = require("../middleware/auth.js");
+const verifyToken = require('../controllers/AuthController.js');
 
 
 const router = express.Router();
@@ -15,6 +16,8 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 
 const upload = multer({ storage });
+// auth
+router.get("/verify-token", middleware, verifyToken)
 
 // admin
 router.post("/admin/create", createAdmin)

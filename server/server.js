@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const router = require('./routes/routes.js')
 const mongoose = require('mongoose')
+const cookieParser = require("cookie-parser")
 const { middleware } = require("./middleware/auth.js")
 const app = express()
 
@@ -14,21 +15,14 @@ mongoose.connect('mongodb+srv://romnick:1234@romnickdb.e14diyv.mongodb.net/capst
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
+  
+app.use(express.json()); // Ensure this line is included
+app.use(cookieParser())
 app.use(cors({
   origin: hosted_server,
   methods: ['POST', 'DELETE', 'PUT', 'GET'],
   credentials: true
 }));
-
-// Apply middleware globally, but exclude specific routes
-app.use((req, res, next) => {
-  const openRoutes = ["/admin/create", "/admin/login"]; // Add routes that should be public
-  if (openRoutes.includes(req.path)) {
-      return next(); // Skip authentication for these routes
-  }
-  middleware(req, res, next);
-});
-app.use(express.json()); // Ensure this line is included
 app.use('/', router)
 
 

@@ -1,4 +1,4 @@
-const { default: mongoose } = require('mongoose')
+
 const borrowItem = require('../model/borrowItem')
 const Item = require('../model/Item.js')
 
@@ -30,7 +30,7 @@ const fetchBorrowedItems = async (req, res) => {
     try {
         const fetch = await borrowItem.find({ action: 'Borrowed' }).lean()
 
-        console.log(fetch)
+        // console.log(fetch)
 
         if (!fetch) {
             res.json('No Borrowed Item')

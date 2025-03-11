@@ -44,8 +44,15 @@ const loginAdmin = async (req, res) => {
         const sercretKEy = "romnickPogi"
         const token = jwt.sign(payload, sercretKEy, { expiresIn: "10h" })
 
-
-        res.status(201).json({ success: true, message: "Login Successfull", token: token })
+        res.cookie("token", token, {
+            // withCredentials: true,
+            httpOnly: true,   // ✅ Prevents JavaScript access (for security)
+            secure: true,
+            sameSite: "Lax",
+            // maxAge: 24 * 60 * 60 * 1000,
+            maxAge: 60 * 1000
+        })
+        res.status(201).json({ success: true, message: "Login Successfull" })
 
     } catch (error) {
         console.log(error)
@@ -73,7 +80,7 @@ const forgotPassword = async (req, res) => {
             return res.status(400).json({ success: false, message: "Password does not match" })
         }
 
-        const save = await Admin.findOneAndUpdate({email}, { password: newPassword }, { new: true })
+        const save = await Admin.findOneAndUpdate({ email }, { password: newPassword }, { new: true })
         await save.save()
 
         res.status(200).json({ success: true, message: "Password Reset Successfull" })
