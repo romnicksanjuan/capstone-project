@@ -156,12 +156,12 @@ function Dashboard() {
               <tr key={index}>
                 {/* <td className={styles.serialNumber}>{item.number}</td> */}
                 <td>{item.serialNumber}</td>
-                <td>{item.unit}</td>
-                <td>{item.brand}</td>
+                <td>{item.item.unit}</td>
+                <td>{item.item.brand}</td>
                 <td>{item.borrower}</td>
                 <td>{item.mobileNumber}</td>
                 <td>{item.purpose}</td>
-                <td>{item.status}</td>
+                <td>{item.item.status}</td>
                 <td>{item.dateBorrowed}</td>
                 <td>
                   <button style={{
