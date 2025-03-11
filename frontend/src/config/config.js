@@ -4,4 +4,4 @@ const DOMAIN = {
 
 }
 
-export default DOMAIN.local_domain
+export default DOMAIN.server_domain

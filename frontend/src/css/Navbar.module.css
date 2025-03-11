@@ -65,7 +65,7 @@
   
   div a:hover {
     color: white;
-    border-bottom: 0.1rem solid white;
+    border-bottom: 0.2rem solid white;
   }
 
   div .icon:hover {
