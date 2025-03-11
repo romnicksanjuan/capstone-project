@@ -4,12 +4,10 @@ import styles from '../css/BorrowedItems.module.css'
 import DOMAIN from '../config/config';
 
 import { useNavigate } from 'react-router-dom';
-import Auth from './auth/Auth';
 const token = localStorage.getItem("token")
 
 const BorrowedItems = () => {
 
-  Auth()
   const [data, setData] = useState([])
   const [error, setError] = useState('')
   const [isClick, setIsClick] = useState(false)
@@ -37,12 +35,19 @@ const BorrowedItems = () => {
     const fetchBorrowedItems = async () => {
       const response = await fetch(`${DOMAIN}/fetch-borrowed-items`, {
         method: 'GET',
+        credentials: 'include',
         headers: {
           "Authorization": `Beare ${token}`
         }
       })
-
       const data = await response.json()
+      if (!response.ok) {
+        console.log(data)
+        alert("pota ka")
+        return
+      }
+
+
       console.log(data)
       setData(data)
     }

@@ -3,7 +3,6 @@ import Navbar from './Navbar'
 import styles from '../css/Dashboard.module.css'
 import DOMAIN from '../config/config'
 import { useNavigate } from 'react-router-dom'
-import Auth from './auth/Auth'
 // const token = localStorage.getItem("token")
 
 function Dashboard() {
@@ -22,8 +21,6 @@ function Dashboard() {
   // }, [])
 
   // console.log("tokennnnn:",token)
-
-  Auth()
 
   // display total items
   useEffect(() => {

@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react'
 import style from '../css/Items.module.css'
 import Navbar from './Navbar';
 import DOMAIN from '../config/config';
-import Auth from './auth/Auth';
 
 const token = localStorage.getItem("token")
 const Items = () => {
-  Auth()
   const [query, setQuery] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [data, setData] = useState([])
@@ -30,9 +28,10 @@ const Items = () => {
     try {
       const response = await fetch(`${DOMAIN}/search?query=${query}`, {
         method: 'GET',
+        credentials: "include",
         headers: {
           "Authorization": `Bearer ${token}`
-        }
+        },
       })
 
       const data = await response.json()
@@ -93,6 +92,7 @@ const Items = () => {
       try {
         const response = await fetch(`${DOMAIN}/display-items`, {
           method: "GET",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
@@ -124,6 +124,7 @@ const Items = () => {
     try {
       const response = await fetch(`${DOMAIN}/create-item`, {
         method: 'POST',
+        credentials: "include",
         headers: {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${token}`
@@ -173,6 +174,7 @@ const Items = () => {
     try {
       const response = await fetch(`${DOMAIN}/edit-item/${editingItemId}`, {
         method: 'PUT',
+        credentials: "include",
         headers: {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${token}`
@@ -206,6 +208,7 @@ const Items = () => {
     try {
       const response = await fetch(`${DOMAIN}/delete-item/${item.item._id}`, {
         method: 'DELETE',
+        credentials:"include",
         headers: {
           "Authorization": `Bearer ${token}`
         }

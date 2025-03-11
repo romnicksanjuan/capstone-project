@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
 import style from '../css/AddBorrowItem.module.css'
 import DOMAIN from '../config/config'
-import Auth from './auth/Auth'
 
 const token = localStorage.getItem("token")
 const AddBorrowItem = () => {
-    Auth()
     const [serialNumber, setSerialNumber] = useState('')
     const [brand, setBrand] = useState('')
     const [borrower, setBorrower] = useState('')

@@ -4,11 +4,9 @@ import style from '../../css/Items.module.css'
 import { useNavigate } from 'react-router-dom'
 import CreateProduct from './CreateProduct'
 import DOMAIN from '../../config/config'
-import Auth from '../auth/Auth'
 
 const token = localStorage.getItem("token")
 const Merchandise = () => {
-  Auth()
   const [isClick, setIsClick] = useState(false)
   const [merchandise, setMerchandise] = useState([])
   const [itemId, setItemId] = useState(null)
@@ -43,6 +41,7 @@ const Merchandise = () => {
     const getMerchandise = async () => {
       const response = await fetch(`${DOMAIN}/get-merchandise`, {
         method: 'GET',
+        credentials: "include",
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -82,6 +81,7 @@ const Merchandise = () => {
     try {
       const response = await fetch(`${DOMAIN}/purchase-history/${itemId}`, {
         method: 'post',
+        credentials: "include",
         headers: {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${token}`
@@ -119,6 +119,7 @@ const Merchandise = () => {
     try {
       const response = await fetch(`${DOMAIN}/delete-merchandise/${item._id}`, {
         method: 'DELETE',
+        credentials: "include",
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -157,6 +158,7 @@ const Merchandise = () => {
     try {
       const response = await fetch(`${DOMAIN}/edit-merchandise/${editingItemId}`, {
         method: 'PUT',
+        credentials: "include",
         headers: {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${token}`
@@ -201,6 +203,7 @@ const Merchandise = () => {
     try {
       const response = await fetch(`${DOMAIN}/create-product`, {
         method: 'POST',
+        credentials: "include",
         headers: {
           "Authorization": `Bearer ${token}`
         },

@@ -7,13 +7,20 @@ import { FaShoppingBag } from "react-icons/fa";
 import { IoIosListBox } from "react-icons/io";
 import { IoLogOut } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
-
+import DOMAIN from '../config/config';
 const Navbar = () => {
 
     const navigate = useNavigate()
-    const handleLogout = () => {
+    const handleLogout = async () => {
         if (!window.confirm("Do you want to logout?")) return
-        localStorage.clear()
+
+        const response = await fetch(`${DOMAIN}/logout`, {
+            method: "POST",
+            credentials: "include"
+        })
+
+        const data = await response.json()
+        console.log(data.message)
         navigate('/')
     }
     return (

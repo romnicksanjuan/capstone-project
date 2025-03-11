@@ -49,8 +49,8 @@ const loginAdmin = async (req, res) => {
             httpOnly: true,   // ✅ Prevents JavaScript access (for security)
             secure: true,
             sameSite: "Strict",
-            maxAge: 24 * 60 * 60 * 1000,
-            // maxAge: 60 * 1000
+            // maxAge: 24 * 60 * 60 * 1000,
+            maxAge: 60 * 1000
         })
         res.status(201).json({ success: true, message: "Login Successfull" })
 
@@ -88,4 +88,14 @@ const forgotPassword = async (req, res) => {
         console.log(error)
     }
 }
-module.exports = { createAdmin, loginAdmin, forgotPassword }
+
+const logout = async(req,res) => {
+    try {
+        res.clearCookie("token");
+        console.log("vovo")
+        res.status(200).json({ message: "Logged out successfully" });
+    } catch (error) {
+        console.log(error)
+    }
+}
+module.exports = { createAdmin, loginAdmin, forgotPassword,logout }

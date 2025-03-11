@@ -4,11 +4,9 @@ import style from '../../css/Items.module.css'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import DOMAIN from '../../config/config'
-import Auth from '../auth/Auth'
 
 const token = localStorage.getItem("token")
 const PurchaseHistory = () => {
-    Auth()
     const [purchaseHistory, setPurChaseHistory] = useState([])
 
     useEffect(() => {
@@ -16,6 +14,7 @@ const PurchaseHistory = () => {
             try {
                 const response = await fetch(`${DOMAIN}/get-purchase-history`, {
                     method: "GET",
+                    credentials: "include",
                     headers: {
                         "Authorization": `Bearer ${token}`
                     }

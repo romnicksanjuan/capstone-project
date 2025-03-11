@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import Navbar from '../Navbar';
 import style from '../../css/Items.module.css'
-import Auth from '../auth/Auth';
 
 const token = localStorage.getItem("token")
 function CreateProduct() {
-    Auth()
     const [name, setName] = useState('')
     const [price, setPrice] = useState(0)
     const [stock, setStock] = useState(0)

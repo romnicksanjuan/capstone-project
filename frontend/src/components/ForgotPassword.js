@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Domain from '../config/config'
 import { useNavigate } from "react-router-dom"
-import Auth from './auth/Auth'
 
 const token = localStorage.getItem("token")
 const ForgotPassword = () => {
-    Auth()
     const navigate = useNavigate()
     const [email, setEmail] = useState("")
     const [newPassword, setNewPassword] = useState("")
