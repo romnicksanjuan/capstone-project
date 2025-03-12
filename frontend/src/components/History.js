@@ -3,6 +3,7 @@ import Navbar from './Navbar'
 import styles from '../css/History.module.css'
 import DOMAIN from '../config/config'
 import { useNavigate } from 'react-router-dom'
+import TopBar from "./Topbar"
 
 const token = localStorage.getItem("token")
 
@@ -35,9 +36,13 @@ const History = () => {
         fetchBorrowedItems()
     }, [])
     return (
-        <>
+        <div style={{display:'flex'}}>
             <Navbar />
             <div className={styles.history}>
+
+                <TopBar />
+                
+                <h2 style={{ color: "orange", padding:'10px 0' }}>Borrowed History</h2>
                 <table className={styles.styledTable}>
                     <thead>
                         <tr>
@@ -72,7 +77,7 @@ const History = () => {
                     </tbody>
                 </table>
             </div>
-        </>
+        </div>
     )
 }
 

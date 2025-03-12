@@ -4,6 +4,7 @@ import styles from '../css/BorrowedItems.module.css'
 import DOMAIN from '../config/config';
 
 import { useNavigate } from 'react-router-dom';
+import Topbar from './Topbar';
 const token = localStorage.getItem("token")
 
 const BorrowedItems = () => {
@@ -96,7 +97,7 @@ const BorrowedItems = () => {
       })
 
       const data = await response.json()
-     
+
       if (!response.ok) {
         setError(data.message)
         throw new Error(response.status);
@@ -116,7 +117,7 @@ const BorrowedItems = () => {
     f()
   }, [serialNumber, borrower, mobileNumber, purpose])
   return (
-    <>
+    <div style={{ display: "flex" }}>
       <Navbar />
 
       {showForm && <form onSubmit={handleSubmit} style={{
@@ -165,6 +166,8 @@ const BorrowedItems = () => {
 
 
       <div className={styles.borrowedItems}>
+
+        < Topbar />
         <div>
           <button style={{
             marginTop: "20px",
@@ -179,6 +182,8 @@ const BorrowedItems = () => {
             fontSize: '15px'
           }} onClick={handleButtonClick}>Create Transaction</button>
         </div>
+        
+        <h2 style={{ color: "orange", padding:'10px 0' }}>Borrowed Items</h2>
         <table className={styles.styledTable}>
           <thead>
             <tr>
@@ -220,7 +225,7 @@ const BorrowedItems = () => {
           </tbody>
         </table>
       </div>
-    </>
+    </div>
 
   )
 }

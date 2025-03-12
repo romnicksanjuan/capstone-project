@@ -1,3 +1,9 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 .navbar {
     width: 100%;
     height: 130px;
@@ -26,20 +32,22 @@
   
   .navbarLinks {
     list-style: none;
-    display: flex;
-    gap: 15px;
+    display: grid;
+    /* grid-template-columns: repeat(2, 1fr); */
+    /* gap: 30px; */
     height: auto;
-    padding: 0 20px;
+    padding: 10px;
   }
 
   .pages{
-    width: 100%;
-    margin: 3px auto;
-    display: flex;
+    width: 280px;
+    /* margin: 3px auto; */
+    padding: 15px 5px;
+    /* display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center; */
     /* background-color: #0056b3; */
-    height: 80px;
+    height: 100vh;
     color: #fff;
     font-family: Arial, sans-serif;
     background-color: rgb(255, 187, 0);
@@ -50,22 +58,25 @@
     color: gray;
     font-size: 18px;
     transition: color 0.3s;
+    padding: 10px;
     /* font-weight: bold; */
+    /* background-color: blue; */
   }
   
-  .navbarLinks a:hover {
+  /* .navbarLinks a:hover {
     color: white;
-    border-bottom: 0.2rem solid white;
-  }
+    background-color: 0.2rem solid white;
+  } */
 
   .navbarLinks .icon:hover {
     color: white;
   }
   
   
-  div a:hover {
+ .navbarLinks a:hover {
     color: white;
-    border-bottom: 0.2rem solid white;
+    background-color: gray;
+    border-radius: 5px;
   }
 
   div .icon:hover {

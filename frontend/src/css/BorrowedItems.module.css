@@ -1,6 +1,13 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 .borrowedItems{
-    width: 90%;
+    width: 100%;
     margin: 0 auto;
+    padding: 20px;
 }
 
 
@@ -32,6 +39,7 @@
   }
   
   .styledTable tbody tr {
+    background-color: white;
     border-bottom: 1px solid #dddddd;
   }
   

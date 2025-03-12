@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer')
 const { createItem, fetchItems, editITem, deleteitem, totalItems, searchItem, propertyPage } = require('../controllers/controller.js')
 const { addBorrowItem, fetchBorrowedItems, totalBorrowedItems, returnItem, fetchHistory } = require('../controllers/borrowItemController.js');
-const { createProduct, getMerchandise, purchaseHistory, getAllPurchaseHistory, deleteMerchandise, editMerchandise } = require('../controllers/merchandise-controller.js');
+const { createProduct, getMerchandise, purchaseHistory, getAllPurchaseHistory, deleteMerchandise, editMerchandise, totalMerchandise } = require('../controllers/merchandise-controller.js');
 const { createAdmin, loginAdmin, forgotPassword, logout } = require('../controllers/adminController.js');
 
 
@@ -45,6 +45,7 @@ router.delete('/delete-merchandise/:id', deleteMerchandise)
 router.put('/edit-merchandise/:id', editMerchandise)
 router.post('/purchase-history/:id', purchaseHistory)
 router.get('/get-purchase-history', middleware, getAllPurchaseHistory)// middleware
+router.get("/total-merchandise", totalMerchandise)
 
 
 module.exports = router;

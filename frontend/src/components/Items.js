@@ -3,6 +3,7 @@ import style from '../css/Items.module.css'
 import Navbar from './Navbar';
 import DOMAIN from '../config/config';
 import { useNavigate } from 'react-router-dom';
+import Topbar from './Topbar';
 
 const token = localStorage.getItem("token")
 const Items = () => {
@@ -235,9 +236,12 @@ const Items = () => {
     }
   }
   return (
-    <>
+    <div style={{display:'flex'}}>
       <Navbar />
       <div className={style.tableContainer}>
+
+        <Topbar/>
+
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <form onSubmit={handleSearch}>
             <input
@@ -417,6 +421,8 @@ const Items = () => {
           )}
 
         </div>
+        
+        <h2 style={{ color: "orange", padding:'10px 0' }}>Inventory</h2>
         <table className={style.styledTable}>
           <thead>
             <tr>
@@ -442,7 +448,7 @@ const Items = () => {
                 <td>{item.item.category}</td>
                 <td>{item.item.status}</td>
                 <td>
-                  <img src={item.qr_code_image.data} style={{ width: '100px', height: '100px' }} />
+                  <img src={item.qr_code_image.data} style={{ width: '70px', height: 'auto' }} />
                 </td>
                 <td>{item.dateAdded}</td>
                 <td style={{ gap: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100px' }}>
@@ -460,7 +466,7 @@ const Items = () => {
           </tbody>
         </table>
       </div>
-    </>
+    </div>
 
   )
 }

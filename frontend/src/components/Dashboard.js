@@ -3,11 +3,15 @@ import Navbar from './Navbar'
 import styles from '../css/Dashboard.module.css'
 import DOMAIN from '../config/config'
 import { useNavigate } from 'react-router-dom'
+import { MdInventory } from "react-icons/md";
+
+import Topbar from './Topbar'
 // const token = localStorage.getItem("token")
 
 function Dashboard() {
   const [totalItems, setTotalItems] = useState(0)
   const [totalBorrowedItems, setTotalBorrowedItems] = useState(0)
+  const [totalMerchandise, setTotalMerchandise] = useState(0)
   const [data, setData] = useState([])
   // const [tokenExpired,setTokenExpired] = useState("")
 
@@ -34,7 +38,7 @@ function Dashboard() {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         console.log(response.statusText)
-       
+
 
         const data = await response.json();
         setTotalItems(data.total);
@@ -47,51 +51,62 @@ function Dashboard() {
   }, [])
 
   // total borrowed items
-  useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const response = await fetch(`${DOMAIN}/total-borrowed-items`, {
-          method: 'GET',
-          credentials: "include",
-        }); // Fetch from backend
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setTotalBorrowedItems(data);
-      } catch (error) {
-        console.error('Error fetching items:', error);
-      }
-    };
-
-    fetchItems();
-  }, [])
-
-  //   display borrowed items
-  useEffect(() => {
-    const fetchBorrowedItems = async () => {
-      const response = await fetch(`${DOMAIN}/fetch-borrowed-items`, {
+  const fetchItems = async () => {
+    try {
+      const response = await fetch(`${DOMAIN}/total-borrowed-items`, {
         method: 'GET',
         credentials: "include",
-      })
-
-      if (response.statusText === "Unauthorized") {
-        // console.log("hayop ka",response.statusText)
-        alert("Session Expired, Please Login Again")
-        navigate("/")
-        return
+      }); // Fetch from backend
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
+
+      const data = await response.json();
+      setTotalBorrowedItems(data);
+    } catch (error) {
+      console.error('Error fetching items:', error);
+    }
+  };
+
+  //   display borrowed items
+  const fetchBorrowedItems = async () => {
+    const response = await fetch(`${DOMAIN}/fetch-borrowed-items`, {
+      method: 'GET',
+      credentials: "include",
+    })
+    if (response.statusText === "Unauthorized") {
+      // console.log("hayop ka",response.statusText)
+      alert("Session Expired, Please Login Again")
+      navigate("/")
+      return
+    }
+
+    const data = await response.json()
+    console.log(data)
+    setData(data)
+  }
+
+  // display total merchanise
+  const displayTotalMerchandise = async () => {
+    try {
+      const response = await fetch(`${DOMAIN}/total-merchandise`, {
+        method: "GET"
+      })
 
       const data = await response.json()
       console.log(data)
-      setData(data)
+      setTotalMerchandise(data)
+    } catch (error) {
+      console.log(error)
     }
+  }
 
+  useEffect(() => {
+
+    fetchItems()
     fetchBorrowedItems()
+    displayTotalMerchandise()
   }, [])
-
-
 
 
   // return
@@ -111,30 +126,50 @@ function Dashboard() {
     }
   }
   return (
-    <>
+    <div style={{ display: 'flex' }}>
       <Navbar />
+
+
       <div className={styles.Dashboard}>
+
+        <Topbar />
+
+
         <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
 
 
           <div className={styles.totalItems}>
-            <div>
-              <h3 style={{ margin: '0', color: 'white' }}>Total Items</h3>
-              <h4 style={{ margin: '0', color: 'white', textAlign: 'center' }}>{totalItems}</h4>
+          <div style={{width:'100%',display:'flex',alignItems:'center'}}>
+              <MdInventory size={30} color='white' />
+              <h3 style={{ margin: '0', color: 'white' }}>Total Inventory</h3>
             </div>
+          
+              <h4 style={{ margin: '0', color: 'white', textAlign: 'center', fontSize:'20px' }}>{totalItems}</h4>
           </div>
 
-          <div className={styles.totalBorrowedItems}>
-            <div>
+          <div className={styles.totalItems}>
+            <div style={{width:'100%',display:'flex',alignItems:'center'}}>
+              <MdInventory size={30} color='white' />
               <h3 style={{ margin: '0', color: 'white' }}>Total Borrowed Items</h3>
-              <h4 style={{ margin: '0', color: 'white', textAlign: 'center' }}>{totalBorrowedItems}</h4>
             </div>
+          
+              <h4 style={{ margin: '0', color: 'white', textAlign: 'center', fontSize:'20px' }}>{totalBorrowedItems}</h4>
           </div>
+
+          <div className={styles.totalItems}>
+          <div style={{width:'100%',display:'flex',alignItems:'center'}}>
+              <MdInventory size={30} color='white' />
+              <h3 style={{ margin: '0', color: 'white' }}>Total Merchandise</h3>
+            </div>
+          
+              <h4 style={{ margin: '0', color: 'white', textAlign: 'center', fontSize:'20px' }}>{totalMerchandise}</h4>
+          </div>
+          
         </div>
 
 
 
-        <h2 style={{ color: "gray" }}>Borrowed Items</h2>
+        <h2 style={{ color: "orange", padding: '10px 0' }}>Borrowed Items</h2>
         <table className={styles.styledTable}>
           <thead>
             <tr>
@@ -178,7 +213,7 @@ function Dashboard() {
 
       </div>
 
-    </>
+    </div>
 
   )
 }

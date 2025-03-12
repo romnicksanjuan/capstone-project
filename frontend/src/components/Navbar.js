@@ -1,5 +1,4 @@
 import styles from '../css/Navbar.module.css'
-import image from '../images/ctc logo.png'
 import { RiDashboardHorizontalFill } from "react-icons/ri";
 import { HiCollection } from "react-icons/hi";
 import { RiChatHistoryFill } from "react-icons/ri";
@@ -25,7 +24,7 @@ const Navbar = () => {
     }
     return (
         <>
-            <nav className={styles.navbar}>
+            {/* <nav className={styles.navbar}>
                 <div className={styles.navbarLogo}>
                     <img style={{}} src={image} />
                 </div>
@@ -37,12 +36,11 @@ const Navbar = () => {
                 <div style={{ visibility: "hidden" }} className={styles.navbarLogo}>
                     <img src={image} />
                 </div>
-            </nav>
+            </nav> */}
 
             <div className={styles.pages}>
-
                 <nav className={styles.navbarLinks}>
-                    <a style={{ display: 'flex', alignItems: 'center', padding: '0' }} href="/Dashboard">
+                    <a style={{ display: 'flex', alignItems: 'center' }} href="/Dashboard">
                         < RiDashboardHorizontalFill
                             size={25}
                             className='icon'
@@ -71,14 +69,13 @@ const Navbar = () => {
                         <RiChatHistoryFill size={30} className='icon' />
                         <p style={{ padding: '0' }}> Purchase History</p>
                     </a>
-                </nav>
 
-                <div style={{ padding: '0 20px' }}>
+
                     <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={() => handleLogout()}>
                         <IoLogOut size={30} className='icon' />
                         <p style={{ padding: '0' }}> Logout</p>
                     </a>
-                </div>
+                </nav>
             </div>
 
         </>

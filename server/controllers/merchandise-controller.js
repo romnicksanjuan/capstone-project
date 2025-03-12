@@ -136,5 +136,22 @@ const getAllPurchaseHistory = async (req, res) => {
     }
 }
 
+const totalMerchandise = async (req, res) => {
+    try {
+        const total = await Merchandise.countDocuments()
 
-module.exports = { createProduct, getMerchandise, purchaseHistory, getAllPurchaseHistory, deleteMerchandise, editMerchandise }
+        if (total >= 0) {
+            res.json(total)
+        }
+
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+module.exports = {
+    createProduct, getMerchandise, purchaseHistory,
+    getAllPurchaseHistory, deleteMerchandise, editMerchandise, totalMerchandise
+}

@@ -1,16 +1,26 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 .Dashboard {
-    margin: 10px auto;
-    width: 90%;
+    /* margin: 10px auto; */
+    width: 100%;
     gap: 20px;
+    padding:  20px;
 }
 
 .totalItems, .totalBorrowedItems {
-    width: 300px;
+
+    width: 350px;
     height: 150px;
     display: flex;
+    padding: 10px 20px;
+    /* grid-template-columns: repeat(2, 1fr);
+    place-items: center; */
     align-items: center;
-    justify-content: center;
-    background-color: #219ebc;
+    background-color:  rgb(255, 187, 0);
     border-radius: 5px;
 }
 
@@ -40,11 +50,10 @@
   .styledTable th,
   .styledTable td {
     padding: 12px 15px;
-    border: 1px solid #ddd;
   }
   
   .styledTable tbody tr {
-    border-bottom: 1px solid #dddddd;
+    background-color: white;
   }
   
   .styledTable tbody tr:nth-of-type(even) {

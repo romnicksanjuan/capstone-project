@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import DOMAIN from '../../config/config'
 import { useNavigate } from 'react-router-dom'
+import Topbar from '../Topbar'
 
 const token = localStorage.getItem("token")
 const PurchaseHistory = () => {
@@ -43,9 +44,11 @@ const PurchaseHistory = () => {
         getAllPurchaseHistory()
     }, [])
     return (
-        <>
+        < div style={{display:'flex'}}>
             <Navbar />
-            <div style={{ width: '90%', margin: '0 auto' }}>
+            <div style={{ width: '100%', margin: '0 auto' ,padding:'20px'}}>
+                <Topbar />
+                <h2 style={{ color: "orange", padding:'10px 0' }}>Purchase History</h2>
                 <table className={style.styledTable}>
                     <thead>
                         <tr>
@@ -88,7 +91,7 @@ const PurchaseHistory = () => {
 
                 </table>
             </div>
-        </>
+        </div>
     )
 }
 

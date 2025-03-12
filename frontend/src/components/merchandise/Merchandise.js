@@ -4,6 +4,7 @@ import style from '../../css/Items.module.css'
 import { useNavigate } from 'react-router-dom'
 import CreateProduct from './CreateProduct'
 import DOMAIN from '../../config/config'
+import TopBar from "../Topbar"
 
 const token = localStorage.getItem("token")
 const Merchandise = () => {
@@ -227,9 +228,10 @@ const Merchandise = () => {
     }
   };
   return (
-    <>
+    <div style={{display:"flex"}}>
       <Navbar />
-      <div style={{ width: '90%', margin: '0 auto' }}>
+      <div style={{ width: '100%', margin: '0 auto', padding:'20px' }}>
+        <TopBar />
         <button
           style={{
             marginTop: "20px",
@@ -333,7 +335,7 @@ const Merchandise = () => {
                 <td onClick={() => handleClick(item)}>{item.name}</td>
                 <td onClick={() => handleClick(item)}>{item.price}</td>
                 <td onClick={() => handleClick(item)}>{item.stock}</td>
-                <td style={{ display: 'flex', gap: '5px', height: '100px', alignItems: 'center' }}>
+                <td style={{display:"grid", gridTemplateColumns: "repeat(2 ,1fr)",placeItems:'center',gap: '5px',height:'130px', border:'none' }}>
                   <button style={{
                     backgroundColor: "#219ebc",
                     color: "#fff", cursor: 'pointer', height: '35px', width: '45%', border: 'none', fontSize: '15px', borderRadius: '5px',
@@ -446,7 +448,7 @@ const Merchandise = () => {
           </form>
         )}
       </div>
-    </>
+    </ div>
   )
 }
 

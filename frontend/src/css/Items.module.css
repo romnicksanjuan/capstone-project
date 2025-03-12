@@ -1,8 +1,15 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 .tableContainer {
-  margin: 20px auto;
-  width: 90%;
+  /* margin: 20px auto; */
+  width: 100%;
   overflow-x: auto;
   /* position: relative; */
+  padding: 20px;
 }
 
 .styledTable {
@@ -32,6 +39,7 @@
 
 .styledTable tbody tr {
   border-bottom: 1px solid #dddddd;
+  background-color: white;
 }
 
 .styledTable tbody tr:nth-of-type(even) {
@@ -43,7 +51,7 @@
 }
 
 .styledTable tbody tr:hover {
-  background-color: #f1f1f1;
+  /* background-color: #f1f1f1; */
   cursor: pointer;
 }
 
