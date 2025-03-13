@@ -14,6 +14,7 @@ import PurchaseHistory from './components/merchandise/PurchaseHistory.js';
 import PropertyPage from './components/PropertyPage.js';
 import Login from './components/Login.js';
 import ForgotPassword from './components/ForgotPassword.js';
+import Test from './components/Test.js';
 
 function App() {
 // pota 
@@ -31,6 +32,7 @@ function App() {
         <Route path='/get-purchase-history' element={<PurchaseHistory />} />
         <Route path='/item/:sn' element={<PropertyPage />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/test' element={<Test />} />
       </Routes>
     </BrowserRouter>
   );

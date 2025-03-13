@@ -42,7 +42,7 @@ const Navbar = () => {
                 <nav className={styles.navbarLinks}>
                     <a style={{ display: 'flex', alignItems: 'center' }} href="/Dashboard">
                         < RiDashboardHorizontalFill
-                            size={25}
+                            size={30}
                             className='icon'
                         />
                         <p style={{ padding: '0' }}>  Dashboard</p>

@@ -4,7 +4,8 @@ import styles from '../css/Dashboard.module.css'
 import DOMAIN from '../config/config'
 import { useNavigate } from 'react-router-dom'
 import { MdInventory } from "react-icons/md";
-
+import BarChart from './BarChart'
+import BarChartMerchandise from './BarChartMerchandise'
 import Topbar from './Topbar'
 // const token = localStorage.getItem("token")
 
@@ -37,7 +38,7 @@ function Dashboard() {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        console.log(response.statusText)
+        // console.log(response.statusText)
 
 
         const data = await response.json();
@@ -82,7 +83,7 @@ function Dashboard() {
     }
 
     const data = await response.json()
-    console.log(data)
+    // console.log(data)
     setData(data)
   }
 
@@ -94,7 +95,7 @@ function Dashboard() {
       })
 
       const data = await response.json()
-      console.log(data)
+      // console.log(data)
       setTotalMerchandise(data)
     } catch (error) {
       console.log(error)
@@ -102,7 +103,6 @@ function Dashboard() {
   }
 
   useEffect(() => {
-
     fetchItems()
     fetchBorrowedItems()
     displayTotalMerchandise()
@@ -125,6 +125,8 @@ function Dashboard() {
       console.log(error)
     }
   }
+
+
   return (
     <div style={{ display: 'flex' }}>
       <Navbar />
@@ -133,47 +135,52 @@ function Dashboard() {
       <div className={styles.Dashboard}>
 
         <Topbar />
-
-
         <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
 
-
           <div className={styles.totalItems}>
-          <div style={{width:'100%',display:'flex',alignItems:'center'}}>
+            <div style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
               <MdInventory size={30} color='white' />
               <h3 style={{ margin: '0', color: 'white' }}>Total Inventory</h3>
             </div>
-          
-              <h4 style={{ margin: '0', color: 'white', textAlign: 'center', fontSize:'20px' }}>{totalItems}</h4>
+
+            <h4 style={{ margin: '0', color: 'white', textAlign: 'center', fontSize: '20px' }}>{totalItems}</h4>
           </div>
 
           <div className={styles.totalItems}>
-            <div style={{width:'100%',display:'flex',alignItems:'center'}}>
+            <div style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
               <MdInventory size={30} color='white' />
               <h3 style={{ margin: '0', color: 'white' }}>Total Borrowed Items</h3>
             </div>
-          
-              <h4 style={{ margin: '0', color: 'white', textAlign: 'center', fontSize:'20px' }}>{totalBorrowedItems}</h4>
+
+            <h4 style={{ margin: '0', color: 'white', textAlign: 'center', fontSize: '20px' }}>{totalBorrowedItems}</h4>
           </div>
 
           <div className={styles.totalItems}>
-          <div style={{width:'100%',display:'flex',alignItems:'center'}}>
+            <div style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
               <MdInventory size={30} color='white' />
               <h3 style={{ margin: '0', color: 'white' }}>Total Merchandise</h3>
             </div>
-          
-              <h4 style={{ margin: '0', color: 'white', textAlign: 'center', fontSize:'20px' }}>{totalMerchandise}</h4>
+
+            <h4 style={{ margin: '0', color: 'white', textAlign: 'center', fontSize: '20px' }}>{totalMerchandise}</h4>
           </div>
-          
+
         </div>
 
 
-
-        <h2 style={{ color: "orange", padding: '10px 0' }}>Borrowed Items</h2>
+        <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+          <div style={{ width: '50%' }}>
+            <h2 style={{ color: 'orange', textAlign: 'center', margin: "0", padding: '10px 0' }}>Inventory</h2>
+            <BarChart />
+          </div>
+          <div style={{ width: '50%' }}>
+            <h2 style={{ color: 'orange', textAlign: 'center', padding: '10px 0' }}>Merchandise</h2>
+            <BarChartMerchandise />
+          </div>
+        </div>
+        {/* <h2 style={{ color: "orange", padding: '10px 0' }}>Borrowed Items</h2>
         <table className={styles.styledTable}>
           <thead>
             <tr>
-              {/* <th>Serial No.</th> */}
               <th>Serial Number</th>
               <th>Unit</th>
               <th>Brand</th>
@@ -189,7 +196,6 @@ function Dashboard() {
           <tbody>
             {data ? data.map((item, index) => (
               <tr key={index}>
-                {/* <td className={styles.serialNumber}>{item.number}</td> */}
                 <td>{item.serialNumber}</td>
                 <td>{item.item.unit}</td>
                 <td>{item.item.brand}</td>
@@ -209,7 +215,7 @@ function Dashboard() {
               </tr>
             )) : ""}
           </tbody>
-        </table>
+        </table> */}
 
       </div>
 

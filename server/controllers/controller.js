@@ -156,4 +156,56 @@ const propertyPage = async (req, res) => {
     }
 }
 
-module.exports = { createItem, fetchItems, editITem, deleteitem, totalItems, searchItem, propertyPage }
+
+// get months
+const getMonths = () => {
+    const year = 2025;
+    const currentMonth = new Date().getMonth() + 1; // Current month index (0-11)
+
+    let months = [];
+
+    for (let month = 0; month < currentMonth; month++) {
+        months.push(new Date(year, month, 1)); // Push start of each month
+    }
+    console.log("moths:", months)
+    return months
+}
+
+
+const barGraph = async (req, res) => {
+    try {
+        const months = getMonths()
+        // const monthlyData = []
+
+        // for (let month = 0; month < months.length; month++) {
+        //     const start = months[month]
+        //     const barGraph = await Item.find({ createdAt: { $gte:  start , }})
+
+        //     monthlyData.push({
+        //         month: start.toLocaleDateString("en-US", {month: "long"}),
+        //         count: barGraph.length,
+        //         data: barGraph
+        //     }) 
+        // }
+
+        const monthlyData = Promise.all(months.map(async (month, index) => {
+            const end = index + 1 < months.length ? months[index + 1] : new Date(2025, new Date().getMonth() + 1, 1);
+            const bar = await Item.find({ createdAt: { $gte: month , $lt: end} })
+
+            return {
+                month: month.toLocaleDateString("en-US", { month: "long" }),
+                count: bar.length,
+                data: bar
+            }
+        }))
+        // console.log(monthlyData)
+
+        // const barGraph = await Item.find({ createdAt: { $lt: dtae } })
+        // console.log("monthlydata", (await monthly).map(m => m))
+        res.json({ success: true, message: "Data Retrieve Successful", monthlyData: (await monthlyData).map(m => m) })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+module.exports = { createItem, fetchItems, barGraph, editITem, deleteitem, totalItems, searchItem, propertyPage }

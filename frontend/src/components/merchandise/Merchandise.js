@@ -39,7 +39,7 @@ const Merchandise = () => {
   // get merchandise
   useEffect(() => {
     const token = localStorage.getItem("token")
-    console.log(token)
+    // console.log(token)
     const getMerchandise = async () => {
       const response = await fetch(`${DOMAIN}/get-merchandise`, {
         method: 'GET',
