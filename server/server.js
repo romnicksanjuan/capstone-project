@@ -8,7 +8,7 @@ const app = express()
 
 const port = 3001
 
-const hosted_server = 'https://capstone-project-sand-gamma.vercel.app'
+const hosted_domain = 'https://capstone-project-sand-gamma.vercel.app'
 const local_domain = 'http://localhost:3000'
 
 mongoose.connect('mongodb+srv://romnick:1234@romnickdb.e14diyv.mongodb.net/capstone')
@@ -19,7 +19,7 @@ mongoose.connect('mongodb+srv://romnick:1234@romnickdb.e14diyv.mongodb.net/capst
 app.use(express.json()); // Ensure this line is included
 app.use(cookieParser())
 app.use(cors({
-  origin: hosted_server,
+  origin: hosted_domain,
   methods: ['POST', 'DELETE', 'PUT', 'GET'],
   credentials: true
 }));

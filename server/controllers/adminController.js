@@ -94,7 +94,7 @@ const logout = async(req,res) => {
         res.clearCookie("token", {
             httpOnly: true,
             secure: true, // Make sure it's false in development if you're not using HTTPS
-            sameSite: "strict",
+            sameSite: 'None', 
           });
         console.log("vovo")
         res.status(200).json({ message: "Logged out successfully" });

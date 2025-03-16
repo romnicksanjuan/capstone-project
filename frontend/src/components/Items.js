@@ -239,6 +239,7 @@ const Items = () => {
 
   // printer
   const reactToPrintFn = useReactToPrint({
+    documentTitle:`${new Date()}`,
     contentRef: contentRef,
   });
   return (
