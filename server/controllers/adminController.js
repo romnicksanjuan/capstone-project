@@ -91,7 +91,11 @@ const forgotPassword = async (req, res) => {
 
 const logout = async(req,res) => {
     try {
-        res.clearCookie("token");
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: true, // Make sure it's false in development if you're not using HTTPS
+            sameSite: "strict",
+          });
         console.log("vovo")
         res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {
