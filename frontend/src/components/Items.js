@@ -4,6 +4,7 @@ import style from '../css/Items.module.css'
 import Navbar from './Navbar';
 import DOMAIN from '../config/config';
 import { useNavigate } from 'react-router-dom';
+import { RiPrinterFill } from "react-icons/ri";
 import Topbar from './Topbar';
 
 const token = localStorage.getItem("token")
@@ -452,20 +453,27 @@ const Items = () => {
                 <td>{item.item.brand}</td>
                 <td>{item.item.category}</td>
                 <td>{item.item.status}</td>
-                <td>
-                  <img ref={contentRef} src={item.qr_code_image.data} style={{ width: '70px', height: 'auto' }} />
-                  <button onClick={() => reactToPrintFn()}>print</button>
+                <td style={{width:'10px' }}>
+                  <div style={{ display: 'flex', justifyItems:'center',alignItems:'center', gap: '5px' }}>
+                    {/* Your content here */}
+                    <img ref={contentRef} src={item.qr_code_image.data} style={{ width: '70px', height: 'auto' }} />
+                    <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={26} />
+                  </div>
                 </td>
                 <td>{item.dateAdded}</td>
-                <td style={{ gap: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100px' }}>
-                  <button style={{
+                <td style={{ gap: '10px', justifyContent: 'space-between', alignItems: 'center', }}>
+               <div style={{display:'flex', gap:'10px'}}>
+
+               <button style={{
                     backgroundColor: "#219ebc",
+                    padding:'3px 5px',
                     color: "#fff", cursor: 'pointer', height: '35px', width: '45%', border: 'none', fontSize: '15px', borderRadius: '5px',
                   }} onClick={() => handleDelete(item)}>Delete</button>
                   <button style={{
                     backgroundColor: "#219ebc",
                     color: "#fff", cursor: 'pointer', height: '35px', width: '45%', border: 'none', fontSize: '15px', borderRadius: '5px',
                   }} onClick={() => handleEdit(item)}>Edit</button>
+               </div>
                 </td>
               </tr>
             ))}
