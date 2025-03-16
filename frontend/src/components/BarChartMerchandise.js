@@ -34,7 +34,7 @@ const BarChartMerchandise = () => {
         labels: monthlyData.map((m) => m.month),
         datasets: [
             {
-                label: "Monthly Merchandise Data",
+                label: "Monthly Purchase Data",
                 data: monthlyData.map(m => m.count ? m.count : 0),
                 backgroundColor: "rgba(255, 165, 0, 0.6)", // Orange with transparency
                 borderColor: "rgba(255, 140, 0, 1)", // Darker orange border
