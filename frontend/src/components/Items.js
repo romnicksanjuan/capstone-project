@@ -104,15 +104,13 @@ const Items = () => {
           }
         }); // Fetch from backend
 
-        if (response.statusText === "Unauthorized") {
-          // console.log("hayop ka",response.statusText)
-          alert("Session Expired, Please Login Again")
-          navigate("/")
-          return
-        }
-
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          if (response.statusText === "Unauthorized") {
+            // console.log("hayop ka",response.statusText)
+            alert("Session Expired, Please Login Again")
+            navigate("/")
+            return
+          }
         }
 
 
