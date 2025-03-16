@@ -11,11 +11,6 @@ const PrintableComponent = React.forwardRef((props, ref) => (
 const Test = () => {
   const contentRef = useRef(null);
   const reactToPrintFn = useReactToPrint({
-    // content: () => {
-    //   console.log("contentRef.current:", contentRef.current);
-    //   return contentRef.current
-    // },
-    // contentRef
     contentRef: contentRef,
   });
 

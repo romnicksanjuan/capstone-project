@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
+import { useReactToPrint } from "react-to-print";
 import style from '../css/Items.module.css'
 import Navbar from './Navbar';
 import DOMAIN from '../config/config';
@@ -7,6 +8,7 @@ import Topbar from './Topbar';
 
 const token = localStorage.getItem("token")
 const Items = () => {
+  const contentRef = useRef(null);
   const navigate = useNavigate()
   const [query, setQuery] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -101,7 +103,7 @@ const Items = () => {
             "Authorization": `Bearer ${token}`
           }
         }); // Fetch from backend
-        
+
         if (response.statusText === "Unauthorized") {
           // console.log("hayop ka",response.statusText)
           alert("Session Expired, Please Login Again")
@@ -113,7 +115,7 @@ const Items = () => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-       
+
         const data = await response.json(); // Parse JSON response
         console.log(data.items)
         if (query === '') {
@@ -221,7 +223,7 @@ const Items = () => {
     try {
       const response = await fetch(`${DOMAIN}/delete-item/${item.item._id}`, {
         method: 'DELETE',
-        credentials:"include",
+        credentials: "include",
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -235,12 +237,17 @@ const Items = () => {
 
     }
   }
+
+  // printer
+  const reactToPrintFn = useReactToPrint({
+    contentRef: contentRef,
+  });
   return (
-    <div style={{display:'flex'}}>
+    <div style={{ display: 'flex' }}>
       <Navbar />
       <div className={style.tableContainer}>
 
-        <Topbar/>
+        <Topbar />
 
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <form onSubmit={handleSearch}>
@@ -421,8 +428,8 @@ const Items = () => {
           )}
 
         </div>
-        
-        <h2 style={{ color: "orange", padding:'10px 0' }}>Inventory</h2>
+
+        <h2 style={{ color: "orange", padding: '10px 0' }}>Inventory</h2>
         <table className={style.styledTable}>
           <thead>
             <tr>
@@ -448,7 +455,8 @@ const Items = () => {
                 <td>{item.item.category}</td>
                 <td>{item.item.status}</td>
                 <td>
-                  <img src={item.qr_code_image.data} style={{ width: '70px', height: 'auto' }} />
+                  <img ref={contentRef} src={item.qr_code_image.data} style={{ width: '70px', height: 'auto' }} />
+                  <button onClick={() => reactToPrintFn()}>print</button>
                 </td>
                 <td>{item.dateAdded}</td>
                 <td style={{ gap: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100px' }}>
