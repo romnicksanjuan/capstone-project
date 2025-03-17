@@ -160,7 +160,7 @@ const propertyPage = async (req, res) => {
 // get months
 const getMonths = () => {
     const year = 2025;
-    const currentMonth = new Date().getMonth(); // Current month index (0-11)
+    const currentMonth = new Date().getMonth() + 1; // Current month index (0-11)
 
     let months = [];
 
