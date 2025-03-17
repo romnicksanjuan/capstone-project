@@ -42,37 +42,37 @@ const Navbar = () => {
                 <nav className={styles.navbarLinks}>
                     <a style={{ display: 'flex', alignItems: 'center' }} href="/Dashboard">
                         < RiDashboardHorizontalFill
-                            size={30}
+                            size={26}
                             className='icon'
                         />
                         <p style={{ padding: '0' }}>  Dashboard</p>
                     </a>
 
                     <a style={{ display: 'flex', alignItems: 'center' }} href="/items">
-                        <IoIosListBox size={30} className='icon' />
+                        <IoIosListBox size={26} className='icon' />
                         <p style={{ padding: '0' }}>Inventory</p>
                     </a>
                     <a style={{ display: 'flex', alignItems: 'center' }} href="/borrowed-items">
-                        <HiCollection size={30} className='icon' />
+                        <HiCollection size={26} className='icon' />
                         <p style={{ padding: '0' }}>Borrowed-Items</p>
                     </a>
                     <a style={{ display: 'flex', alignItems: 'center' }} href="/history">
-                        <RiChatHistoryFill size={30} className='icon' />
+                        <RiChatHistoryFill size={26} className='icon' />
                         <p style={{ padding: '0' }}>History</p>
                     </a>
                     <a style={{ display: 'flex', alignItems: 'center' }} href="/merchandise">
-                        <FaShoppingBag size={29} className='icon' />
+                        <FaShoppingBag size={26} className='icon' />
                         <p style={{ padding: '0' }}>Merchandise</p>
 
                     </a>
                     <a style={{ display: 'flex', alignItems: 'center' }} href="/get-purchase-history">
-                        <RiChatHistoryFill size={30} className='icon' />
+                        <RiChatHistoryFill size={26} className='icon' />
                         <p style={{ padding: '0' }}> Purchase History</p>
                     </a>
 
 
                     <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={() => handleLogout()}>
-                        <IoLogOut size={30} className='icon' />
+                        <IoLogOut size={26} className='icon' />
                         <p style={{ padding: '0' }}> Logout</p>
                     </a>
                 </nav>
