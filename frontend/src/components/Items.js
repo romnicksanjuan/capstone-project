@@ -272,8 +272,9 @@ const Items = () => {
                 style={{
                   display:"flex",
                   alignItems:'center',
+                  justifyContent:"center",
                   gap:"5px",
-                  padding: "10px",
+                  padding: "5px",
                   marginLeft: "10px",
                   border: "none",
                   borderRadius: "5px",
@@ -292,7 +293,7 @@ const Items = () => {
 
 
           <div style={{
-            padding: "10px",
+            padding: "5px",
             border: "none",
             borderRadius: "5px",
             backgroundColor: "#219ebc",
