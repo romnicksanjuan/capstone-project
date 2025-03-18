@@ -302,7 +302,8 @@ const Items = () => {
             width: '120px',
             fontSize: '15px',
             display: "flex",
-            alignItems: 'center'
+            alignItems: 'center',
+            justifyContent:'center'
           }}
             onClick={handleButtonClick}
           >
