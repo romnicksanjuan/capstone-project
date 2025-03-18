@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import CreateProduct from './CreateProduct'
 import DOMAIN from '../../config/config'
 import TopBar from "../Topbar"
+import { MdDelete, MdAdd } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
 
 const token = localStorage.getItem("token")
 const Merchandise = () => {
@@ -58,7 +60,7 @@ const Merchandise = () => {
         alert("Session Expired, Please Login Again")
         navigate("/")
         return
-    }
+      }
 
       const data = await response.json()
       console.log(data)
@@ -228,28 +230,31 @@ const Merchandise = () => {
     }
   };
   return (
-    <div style={{display:"flex"}}>
+    <div style={{ display: "flex" }}>
       <Navbar />
-      <div style={{ width: '100%', margin: '0 auto', padding:'20px' }}>
+      <div style={{ width: '100%', margin: '0 auto', padding: '20px' }}>
         <TopBar />
-        <button
+        <div
           style={{
+            display:"flex",
+            justifyContent:"center",
+            alignItems:"center",
             marginTop: "20px",
             marginBottom: "10px",
             padding: "10px",
-            marginLeft: "10px",
             border: "none",
             borderRadius: "5px",
             backgroundColor: "#219ebc",
             color: "#fff",
             cursor: "pointer",
-            width: '120px',
+            width: '140px',
             fontSize: '15px'
           }}
           onClick={() => handleShowForm()}
         >
+          <MdAdd color='white' size={30} />
           Add Product
-        </button>
+        </div>
 
 
         {showForm ? <form onSubmit={handleSubmit} style={{
@@ -330,21 +335,14 @@ const Merchandise = () => {
               <tr key={index}>
                 {/* <td className={style.serialNumber}>{item.number}</td> */}
                 <td className={style.image} onClick={() => handleClick(item)}>
-                  <img src={item.image.data} style={{ width: '100px', height: '100px' }} />
+                  <img src={item.image.data} style={{ width: '70px', height: '70px' }} />
                 </td>
                 <td onClick={() => handleClick(item)}>{item.name}</td>
                 <td onClick={() => handleClick(item)}>{item.price}</td>
                 <td onClick={() => handleClick(item)}>{item.stock}</td>
-                <td style={{display:"grid", gridTemplateColumns: "repeat(2 ,1fr)",placeItems:'center',gap: '5px',height:'130px', border:'none' }}>
-                  <button style={{
-                    backgroundColor: "#219ebc",
-                    color: "#fff", cursor: 'pointer', height: '35px', width: '45%', border: 'none', fontSize: '15px', borderRadius: '5px',
-                  }} onClick={() => handleDelete(item)}>Delete</button>
-
-                  <button style={{
-                    backgroundColor: "#219ebc",
-                    color: "#fff", cursor: 'pointer', height: '35px', width: '45%', border: 'none', fontSize: '15px', borderRadius: '5px',
-                  }} onClick={() => handleEdit(item)}>Edit</button>
+                <td style={{ display: "grid", gridTemplateColumns: "repeat(2 ,1fr)", placeItems: 'center', gap: '10px', height: '100px', border: 'none' }}>
+                  <MdDelete color='red' size={30} onClick={() => handleDelete(item)} />
+                  <FaEdit color='blue' size={30} onClick={() => handleEdit(item)} />
                 </td>
               </tr>
             ))}

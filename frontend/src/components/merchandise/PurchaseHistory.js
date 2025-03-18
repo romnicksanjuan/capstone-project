@@ -75,7 +75,7 @@ const PurchaseHistory = () => {
                                     <img src={item.image.data} style={{ width: '100px', height: '100px' }} />
                                 </td> */}
                                 <td className={style.image}>
-                                    <img src={`data:image/jpeg;base64,${item.merchandise.image.data}`} style={{ width: '100px', height: '100px' }} />
+                                    <img src={`data:image/jpeg;base64,${item.merchandise.image.data}`} style={{ width: '70px', height: '70px' }} />
                                 </td>
                                 <td>{item.merchandise.name}</td>
                                 <td>{item.merchandise.price}</td>

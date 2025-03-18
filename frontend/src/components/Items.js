@@ -6,6 +6,9 @@ import DOMAIN from '../config/config';
 import { useNavigate } from 'react-router-dom';
 import { RiPrinterFill } from "react-icons/ri";
 import Topbar from './Topbar';
+import { MdDelete, MdAdd } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import { IoSearch } from "react-icons/io5";
 
 const token = localStorage.getItem("token")
 const Items = () => {
@@ -239,7 +242,7 @@ const Items = () => {
 
   // printer
   const reactToPrintFn = useReactToPrint({
-    documentTitle:`${new Date()}`,
+    documentTitle: `${new Date()}`,
     contentRef: contentRef,
   });
   return (
@@ -250,59 +253,60 @@ const Items = () => {
         <Topbar />
 
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <form onSubmit={handleSearch}>
-            <input
-              type="text"
-              placeholder="Search item..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              style={{
-                padding: "10px",
-                width: "300px",
-                borderRadius: "5px",
-                border: "1px solid #ccc",
-                fontSize: '15px'
+ 
+            <div onSubmit={handleSearch} style={{ display: 'grid', gridTemplateColumns:"repeat(2, 1fr)" }} >
+              <input
+                type="text"
+                placeholder="Search item..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                style={{
+                  padding: "10px",
+                  width: "300px",
+                  borderRadius: "5px",
+                  border: "1px solid #ccc",
+                  fontSize: '15px'
+                }}
+              />
+              <div
+                style={{
+                  display:"flex",
+                  alignItems:'center',
+                  gap:"5px",
+                  padding: "10px",
+                  marginLeft: "10px",
+                  border: "none",
+                  borderRadius: "5px",
+                  backgroundColor: "#219ebc",
+                  color: "#fff",
+                  cursor: "pointer",
+                  width: '120px',
+                  fontSize: '15px'
+                }}
+                onClick={() => searchItem()}
+              >
+                <IoSearch color='white' size={30} />
+                Search
+              </div>
+            </div>
 
-              }}
-            />
-            <button
 
-              style={{
-                marginTop: "20px",
-                marginBottom: "10px",
-                padding: "10px",
-                marginLeft: "10px",
-                border: "none",
-                borderRadius: "5px",
-                backgroundColor: "#219ebc",
-                color: "#fff",
-                cursor: "pointer",
-                width: '120px',
-                fontSize: '15px'
-              }}
-
-              onClick={() => searchItem()}
-            >
-              Search
-            </button>
-          </form>
-
-
-          <button style={{
-            marginTop: "20px",
-            marginBottom: "10px",
+          <div style={{
             padding: "10px",
-            marginLeft: "10px",
             border: "none",
             borderRadius: "5px",
             backgroundColor: "#219ebc",
             color: "#fff",
             cursor: "pointer",
             width: '120px',
-            fontSize: '15px'
+            fontSize: '15px',
+            display: "flex",
+            alignItems: 'center'
           }}
             onClick={handleButtonClick}
-          >Add Item</button>
+          >
+            <MdAdd color='white' size={30} />
+            Add Item</div>
 
           {/* add item form */}
 
@@ -454,8 +458,8 @@ const Items = () => {
                 <td>{item.item.brand}</td>
                 <td>{item.item.category}</td>
                 <td>{item.item.status}</td>
-                <td style={{width:'10px' }}>
-                  <div style={{ display: 'flex', justifyItems:'center',alignItems:'center', gap: '5px' }}>
+                <td style={{ width: '10px' }}>
+                  <div style={{ display: 'flex', justifyItems: 'center', alignItems: 'center', gap: '5px' }}>
                     {/* Your content here */}
                     <img ref={contentRef} src={item.qr_code_image.data} style={{ width: '70px', height: 'auto' }} />
                     <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={26} />
@@ -463,18 +467,10 @@ const Items = () => {
                 </td>
                 <td>{item.dateAdded}</td>
                 <td style={{ gap: '10px', justifyContent: 'space-between', alignItems: 'center', }}>
-               <div style={{display:'flex', gap:'10px'}}>
-
-               <button style={{
-                    backgroundColor: "#219ebc",
-                    padding:'3px 5px',
-                    color: "#fff", cursor: 'pointer', height: '35px', width: '45%', border: 'none', fontSize: '15px', borderRadius: '5px',
-                  }} onClick={() => handleDelete(item)}>Delete</button>
-                  <button style={{
-                    backgroundColor: "#219ebc",
-                    color: "#fff", cursor: 'pointer', height: '35px', width: '45%', border: 'none', fontSize: '15px', borderRadius: '5px',
-                  }} onClick={() => handleEdit(item)}>Edit</button>
-               </div>
+                  <div style={{ display: 'flex', justifyContent: "center", gap: '10px' }}>
+                    <MdDelete color='red' size={30} onClick={() => handleDelete(item)} />
+                    <FaEdit color='blue' size={30} onClick={() => handleEdit(item)} />
+                  </div>
                 </td>
               </tr>
             ))}

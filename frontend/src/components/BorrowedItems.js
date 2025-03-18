@@ -5,6 +5,7 @@ import DOMAIN from '../config/config';
 
 import { useNavigate } from 'react-router-dom';
 import Topbar from './Topbar';
+import { PiKeyReturnBold } from "react-icons/pi";
 const token = localStorage.getItem("token")
 
 const BorrowedItems = () => {
@@ -182,8 +183,8 @@ const BorrowedItems = () => {
             fontSize: '15px'
           }} onClick={handleButtonClick}>Create Transaction</button>
         </div>
-        
-        <h2 style={{ color: "orange", padding:'10px 0' }}>Borrowed Items</h2>
+
+        <h2 style={{ color: "orange", padding: '10px 0' }}>Borrowed Items</h2>
         <table className={styles.styledTable}>
           <thead>
             <tr>
@@ -212,13 +213,12 @@ const BorrowedItems = () => {
                 <td>{item.purpose}</td>
                 <td>{item.item.status}</td>
                 <td>{item.dateBorrowed}</td>
-                <td>
-                  <button style={{
-                    backgroundColor: "#219ebc",
-                    color: "#fff", cursor: 'pointer', height: '35px', width: '100%', border: 'none', fontSize: '15px', borderRadius: '5px',
-                  }} onClick={() => handleReturn(item)}>
-                    Return
-                  </button>
+                <td style={{ display: 'flex' }}>
+
+                  <div style={{ display: "flex",alignItems:'center',borderRadius:"5px", backgroundColor: "#219ebc", padding:'10px'}} onClick={() => handleReturn(item)} >
+                    <PiKeyReturnBold size={30} color='white' />
+                    <p style={{color:'white', fontSize:'20px'}}> Return</p>
+                  </div>
                 </td>
               </tr>
             ))}
