@@ -469,10 +469,10 @@ const Items = () => {
                 <td>{item.item.brand}</td>
                 <td>{item.item.category}</td>
                 <td>{item.item.status}</td>
-                <td style={{ width: '10px' }} onClick={() => showQRCode(item.qr_code_image.data)}>
+                <td style={{ width: '10px' }}>
                   <div style={{ display: 'flex', justifyItems: 'center', alignItems: 'center', gap: '5px' }}>
                     {/* Your content here */}
-                    <img ref={contentRef} src={item.qr_code_image.data} style={{ width: '50px', height: 'auto' }} />
+                    <img ref={contentRef} src={item.qr_code_image.data} style={{ width: '50px', height: 'auto' }}  onClick={() => showQRCode(item.qr_code_image.data)}/>
                     <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={24} />
                   </div>
                 </td>
