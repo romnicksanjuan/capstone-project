@@ -31,6 +31,6 @@ const borrowedItem = new mongoose.Schema({
     enum: ['Borrowed', 'Returned'],
     default: 'Borrowed'
   }
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('borrow-item', borrowedItem);

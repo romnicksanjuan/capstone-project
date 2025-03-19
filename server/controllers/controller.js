@@ -1,3 +1,4 @@
+const borrowItem = require('../model/borrowItem.js');
 const Item = require('../model/Item.js')
 const QRCode = require("qrcode");
 
@@ -190,7 +191,7 @@ const barGraph = async (req, res) => {
 
         const monthlyData = Promise.all(months.map(async (month, index) => {
             const end = index + 1 < months.length ? months[index + 1] : new Date(2025, new Date().getMonth() + 1, 1);
-            const bar = await Item.find({ createdAt: { $gte: month , $lt: end} })
+            const bar = await borrowItem.find({ createdAt: { $gte: month , $lt: end} })
 
             return {
                 month: month.toLocaleDateString("en-US", { month: "long" }),
