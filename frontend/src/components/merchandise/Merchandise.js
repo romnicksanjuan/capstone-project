@@ -241,7 +241,7 @@ const Merchandise = () => {
             alignItems:"center",
             marginTop: "20px",
             marginBottom: "10px",
-            padding: "10px",
+            padding: "5px",
             border: "none",
             borderRadius: "5px",
             backgroundColor: "#219ebc",

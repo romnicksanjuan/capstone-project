@@ -213,9 +213,9 @@ const BorrowedItems = () => {
                 <td>{item.purpose}</td>
                 <td>{item.item.status}</td>
                 <td>{item.dateBorrowed}</td>
-                <td style={{ display: 'flex' }}>
+                <td style={{ display: 'flex' ,border:'none',}}>
 
-                  <div style={{ display: "flex",alignItems:'center',borderRadius:"5px", backgroundColor: "#219ebc", padding:'10px'}} onClick={() => handleReturn(item)} >
+                  <div style={{ display: "flex",alignItems:'center',borderRadius:"5px", backgroundColor: "#219ebc", padding:'5px',}} onClick={() => handleReturn(item)} >
                     <PiKeyReturnBold size={30} color='white' />
                     <p style={{color:'white', fontSize:'20px'}}> Return</p>
                   </div>
