@@ -6,7 +6,7 @@ import DOMAIN from '../config/config';
 import { useNavigate } from 'react-router-dom';
 import { RiPrinterFill } from "react-icons/ri";
 import Topbar from './Topbar';
-import { MdDelete, MdAdd } from "react-icons/md";
+import { MdDelete, MdAdd,MdCancel } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 
@@ -71,6 +71,7 @@ const Items = () => {
   const [status, setStatus] = useState('')
   const [quantity, setQuantity] = useState(1)
   const [qrCode, setQrCode] = useState('')
+  const [showImage, setShowImage] = useState('')
   // const [token, setToken] = useState("")
 
   // useEffect(() => {
@@ -245,6 +246,14 @@ const Items = () => {
     documentTitle: `${new Date()}`,
     contentRef: contentRef,
   });
+
+
+
+  // qr code image
+  const showQRCode = (image) => {
+    setShowImage(image)
+    console.log("image:", image)
+  }
   return (
     <div style={{ display: 'flex' }}>
       <Navbar />
@@ -253,43 +262,43 @@ const Items = () => {
         <Topbar />
 
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
- 
-            <div onSubmit={handleSearch} style={{ display: 'grid', gridTemplateColumns:"repeat(2, 1fr)" }} >
-              <input
-                type="text"
-                placeholder="Search item..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                style={{
-                  padding: "10px",
-                  width: "300px",
-                  borderRadius: "5px",
-                  border: "1px solid #ccc",
-                  fontSize: '15px'
-                }}
-              />
-              <div
-                style={{
-                  display:"flex",
-                  alignItems:'center',
-                  justifyContent:"center",
-                  gap:"5px",
-                  padding: "5px",
-                  marginLeft: "10px",
-                  border: "none",
-                  borderRadius: "5px",
-                  backgroundColor: "#219ebc",
-                  color: "#fff",
-                  cursor: "pointer",
-                  width: '120px',
-                  fontSize: '15px'
-                }}
-                onClick={() => searchItem()}
-              >
-                <IoSearch color='white' size={30} />
-                Search
-              </div>
+
+          <div onSubmit={handleSearch} style={{ display: 'grid', gridTemplateColumns: "repeat(2, 1fr)" }} >
+            <input
+              type="text"
+              placeholder="Search item..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              style={{
+                padding: "10px",
+                width: "300px",
+                borderRadius: "5px",
+                border: "1px solid #ccc",
+                fontSize: '15px'
+              }}
+            />
+            <div
+              style={{
+                display: "flex",
+                alignItems: 'center',
+                justifyContent: "center",
+                gap: "5px",
+                padding: "5px",
+                marginLeft: "10px",
+                border: "none",
+                borderRadius: "5px",
+                backgroundColor: "#219ebc",
+                color: "#fff",
+                cursor: "pointer",
+                width: '120px',
+                fontSize: '15px'
+              }}
+              onClick={() => searchItem()}
+            >
+              <IoSearch color='white' size={30} />
+              Search
             </div>
+          </div>
 
 
           <div style={{
@@ -303,7 +312,7 @@ const Items = () => {
             fontSize: '15px',
             display: "flex",
             alignItems: 'center',
-            justifyContent:'center'
+            justifyContent: 'center'
           }}
             onClick={handleButtonClick}
           >
@@ -320,7 +329,7 @@ const Items = () => {
 
 
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <button style={{ textAlign: 'center', fontSize: '20px', width: '35px' }} onClick={handleButtonClick}>x</button>
+                < MdCancel style={{position:"absolute",right:"10px", top:'10px'}} size={27} color='black' onClick={() =>handleButtonClick()}/>
               </div>
 
               <div>
@@ -384,7 +393,7 @@ const Items = () => {
 
 
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <button style={{ textAlign: 'center', fontSize: '20px', width: '35px' }} onClick={handleExitEdit}>x</button>
+                < MdCancel style={{position:"absolute",right:"10px", top:'10px'}} size={27} color='black' onClick={() =>handleExitEdit()}/>
               </div>
 
               <div>
@@ -460,18 +469,18 @@ const Items = () => {
                 <td>{item.item.brand}</td>
                 <td>{item.item.category}</td>
                 <td>{item.item.status}</td>
-                <td style={{ width: '10px' }}>
+                <td style={{ width: '10px' }} onClick={() => showQRCode(item.qr_code_image.data)}>
                   <div style={{ display: 'flex', justifyItems: 'center', alignItems: 'center', gap: '5px' }}>
                     {/* Your content here */}
-                    <img ref={contentRef} src={item.qr_code_image.data} style={{ width: '70px', height: 'auto' }} />
-                    <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={26} />
+                    <img ref={contentRef} src={item.qr_code_image.data} style={{ width: '50px', height: 'auto' }} />
+                    <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={24} />
                   </div>
                 </td>
                 <td>{item.dateAdded}</td>
                 <td style={{ gap: '10px', justifyContent: 'space-between', alignItems: 'center', }}>
                   <div style={{ display: 'flex', justifyContent: "center", gap: '10px' }}>
-                    <MdDelete color='red' size={30} onClick={() => handleDelete(item)} />
-                    <FaEdit color='blue' size={30} onClick={() => handleEdit(item)} />
+                    <MdDelete color='red' size={27} onClick={() => handleDelete(item)} />
+                    <FaEdit color='blue' size={27} onClick={() => handleEdit(item)} />
                   </div>
                 </td>
               </tr>
@@ -479,6 +488,11 @@ const Items = () => {
           </tbody>
         </table>
       </div>
+
+      {showImage ? <div style={{position:'absolute', top:"50%", left:"50%", transform:"translate(-50%, -50%)" ,width:"500px", height:"auto",}}>
+            < MdCancel style={{position:"absolute",right:"5px", top:'5px'}} size={27} color='black' onClick={() => setShowImage("")}/>
+        <img src={showImage} style={{width:"100%", height:"auto", border:"2px solid rgb(255, 187, 0)"}}/>
+      </div> : ""}
     </div>
 
   )

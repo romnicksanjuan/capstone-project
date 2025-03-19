@@ -96,7 +96,7 @@ const purchaseHistory = async (req, res) => {
         })
 
         const save = await newPurchaseHistory.save()
-        finditem.stock -= 1
+        finditem.stock -= quantity
         await finditem.save()
         console.log(save)
         res.status(200).json({ message: "success purchase" })

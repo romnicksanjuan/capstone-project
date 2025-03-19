@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import CreateProduct from './CreateProduct'
 import DOMAIN from '../../config/config'
 import TopBar from "../Topbar"
-import { MdDelete, MdAdd } from "react-icons/md";
+import { MdDelete, MdAdd, MdCancel } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 
 const token = localStorage.getItem("token")
@@ -236,9 +236,9 @@ const Merchandise = () => {
         <TopBar />
         <div
           style={{
-            display:"flex",
-            justifyContent:"center",
-            alignItems:"center",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
             marginTop: "20px",
             marginBottom: "10px",
             padding: "5px",
@@ -264,7 +264,7 @@ const Merchandise = () => {
 
 
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button style={{ textAlign: 'center', fontSize: '20px', width: '35px' }} onClick={handleButtonClick}>x</button>
+            < MdCancel style={{ position: "absolute", right: "10px", top: '10px' }} size={27} color='black' onClick={() => handleButtonClick()} />
           </div>
 
           <div>
@@ -335,14 +335,14 @@ const Merchandise = () => {
               <tr key={index}>
                 {/* <td className={style.serialNumber}>{item.number}</td> */}
                 <td className={style.image} onClick={() => handleClick(item)}>
-                  <img src={item.image.data} style={{ width: '70px', height: '70px' }} />
+                  <img src={item.image.data} style={{ width: '50px', height: '50px' }} />
                 </td>
                 <td onClick={() => handleClick(item)}>{item.name}</td>
                 <td onClick={() => handleClick(item)}>{item.price}</td>
                 <td onClick={() => handleClick(item)}>{item.stock}</td>
-                <td style={{ display: "grid", gridTemplateColumns: "repeat(2 ,1fr)", placeItems: 'center', gap: '10px', height: '100px', border: 'none' }}>
-                  <MdDelete color='red' size={30} onClick={() => handleDelete(item)} />
-                  <FaEdit color='blue' size={30} onClick={() => handleEdit(item)} />
+                <td style={{ display: "grid", gridTemplateColumns: "repeat(2 ,1fr)", placeItems: 'center', gap: '10px', height: '80px', border: 'none' }}>
+                  <MdDelete color='red' size={27} onClick={() => handleDelete(item)} />
+                  <FaEdit color='blue' size={27} onClick={() => handleEdit(item)} />
                 </td>
               </tr>
             ))}
@@ -355,8 +355,7 @@ const Merchandise = () => {
           position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'orange',
           padding: '35px 30px', height: 'auto', width: '450px', gap: '20px', border: '1px solid black', borderRadius: '5px'
         }}>
-
-          <button style={{ position: 'absolute', right: '7px', top: '7px', fontSize: '20px', width: '35px' }} onClick={() => setIsClick(!isClick)}>X</button>
+          < MdCancel style={{ position: "absolute", right: "10px", top: '10px' }} size={27} color='black' onClick={() => setIsClick(!isClick)} />
           <form onSubmit={hanndleSubmit}>
             {errorMessage && <p style={{ fontSize: '17px', padding: '5px', color: 'white', backgroundColor: 'red', textAlign: 'center' }}>{errorMessage}</p>}
             <div>
@@ -402,7 +401,7 @@ const Merchandise = () => {
 
 
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <button style={{ textAlign: 'center', fontSize: '20px', width: '35px' }} onClick={handleExitEdit}>x</button>
+              < MdCancel style={{ position: "absolute", right: "10px", top: '10px' }} size={27} color='black' onClick={() => handleExitEdit()} />
             </div>
 
             <div>

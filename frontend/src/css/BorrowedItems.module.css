@@ -36,6 +36,7 @@
   .styledTable td {
     padding: 12px 15px;
     border: 1px solid #ddd;
+    font-size: 15px;
   }
   
   .styledTable tbody tr {

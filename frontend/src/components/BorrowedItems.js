@@ -6,6 +6,7 @@ import DOMAIN from '../config/config';
 import { useNavigate } from 'react-router-dom';
 import Topbar from './Topbar';
 import { PiKeyReturnBold } from "react-icons/pi";
+import { MdCancel } from "react-icons/md";
 const token = localStorage.getItem("token")
 
 const BorrowedItems = () => {
@@ -125,7 +126,7 @@ const BorrowedItems = () => {
         position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'orange',
         padding: '50px 30px', height: 'auto', width: '450px', gap: '20px', border: '1px solid black', borderRadius: '5px'
       }}>
-        <button onClick={() => handleCancel()} style={{ position: 'absolute', right: '10px', top: '10px', fontSize: '20px', width: '35px' }}>X</button>
+          < MdCancel style={{position:"absolute",right:"10px", top:'10px'}} size={27} color='black' onClick={() =>handleCancel()}/>
         {error && <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'red', height: '40px', }}>
           <p style={{ color: 'white', textAlign: 'center' }}>{error}</p>
         </div>}
@@ -216,8 +217,8 @@ const BorrowedItems = () => {
                 <td style={{ display: 'flex' ,border:'none',}}>
 
                   <div style={{ display: "flex",alignItems:'center',borderRadius:"5px", backgroundColor: "#219ebc", padding:'5px',}} onClick={() => handleReturn(item)} >
-                    <PiKeyReturnBold size={30} color='white' />
-                    <p style={{color:'white', fontSize:'20px'}}> Return</p>
+                    <PiKeyReturnBold size={27} color='white' />
+                    <p style={{color:'white', fontSize:'15px'}}> Return</p>
                   </div>
                 </td>
               </tr>
