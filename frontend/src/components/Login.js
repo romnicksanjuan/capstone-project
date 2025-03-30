@@ -44,7 +44,7 @@ const Login = () => {
     }, [email, password])
 
     return (
-        <div style={{ width: '100%', height: "100vh", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: "black" }}>
+        <div style={{ width: '100%', height: "100vh", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: "whitesmoke" }}>
             <div style={{ width: '500px', height: 'auto', backgroundColor: 'rgb(255, 187, 0)', padding: '1rem 2rem', borderRadius: "5px" }}>
                 <form onSubmit={handleSubmit}>
                     <h2 style={{ textAlign: 'center', color: 'white', fontSize: '25px', padding: '0', margin: "0" }}>Login Form</h2>

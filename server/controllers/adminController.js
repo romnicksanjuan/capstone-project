@@ -1,5 +1,8 @@
 const Admin = require("../model/admin")
 const jwt = require("jsonwebtoken");
+const nodemailer = require('nodemailer')
+const Otp = require('../model/otp.js')
+const crypto = require("crypto")
 
 const createAdmin = async (req, res) => {
     const { email, password } = req.body
@@ -59,6 +62,64 @@ const loginAdmin = async (req, res) => {
     }
 }
 
+
+const transporter = nodemailer.createTransport({
+    tls: {
+        rejectUnauthorized: false  // Ignore certificate validation
+    },
+    service: 'gmail',
+    auth: {
+        user: 'romnicksanjuan22@gmail.com',
+        pass: 'miho qtfh mijo xlts'
+    }
+})
+
+
+// send otp
+const sendOtp = async (req, res) => {
+    const { email } = req.body
+    console.log(email)
+    try {
+        // Generate 6-digit OTP
+        const otp = crypto.randomInt(100000, 999999).toString();
+        const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 mins expiration
+        console.log(otp)
+
+        // Send OTP via email
+        const mailOptions = {
+            from: "romnicksanjuan22@gmail.com",
+            to: email,
+            subject: "Password Reset OTP",
+            text: `Your OTP is ${otp}. It will expire with in 5 minutes.`,
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log(error.message)
+                return
+            };
+            res.status(200).json({ message: "OTP sent!" });
+        });
+
+        const saveOtp = new Otp({ email, otp, expiresAt })
+        await saveOtp.save()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// verify otp
+const verifyOtp = async (req, res) => {
+    const { email, otp } = req.body
+    const otpRecord = await Otp.findOne({ email, otp });
+
+    if (!otpRecord) {
+        return res.status(400).json("Invalid or expired OTP");
+    }
+    // Proceed with password reset
+    res.json({ message: "OTP verified!" });
+}
+
 // forgot password
 const forgotPassword = async (req, res) => {
     const { email, newPassword, confirmPassword } = req.body
@@ -89,13 +150,13 @@ const forgotPassword = async (req, res) => {
     }
 }
 
-const logout = async(req,res) => {
+const logout = async (req, res) => {
     try {
         res.clearCookie("token", {
             httpOnly: true,
             secure: true, // Make sure it's false in development if you're not using HTTPS
-            sameSite: 'None', 
-          });
+            sameSite: 'None',
+        });
         console.log("vovo")
         res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {
@@ -103,4 +164,9 @@ const logout = async(req,res) => {
     }
 }
 
-module.exports = { createAdmin, loginAdmin, forgotPassword,logout }
+
+
+module.exports = {
+    createAdmin, loginAdmin, forgotPassword, logout,
+    sendOtp, verifyOtp
+}

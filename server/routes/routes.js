@@ -3,7 +3,7 @@ const multer = require('multer')
 const { createItem, fetchItems, editITem, deleteitem, totalItems, searchItem, propertyPage, barGraph } = require('../controllers/controller.js')
 const { addBorrowItem, fetchBorrowedItems, totalBorrowedItems, returnItem, fetchHistory } = require('../controllers/borrowItemController.js');
 const { createProduct, getMerchandise, purchaseHistory, getAllPurchaseHistory, deleteMerchandise, editMerchandise, totalMerchandise, barGraphMerchandise } = require('../controllers/merchandise-controller.js');
-const { createAdmin, loginAdmin, forgotPassword, logout } = require('../controllers/adminController.js');
+const { createAdmin, loginAdmin, forgotPassword, logout, sendOtp, verifyOtp } = require('../controllers/adminController.js');
 
 
 // authehntication
@@ -21,6 +21,8 @@ router.post("/admin/create", createAdmin)
 router.post("/admin/login", loginAdmin)
 router.post('/admin/forgot-password', forgotPassword)
 router.post("/logout", logout)
+router.post('/send-otp', sendOtp)
+router.post('/verify-otp', verifyOtp)
 
 // item
 router.post('/create-item', createItem)
