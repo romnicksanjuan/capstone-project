@@ -196,7 +196,7 @@ const BorrowedItems = () => {
               <th>Borrower</th>
               <th>Mobile Number</th>
               <th>Purpose</th>
-              <th>Status</th>
+              <th>Condition</th>
               <th>Date Borrowed</th>
               <th>Action</th>
             </tr>
@@ -212,7 +212,7 @@ const BorrowedItems = () => {
                 <td>{item.borrower}</td>
                 <td>{item.mobileNumber}</td>
                 <td>{item.purpose}</td>
-                <td>{item.item.status}</td>
+                <td>{item.item.condition}</td>
                 <td>{item.dateBorrowed}</td>
                 <td style={{ display: 'flex' ,border:'none',}}>
 

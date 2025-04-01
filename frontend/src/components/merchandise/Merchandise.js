@@ -372,10 +372,12 @@ const Merchandise = () => {
               <label htmlFor="size">Size:</label><br />
               <select id="size" value={size} onChange={(e) => setSize(e.target.value)} style={{ height: '40px', width: 'auto', fontSize: '20px', margin: '10px 0 10px 0' }}>
                 <option disabled value="">-- Select Size --</option>
+                <option value="Small">Extra Small</option>
                 <option value="Small">Small</option>
                 <option value="Medium">Medium</option>
                 <option value="Large">Large</option>
                 <option value="Extra Large">Extra Large</option>
+                <option value="Small">2XL</option>
               </select>
             </div>
 

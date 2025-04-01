@@ -453,7 +453,7 @@ const Items = () => {
               <th>Unit</th>
               <th>Brand</th>
               <th>Category</th>
-              <th>Status</th>
+              <th>Condition</th>
               <th>QR Code</th>
               <th>Date Added</th>
               <th>Action</th>
@@ -468,7 +468,7 @@ const Items = () => {
                 <td>{item.item.unit}</td>
                 <td>{item.item.brand}</td>
                 <td>{item.item.category}</td>
-                <td>{item.item.status}</td>
+                <td>{item.item.condition}</td>
                 <td style={{ width: '10px' }}>
                   <div style={{ display: 'flex', justifyItems: 'center', alignItems: 'center', gap: '5px' }}>
                     {/* Your content here */}

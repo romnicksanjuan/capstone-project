@@ -35,6 +35,12 @@ const History = () => {
 
         fetchBorrowedItems()
     }, [])
+
+    // navigate to history details
+    const historyDetails = (item) =>{
+        navigate('/borrowed-transaction-details', {state: item})
+    }
+    
     return (
         <div style={{display:'flex'}}>
             <Navbar />
@@ -53,7 +59,7 @@ const History = () => {
                             <th>Borrower</th>
                             <th>Mobile Number</th>
                             <th>Purpose</th>
-                            <th>Status</th>
+                            <th>Condition</th>
                             <th>Date Borrowed</th>
                             <th>Date Returned</th>
                         </tr>
@@ -61,7 +67,7 @@ const History = () => {
 
                     <tbody>
                         {data.map((item, index) => (
-                            <tr key={index}>
+                            <tr onClick={() => historyDetails(item)} key={index}>
                                 {/* <td className={styles.serialNumber}>{item.number}</td> */}
                                 <td>{item.serialNumber}</td>
                                 <td>{item.item.unit}</td>
@@ -69,7 +75,7 @@ const History = () => {
                                 <td>{item.borrower}</td>
                                 <td>{item.mobileNumber}</td>
                                 <td>{item.purpose}</td>
-                                <td>{item.item.status}</td>
+                                <td>{item.item.condition}</td>
                                 <td>{item.dateBorrowed}</td>
                                 <td>{item.dateReturned}</td>
                             </tr>

@@ -43,6 +43,13 @@ const PurchaseHistory = () => {
         }
         getAllPurchaseHistory()
     }, [])
+
+
+     // navigate to purchase history details
+     const historyDetails = (item) =>{
+        navigate('/purchase-transaction-details', {state: item})
+    }
+    
     return (
         < div style={{display:'flex'}}>
             <Navbar />
@@ -69,7 +76,7 @@ const PurchaseHistory = () => {
                         {/* {data.map((item, index) => (
                                          <tr key={index}> */}
                         {purchaseHistory.map((item, index) => (
-                            <tr key={index}>
+                            <tr key={index} onClick={() => historyDetails(item)}>
                                 {/* <td className={style.serialNumber}>{item.number}</td> */}
                                 {/* <td className={style.image}>
                                     <img src={item.image.data} style={{ width: '100px', height: '100px' }} />

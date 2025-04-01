@@ -15,6 +15,8 @@ import PropertyPage from './components/PropertyPage.js';
 import Login from './components/Login.js';
 import ForgotPassword from './components/ForgotPassword.js';
 import Test from './components/Test.js';
+import BorrowedTransaction from './components/BorrowedTransaction.js';
+import MerchandiseTransaction from './components/merchandise/MerchandiseTransaction.js';
 
 function App() {
 // pota 
@@ -25,11 +27,13 @@ function App() {
         <Route path='/Dashboard' element={<Dashboard />} />
         <Route path='/items' element={<Items />} />
         <Route path='/borrowed-items' element={<BorrowedItems />} />
+        <Route path='/borrowed-transaction-details' element={<BorrowedTransaction />} />
         <Route path='/history' element={<History />} />
         <Route path='/add-borrow-item' element={<AddBorrowItem />} />
         <Route path='/merchandise' element={<Merchandise />} />
         <Route path='/create-product' element={<CreateProduct />} />
         <Route path='/get-purchase-history' element={<PurchaseHistory />} />
+        <Route path='/purchase-transaction-details' element={<MerchandiseTransaction />} />
         <Route path='/item/:sn' element={<PropertyPage />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/test' element={<Test />} />
