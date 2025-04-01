@@ -87,7 +87,7 @@ const BarChartMerchandise = () => {
     };
 
     return (
-        <div style={{ width: "100%", height: "300px", margin: "0",borderRadius:"5px", backgroundColor:'whitesmoke', padding: '10px',  }}>
+        <div style={{ width: "100%", height: "260px", margin: "0",borderRadius:"5px", backgroundColor:'whitesmoke', padding: '10px',  }}>
             <Bar data={data} options={options} style={{ height: "10px",}}/>
         </div>
     );

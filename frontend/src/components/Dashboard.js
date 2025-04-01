@@ -135,7 +135,7 @@ function Dashboard() {
       <div className={styles.Dashboard}>
 
         <Topbar />
-        <h2 style={{ color: 'orange', textAlign: 'start', margin: "0", padding: '10px 0' }}>OVERVIEW</h2>
+        <h2 style={{ color: 'orange', textAlign: 'start', margin: "0" }}>OVERVIEW</h2>
         <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
 
           <div className={styles.totalItems}>
@@ -170,11 +170,11 @@ function Dashboard() {
 
         <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
           <div style={{ width: '50%' }}>
-            <h2 style={{ color: 'orange', textAlign: 'center', margin: "0", padding: '10px 0' }}>Inventory</h2>
+            <h2 style={{ color: 'orange', textAlign: 'center', margin: "0", padding: '5px 0' }}>Inventory</h2>
             <BarChart />
           </div>
           <div style={{ width: '50%' }}>
-            <h2 style={{ color: 'orange', textAlign: 'center', padding: '10px 0' }}>Merchandise</h2>
+            <h2 style={{ color: 'orange', textAlign: 'center', padding: '5px 0' }}>Merchandise</h2>
             <BarChartMerchandise />
           </div>
         </div>
