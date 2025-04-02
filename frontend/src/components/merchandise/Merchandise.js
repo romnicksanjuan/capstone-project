@@ -111,6 +111,7 @@ const Merchandise = () => {
       setProgram('')
       setSize('')
       setQuantity(1)
+      alert('Purchase Successfull')
     } catch (error) {
       console.log(error)
     }
