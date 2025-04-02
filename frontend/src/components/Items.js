@@ -68,7 +68,7 @@ const Items = () => {
   const [unit, setUnit] = useState('')
   const [brand, setBrand] = useState('')
   const [category, setCategory] = useState('')
-  const [status, setStatus] = useState('')
+  const [condition, setCondition] = useState('')
   const [quantity, setQuantity] = useState(1)
   const [qrCode, setQrCode] = useState('')
   const [showImage, setShowImage] = useState('')
@@ -147,7 +147,7 @@ const Items = () => {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ serialNumber, unit, brand, category, status, quantity })
+        body: JSON.stringify({ serialNumber, unit, brand, category, condition, quantity })
       });
 
       if (!response.ok) {
@@ -157,7 +157,7 @@ const Items = () => {
       setUnit('')
       setBrand('')
       setCategory('')
-      setStatus('')
+      setCondition('')
       setQuantity('')
 
       window.location.reload();
@@ -175,7 +175,7 @@ const Items = () => {
     setUnit(item.item.unit)
     setBrand(item.item.brand)
     setCategory(item.item.category)
-    setStatus(item.item.status)
+    setCondition(item.item.condition)
   }
 
   const handleExitEdit = () => {
@@ -183,7 +183,7 @@ const Items = () => {
     setUnit('')
     setBrand('')
     setCategory('')
-    setStatus('')
+    setCondition('')
   }
 
   const handleSubmitEdit = async (e) => {
@@ -197,7 +197,7 @@ const Items = () => {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ serialNumber, unit, brand, category, status, quantity })
+        body: JSON.stringify({ serialNumber, unit, brand, category, condition, quantity })
       })
 
       if (!window.confirm('Are you sure you want to update this item?')) return
@@ -211,7 +211,7 @@ const Items = () => {
       setUnit('')
       setBrand('')
       setCategory('')
-      setStatus('')
+      setCondition('')
       setQuantity('')
 
       window.location.reload();
@@ -363,12 +363,13 @@ const Items = () => {
                   <option value="Headset">Headset</option>
                   <option value="Microphone">Microphone</option>
                   <option value="Speaker">Speaker</option>
+                  <option value="Speaker">Projector</option>
                 </select>
               </div>
 
               <div>
-                <label htmlFor="status">Status:</label><br />
-                <input className={style.input} type="text" id="status" name="status" value={status} onChange={(e) => setStatus(e.target.value)} />
+                <label htmlFor="status">Condition:</label><br />
+                <input className={style.input} type="text" id="status" name="status" value={condition} onChange={(e) => setCondition(e.target.value)} />
               </div>
 
               {/* <div>
@@ -424,16 +425,17 @@ const Items = () => {
                     -- Choose a Category --
                   </option>
                   <option value="Mouse">Mouse</option>
-                  <option value="Keyboard">Keyboard</option>
+                  <option value="Keyboard">Keyboard</option> 
                   <option value="Headset">Headset</option>
                   <option value="Microphone">Microphone</option>
                   <option value="Speaker">Speaker</option>
+                  <option value="Speaker">Projector</option>
                 </select>
               </div>
 
               <div>
-                <label htmlFor="status">Status:</label><br />
-                <input className={style.input} type="text" id="status" name="status" value={status} onChange={(e) => setStatus(e.target.value)} />
+                <label htmlFor="status">Condition:</label><br />
+                <input className={style.input} type="text" id="status" name="status" value={condition} onChange={(e) => setCondition(e.target.value)} />
               </div>
 
 

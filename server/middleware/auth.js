@@ -9,7 +9,7 @@ const middleware = (req, res, next) => {
     console.log("token", token)
 
     if (!token) {
-        return res.status(401).json({ message: "Access Denied. No Token Provided." });
+        return res.status(401).json({ message: "Access Denied" });
     }
 
     // const token = authHeader.split(" ")[1]

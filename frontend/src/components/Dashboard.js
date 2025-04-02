@@ -18,6 +18,32 @@ function Dashboard() {
 
   const navigate = useNavigate()
 
+
+  // check token
+  useEffect(() => {
+    const checkToken = async () => {
+      const response = await fetch(`${DOMAIN}/check-token`, {
+        method: 'GET',
+        credentials: 'include'
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        console.log('data:', data)
+
+        if (data.message === 'Access Denied') {
+          alert("Session Expired, Please Login Again")
+          navigate("/")
+        }
+        return
+      }
+
+      console.log('data:', data)
+    }
+    checkToken()
+  }, [])
+
   // useEffect(() => {
   //   if (!token) {
   //     navigate("/")
@@ -77,8 +103,6 @@ function Dashboard() {
     })
     if (response.statusText === "Unauthorized") {
       // console.log("hayop ka",response.statusText)
-      alert("Session Expired, Please Login Again")
-      navigate("/")
       return
     }
 

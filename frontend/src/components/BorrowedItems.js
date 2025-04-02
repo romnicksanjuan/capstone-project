@@ -175,7 +175,6 @@ const BorrowedItems = () => {
             marginTop: "20px",
             marginBottom: "10px",
             padding: "10px",
-            marginLeft: "10px",
             border: "none",
             borderRadius: "5px",
             backgroundColor: "#219ebc",

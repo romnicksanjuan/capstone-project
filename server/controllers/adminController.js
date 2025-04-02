@@ -31,14 +31,14 @@ const loginAdmin = async (req, res) => {
         const findEmail = await Admin.findOne({ email })
 
         if (!findEmail) {
-            res.status(404).json({ success: false, message: "Email not found" })
+            res.status(404).json({ success: false, message: "Incorrect Email or Password" })
             return
         }
 
         const findPassword = await Admin.findOne({ password })
 
         if (!findPassword) {
-            res.status(404).json({ success: false, message: "Incorrect Password" })
+            res.status(404).json({ success: false, message: "Incorrect Email or Password" })
             return
         }
 

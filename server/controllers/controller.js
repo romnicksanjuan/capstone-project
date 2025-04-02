@@ -191,7 +191,7 @@ const barGraph = async (req, res) => {
 
         const monthlyData = Promise.all(months.map(async (month, index) => {
             const end = index + 1 < months.length ? months[index + 1] : new Date(2025, new Date().getMonth() + 1, 1);
-            const bar = await borrowItem.find({ createdAt: { $gte: month , $lt: end} })
+            const bar = await borrowItem.find({ createdAt: { $gte: month, $lt: end } })
 
             return {
                 month: month.toLocaleDateString("en-US", { month: "long" }),
@@ -209,4 +209,9 @@ const barGraph = async (req, res) => {
     }
 }
 
-module.exports = { createItem, fetchItems, barGraph, editITem, deleteitem, totalItems, searchItem, propertyPage }
+
+const checkToken = (req, res) => {
+    res.json({ success: true, message: 'token is valid' })
+}
+
+module.exports = { createItem, fetchItems, barGraph, editITem, deleteitem, totalItems, searchItem, propertyPage, checkToken }

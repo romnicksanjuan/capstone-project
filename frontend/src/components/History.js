@@ -58,8 +58,6 @@ const History = () => {
                             <th>Brand</th>
                             <th>Borrower</th>
                             <th>Mobile Number</th>
-                            <th>Purpose</th>
-                            <th>Condition</th>
                             <th>Date Borrowed</th>
                             <th>Date Returned</th>
                         </tr>
@@ -74,8 +72,6 @@ const History = () => {
                                 <td>{item.item.brand}</td>
                                 <td>{item.borrower}</td>
                                 <td>{item.mobileNumber}</td>
-                                <td>{item.purpose}</td>
-                                <td>{item.item.condition}</td>
                                 <td>{item.dateBorrowed}</td>
                                 <td>{item.dateReturned}</td>
                             </tr>

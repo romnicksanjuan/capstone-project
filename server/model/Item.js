@@ -17,7 +17,7 @@ const itemSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  status: {
+  condition: {
     type: String,
     required: true
   },
