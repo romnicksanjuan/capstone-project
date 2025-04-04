@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer')
-const { createItem, fetchItems, editITem, deleteitem, totalItems, searchItem, propertyPage, barGraph, checkToken } = require('../controllers/controller.js')
+const { createItem, fetchItems, editITem, deleteitem, totalItems, searchItem, propertyPage, barGraph, checkToken, newCategoryFunction, displayCategories, deleteCategory } = require('../controllers/controller.js')
 const { addBorrowItem, fetchBorrowedItems, totalBorrowedItems, returnItem, fetchHistory } = require('../controllers/borrowItemController.js');
 const { createProduct, getMerchandise, purchaseHistory, getAllPurchaseHistory, deleteMerchandise, editMerchandise, totalMerchandise, barGraphMerchandise } = require('../controllers/merchandise-controller.js');
 const { createAdmin, loginAdmin, forgotPassword, logout, sendOtp, verifyOtp } = require('../controllers/adminController.js');
@@ -33,6 +33,9 @@ router.get('/total-items', totalItems)
 router.get('/search', searchItem)
 router.get('/item/:sn', propertyPage)
 router.get("/bar-charts", barGraph)
+router.post('/add-category', newCategoryFunction) //add category
+router.get('/display-categories', displayCategories) //display category
+router.delete('/delete-category/:id', deleteCategory) //delete category
 
 // borrow
 router.post('/add-borrow-item', addBorrowItem)

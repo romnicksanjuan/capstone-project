@@ -14,7 +14,7 @@ import PurchaseHistory from './components/merchandise/PurchaseHistory.js';
 import PropertyPage from './components/PropertyPage.js';
 import Login from './components/Login.js';
 import ForgotPassword from './components/ForgotPassword.js';
-import Test from './components/Test.js';
+// import Test from './components/Test.js';
 import BorrowedTransaction from './components/BorrowedTransaction.js';
 import MerchandiseTransaction from './components/merchandise/MerchandiseTransaction.js';
 
@@ -36,7 +36,7 @@ function App() {
         <Route path='/purchase-transaction-details' element={<MerchandiseTransaction />} />
         <Route path='/item/:sn' element={<PropertyPage />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
-        <Route path='/test' element={<Test />} />
+        {/* <Route path='/test' element={<Test />} /> */}
       </Routes>
     </BrowserRouter>
   );

@@ -1,6 +1,8 @@
 const borrowItem = require('../model/borrowItem.js');
 const Item = require('../model/Item.js')
 const QRCode = require("qrcode");
+const Category = require('../model/category.js');
+const category = require('../model/category.js');
 
 const createItem = async (req, res) => {
     const { serialNumber, unit, brand, category, condition, quantity } = req.body;
@@ -22,9 +24,31 @@ const createItem = async (req, res) => {
         }
     })
 
+
     try {
         const savedItem = await newItem.save();
-        res.status(201).json(savedItem);
+
+        const items = await Item.find({});
+
+        if (!items) {
+            console.log('error')
+            return;
+        }
+
+        const i = items.map((item) => {
+            const base64Image = item.qr_code_image.data.toString('base64');
+            const image = `data:${item.qr_code_image.contentType};base64,${base64Image}`
+            return {
+                item,
+                qr_code_image: {
+                    data: image,
+                    contentType: item.qr_code_image.contentType
+                },
+                dateAdded: item.dateAdded.toLocaleDateString('en-US')
+            }
+        })
+
+        res.status(201).json({ success: true, savedItem, items: i });
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
@@ -55,7 +79,7 @@ const fetchItems = async (req, res) => {
             }
         })
 
-        console.log("i", i)
+        // console.log("i", i)
         res.status(200).json({ items: i, totalCounts: totalCounts });
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -214,4 +238,49 @@ const checkToken = (req, res) => {
     res.json({ success: true, message: 'token is valid' })
 }
 
-module.exports = { createItem, fetchItems, barGraph, editITem, deleteitem, totalItems, searchItem, propertyPage, checkToken }
+
+// add new category
+const newCategoryFunction = async (req, res) => {
+    const { newCategory } = req.body
+    // console.log(newCategory)
+
+    try {
+        const addCategory = new Category({ category: newCategory })
+        await addCategory.save()
+
+        const find = await Category.find({})
+
+        res.status(200).json({ success: true, message: "Category Added Successfull", categories: find })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const displayCategories = async (req, res) => {
+    try {
+        const fetchCategories = await Category.find({})
+        if (fetchCategories.length !== 0) {
+            res.json({ success: true, message: "Categories Fetch Successfull", categories: fetchCategories })
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const deleteCategory = async (req, res) => {
+    const { id } = req.params
+    try {
+        const delCategory = await Category.findByIdAndDelete(id)
+
+        res.status(200).json({ success: true, message: "Category Deleted Successful" })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+module.exports = {
+    createItem, fetchItems, barGraph, editITem, deleteitem, totalItems, searchItem, propertyPage, checkToken,
+    newCategoryFunction, displayCategories, deleteCategory
+}

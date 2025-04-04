@@ -6,9 +6,11 @@ import DOMAIN from '../config/config';
 import { useNavigate } from 'react-router-dom';
 import { RiPrinterFill } from "react-icons/ri";
 import Topbar from './Topbar';
-import { MdDelete, MdAdd,MdCancel } from "react-icons/md";
+import { MdDelete, MdAdd, MdCancel } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
+
+import Dropdown from './Category.js'
 
 const token = localStorage.getItem("token")
 const Items = () => {
@@ -19,6 +21,10 @@ const Items = () => {
   const [data, setData] = useState([])
 
   const [serialNumber, setSerialNumber] = useState('');
+  const [arrayCategory, setArrayCategory] = useState([])
+
+  const [displayCategory, setDisplayCategory] = useState('All')
+  const [originalData, setOriginalData] = useState([])
 
   useEffect(() => {
     const generateSerialNumber = () => {
@@ -29,6 +35,10 @@ const Items = () => {
 
     generateSerialNumber();
   }, [])
+
+  useEffect(() => {
+    setData(originalData)
+  }, [originalData])
 
 
   // search
@@ -44,7 +54,7 @@ const Items = () => {
       })
 
       const data = await response.json()
-      setData(data.items)
+      setOriginalData(data.items)
 
     } catch (error) {
       console.log(error)
@@ -95,6 +105,7 @@ const Items = () => {
   };
 
 
+
   // fetch items
   useEffect(() => {
     const fetchItems = async () => {
@@ -120,10 +131,10 @@ const Items = () => {
 
 
         const data = await response.json(); // Parse JSON response
-        console.log(data.items)
+        // console.log(data.items)
         if (query === '') {
 
-          setData(data.items); // Set the items in state
+          setOriginalData(data.items); // Set the items in state
         }
 
       } catch (error) {
@@ -135,10 +146,10 @@ const Items = () => {
   }, [query])
 
 
+
   // create item
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const response = await fetch(`${DOMAIN}/create-item`, {
         method: 'POST',
@@ -150,17 +161,23 @@ const Items = () => {
         body: JSON.stringify({ serialNumber, unit, brand, category, condition, quantity })
       });
 
+      const data = await response.json()
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+
 
       setUnit('')
       setBrand('')
       setCategory('')
       setCondition('')
       setQuantity('')
+      setOriginalData(data.items)
+      alert('Item Added Successful')
+      setShowForm(!showForm)
+      console.log(data)
 
-      window.location.reload();
     } catch (error) {
       console.error('Error adding item:', error);
     }
@@ -237,7 +254,7 @@ const Items = () => {
       setData(data.filter(i => i.item._id !== item.item._id));
       // window.location.reload();
     } catch (error) {
-
+      console.log(error)
     }
   }
 
@@ -254,6 +271,54 @@ const Items = () => {
     setShowImage(image)
     console.log("image:", image)
   }
+
+
+
+
+  // display categories
+  useEffect(() => {
+    const displayCategories = async () => {
+      try {
+        const response = await fetch(`${DOMAIN}/display-categories`, {
+          method: 'GET'
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          console.log(response.statusText)
+          return
+        }
+
+        console.log(data)
+        setArrayCategory(data.categories)
+
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    displayCategories()
+  }, [])
+
+  const categoryFunc = (cat) => {
+    setCategory(cat)
+  }
+
+  // display by category 
+  useEffect(() => {
+    const displayByCategory = async () => {
+      if (displayCategory === "All") {
+        setData(originalData)
+        console.log('s')
+      } else {
+        setData(originalData.filter(i => i.item.category === displayCategory))
+      }
+    }
+
+    displayByCategory()
+  }, [displayCategory])
+
+
   return (
     <div style={{ display: 'flex' }}>
       <Navbar />
@@ -263,7 +328,7 @@ const Items = () => {
 
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
-          <div onSubmit={handleSearch} style={{ display: 'grid', gridTemplateColumns: "repeat(2, 1fr)" }} >
+          <div onSubmit={handleSearch} style={{ display: 'grid', gridTemplateColumns: "repeat(3, 1fr)" }} >
             <input
               type="text"
               placeholder="Search item..."
@@ -277,6 +342,7 @@ const Items = () => {
                 fontSize: '15px'
               }}
             />
+
             <div
               style={{
                 display: "flex",
@@ -298,7 +364,29 @@ const Items = () => {
               <IoSearch color='white' size={30} />
               Search
             </div>
+
+
+
+            <div style={{ display: 'flex', alignItems: 'center', width: '120px', }}>
+              <select
+                id="category"
+                value={displayCategory}
+                onChange={(e) => setDisplayCategory(e.target.value)}
+                style={{ padding: '5px', fontSize: '17px' }}
+              >
+                <option value="All">
+                  -- Select a Category --
+                </option>
+                {arrayCategory ? arrayCategory.map((cat) => (
+                  <option key={cat._id} value={cat.category}>{cat.category}</option>
+                )) : ''}
+              </select>
+            </div>
           </div>
+
+
+
+
 
 
           <div style={{
@@ -329,7 +417,7 @@ const Items = () => {
 
 
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                < MdCancel style={{position:"absolute",right:"10px", top:'10px'}} size={27} color='black' onClick={() =>handleButtonClick()}/>
+                < MdCancel style={{ position: "absolute", right: "10px", top: '10px' }} size={27} color='black' onClick={() => handleButtonClick()} />
               </div>
 
               <div>
@@ -349,13 +437,13 @@ const Items = () => {
 
               <div>
                 <label htmlFor="category">Category:</label><br />
-                <select
+                {/* <select
                   id="category"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   style={{ marginLeft: '10px', marginRight: '10px', height: '40px', marginTop: '5px', marginBottom: '10px', fontSize: '20px' }}
                 >
-                  <option value="" disabled>
+                  <option value="" disabled style={{ textAlign: 'center' }}>
                     -- Choose a Category --
                   </option>
                   <option value="Mouse">Mouse</option>
@@ -364,7 +452,13 @@ const Items = () => {
                   <option value="Microphone">Microphone</option>
                   <option value="Speaker">Speaker</option>
                   <option value="Speaker">Projector</option>
-                </select>
+                  {arrayCategory ? arrayCategory.map((cat) => (
+                    <option key={cat._id} value={cat.category}>{cat.category}</option>
+                  )) : ''}
+                  <option value="add-category" style={{ textAlign: 'center' }}>  Add New Category</option>
+                </select> */}
+
+                <Dropdown items={arrayCategory} categoryFunc={categoryFunc} />
               </div>
 
               <div>
@@ -394,7 +488,7 @@ const Items = () => {
 
 
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                < MdCancel style={{position:"absolute",right:"10px", top:'10px'}} size={27} color='black' onClick={() =>handleExitEdit()}/>
+                < MdCancel style={{ position: "absolute", right: "10px", top: '10px' }} size={27} color='black' onClick={() => handleExitEdit()} />
               </div>
 
               <div>
@@ -415,7 +509,7 @@ const Items = () => {
 
               <div>
                 <label htmlFor="category">Category:</label><br />
-                <select
+                {/* <select
                   id="category"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
@@ -425,12 +519,17 @@ const Items = () => {
                     -- Choose a Category --
                   </option>
                   <option value="Mouse">Mouse</option>
-                  <option value="Keyboard">Keyboard</option> 
+                  <option value="Keyboard">Keyboard</option>
                   <option value="Headset">Headset</option>
                   <option value="Microphone">Microphone</option>
                   <option value="Speaker">Speaker</option>
                   <option value="Speaker">Projector</option>
-                </select>
+                  {arrayCategory ? arrayCategory.map((cat) => (
+                    <option key={cat._id} value={cat.category}>{cat.category}</option>
+                  )) : ''}
+                </select> */}
+
+                <Dropdown items={arrayCategory} categoryFunc={categoryFunc} />
               </div>
 
               <div>
@@ -463,7 +562,7 @@ const Items = () => {
           </thead>
 
           <tbody>
-            {data.map((item, index) => (
+            {data ? data.map((item, index) => (
               <tr key={index}>
                 {/* <td className={style.serialNumber}>{item.number}</td> */}
                 <td>{item.item.serialNumber}</td>
@@ -474,7 +573,7 @@ const Items = () => {
                 <td style={{ width: '10px' }}>
                   <div style={{ display: 'flex', justifyItems: 'center', alignItems: 'center', gap: '5px' }}>
                     {/* Your content here */}
-                    <img ref={contentRef} src={item.qr_code_image.data} style={{ width: '50px', height: 'auto' }}  onClick={() => showQRCode(item.qr_code_image.data)}/>
+                    <img ref={contentRef} src={item.qr_code_image.data} style={{ width: '50px', height: 'auto' }} onClick={() => showQRCode(item.qr_code_image.data)} />
                     <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={24} />
                   </div>
                 </td>
@@ -486,14 +585,14 @@ const Items = () => {
                   </div>
                 </td>
               </tr>
-            ))}
+            )) : ''}
           </tbody>
         </table>
       </div>
 
-      {showImage ? <div style={{position:'absolute', top:"50%", left:"50%", transform:"translate(-50%, -50%)" ,width:"500px", height:"auto",}}>
-            < MdCancel style={{position:"absolute",right:"5px", top:'5px'}} size={27} color='black' onClick={() => setShowImage("")}/>
-        <img src={showImage} style={{width:"100%", height:"auto", border:"2px solid rgb(255, 187, 0)"}}/>
+      {showImage ? <div style={{ position: 'absolute', top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "500px", height: "auto", }}>
+        < MdCancel style={{ position: "absolute", right: "5px", top: '5px' }} size={27} color='black' onClick={() => setShowImage("")} />
+        <img src={showImage} style={{ width: "100%", height: "auto", border: "2px solid rgb(255, 187, 0)" }} />
       </div> : ""}
     </div>
 
