@@ -6,7 +6,7 @@ const middleware = (req, res, next) => {
     // const authHeader = req.header("Authorization")
     const token = req.cookies.token
 
-    console.log("token", token)
+    // console.log("token", token)
 
     if (!token) {
         return res.status(401).json({ message: "Access Denied" });
@@ -18,7 +18,7 @@ const middleware = (req, res, next) => {
         const decoded = jwt.verify(token, sercretKEy)
 
         req.admin = decoded
-        console.log(decoded)
+        // console.log(decoded)
         next()
     } catch (error) {
         // throw new Error(error)

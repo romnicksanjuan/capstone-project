@@ -26,7 +26,7 @@ const createAdmin = async (req, res) => {
 
 const loginAdmin = async (req, res) => {
     const { email, password } = req.body
-    console.log(email, password)
+    // console.log(email, password)
     try {
         const findEmail = await Admin.findOne({ email })
 

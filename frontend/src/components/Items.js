@@ -81,7 +81,9 @@ const Items = () => {
   const [condition, setCondition] = useState('')
   const [quantity, setQuantity] = useState(1)
   const [qrCode, setQrCode] = useState('')
+  const [serialItem, setSerialItem] = useState('')
   const [showImage, setShowImage] = useState('')
+  const [categoryValue, setCategoryValue] = useState('Select Category')
   // const [token, setToken] = useState("")
 
   // useEffect(() => {
@@ -98,6 +100,7 @@ const Items = () => {
 
   const handleButtonClick = () => {
     setShowForm(!showForm);
+    setCategoryValue('Select a Category')
   };
 
   const handleSearch = (e) => {
@@ -158,7 +161,7 @@ const Items = () => {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ serialNumber, unit, brand, category, condition, quantity })
+        body: JSON.stringify({ serialNumber, serialItem, unit, brand, category, condition, quantity })
       });
 
       const data = await response.json()
@@ -173,6 +176,7 @@ const Items = () => {
       setCategory('')
       setCondition('')
       setQuantity('')
+      setSerialItem('')
       setOriginalData(data.items)
       alert('Item Added Successful')
       setShowForm(!showForm)
@@ -189,10 +193,12 @@ const Items = () => {
     // console.log(item)
     setEditingItemId(item.item._id)
     setSerialNumber(item.item.serialNumber)
+    setSerialItem(item.item.serialItem)
     setUnit(item.item.unit)
     setBrand(item.item.brand)
     setCategory(item.item.category)
     setCondition(item.item.condition)
+    setCategoryValue(item.item.category)
   }
 
   const handleExitEdit = () => {
@@ -214,7 +220,7 @@ const Items = () => {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ serialNumber, unit, brand, category, condition, quantity })
+        body: JSON.stringify({ serialNumber, serialItem, unit, brand, category, condition, quantity })
       })
 
       if (!window.confirm('Are you sure you want to update this item?')) return
@@ -230,6 +236,7 @@ const Items = () => {
       setCategory('')
       setCondition('')
       setQuantity('')
+      setSerialItem('')
 
       window.location.reload();
     } catch (error) {
@@ -422,7 +429,12 @@ const Items = () => {
 
               <div>
                 <label htmlFor="serial-number">Serial Number:</label><br />
-                <input className={style.input} type='text' id="serial-number" name="serial-number" value={serialNumber} onChange={(e) => setBrand(e.target.value)} disabled />
+                <input className={style.input} type='text' id="serial-number" name="serial-number" defaultValue={serialNumber} disabled />
+              </div>
+
+              <div>
+                <label htmlFor="serial-item">Serial Item:</label><br />
+                <input className={style.input} type='text' id="serial-item" name="serial-item" value={serialItem} onChange={(e) => setSerialItem(e.target.value)} />
               </div>
 
               <div>
@@ -458,7 +470,7 @@ const Items = () => {
                   <option value="add-category" style={{ textAlign: 'center' }}>  Add New Category</option>
                 </select> */}
 
-                <Dropdown items={arrayCategory} categoryFunc={categoryFunc} />
+                <Dropdown items={arrayCategory} categoryFunc={categoryFunc} categoryValue={categoryValue}/>
               </div>
 
               <div>
@@ -496,6 +508,10 @@ const Items = () => {
                 <input className={style.input} type='text' id="serial-number" name="serial-number" value={serialNumber} onChange={(e) => setBrand(e.target.value)} disabled />
               </div>
 
+              <div>
+                <label htmlFor="serial-item">Serial Item:</label><br />
+                <input className={style.input} type='text' id="serial-item" name="serial-item" value={serialItem} onChange={(e) => setSerialItem(e.target.value)} />
+              </div>
 
               <div>
                 <label htmlFor="unit">Unit:</label><br />
@@ -529,7 +545,7 @@ const Items = () => {
                   )) : ''}
                 </select> */}
 
-                <Dropdown items={arrayCategory} categoryFunc={categoryFunc} />
+                <Dropdown items={arrayCategory} categoryFunc={categoryFunc} categoryValue={categoryValue} />
               </div>
 
               <div>
@@ -551,6 +567,7 @@ const Items = () => {
             <tr>
               {/* <th>Serial No.</th> */}
               <th>Serial Number</th>
+              <th>Serial Item</th>
               <th>Unit</th>
               <th>Brand</th>
               <th>Category</th>
@@ -566,6 +583,7 @@ const Items = () => {
               <tr key={index}>
                 {/* <td className={style.serialNumber}>{item.number}</td> */}
                 <td>{item.item.serialNumber}</td>
+                <td>{item.item.serialItem}</td>
                 <td>{item.item.unit}</td>
                 <td>{item.item.brand}</td>
                 <td>{item.item.category}</td>

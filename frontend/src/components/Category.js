@@ -3,11 +3,19 @@ import '../css/Dropdown.css';
 import { MdDelete } from "react-icons/md";
 import DOMAIN from '../config/config';
 
-const Test = ({ items, categoryFunc }) => {
+const Test = ({ items, categoryFunc, categoryValue }) => {
   const [localItems, setLocalItems] = useState(items);
-  const [placeholder, setPlaceHolder] = useState('Select Option');
+  const [placeholder, setPlaceHolder] = useState(categoryValue);
   const dropdownRef = useRef(null);
   const menuRef = useRef(null);
+  console.log("cattt", categoryValue)
+  useEffect(() => {
+    if (categoryValue !== '') {
+      setPlaceHolder(categoryValue)
+    } else {
+      setPlaceHolder(categoryValue)
+    }
+  }, [])
 
 
   const toggleDropdown = () => {

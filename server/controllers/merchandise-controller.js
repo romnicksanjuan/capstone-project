@@ -3,7 +3,13 @@ const Merchandise = require('../model/merchandise.js')
 const purchaseHistoryModel = require('../model/purchase_history.js')
 
 const createProduct = async (req, res) => {
-    const { name, price, stock } = req.body
+    const { name, price, stock, size_and_quantity } = req.body
+
+    const parsedSizesAndQuantity = JSON.parse(size_and_quantity);
+
+    // console.log("size_and_quantity:", parsedSizesAndQuantity)
+
+    // return
 
     const newProduct = new Merchandise({
         name,
@@ -12,7 +18,8 @@ const createProduct = async (req, res) => {
         image: {
             data: req.file.buffer,
             contentType: req.file.mimetype
-        }
+        },
+        size_and_stock: parsedSizesAndQuantity
     })
 
     const save = await newProduct.save()
@@ -21,7 +28,7 @@ const createProduct = async (req, res) => {
 }
 
 const getMerchandise = async (req, res) => {
-    console.log("decoded:", req.admin)
+    // console.log("decoded:", req.admin)
     try {
         const getItems = await Merchandise.find({})
 
@@ -36,7 +43,8 @@ const getMerchandise = async (req, res) => {
                     data: image,
                     contentType: item.image.contentType
                 },
-                stock: item.stock
+                stock: item.stock,
+                size_and_quantity: item.size_and_stock
             }
         })
         // console.log(items)
@@ -62,12 +70,14 @@ const deleteMerchandise = async (req, res) => {
 }
 
 const editMerchandise = async (req, res) => {
-    const { name, price, stock } = req.body
+    const { name, price, stock, size_and_quantity } = req.body
     const { id } = req.params
+
+    console.log("size_and_quantity", size_and_quantity)
     console.log(id)
     try {
-        const edit = await Merchandise.findByIdAndUpdate({ _id: id }, { name, price, stock })
-        console.log(edit)
+        const edit = await Merchandise.findByIdAndUpdate({ _id: id }, { name, price, stock, size_and_stock: size_and_quantity })
+        // console.log(edit)
         res.json('Merchandise Update Successfully')
     } catch (error) {
         console.log(error)
@@ -92,11 +102,17 @@ const purchaseHistory = async (req, res) => {
             program: program,
             size: size,
             quantity: quantity
-
         })
 
+
+
+        const result = finditem.size_and_stock.find(s => s.size === size)
+        console.log("res", result)
+        if (result.quantity < quantity) {
+            return res.status(400).json({ success: false, message: "Insufficient stock" })
+        }
         const save = await newPurchaseHistory.save()
-        finditem.stock -= quantity
+        result.quantity -= quantity
         await finditem.save()
         console.log(save)
         res.status(200).json({ message: "success purchase" })
@@ -187,7 +203,7 @@ const barGraphMerchandise = async (req, res) => {
 
         const monthlyData = Promise.all(months.map(async (month, index) => {
             const end = index + 1 < months.length ? months[index + 1] : new Date(2025, new Date().getMonth() + 1, 1);
-            const bar = await purchaseHistoryModel.find({ createdAt: { $gte: month , $lt: end} })
+            const bar = await purchaseHistoryModel.find({ createdAt: { $gte: month, $lt: end } })
 
             return {
                 month: month.toLocaleDateString("en-US", { month: "long" }),
@@ -208,6 +224,6 @@ const barGraphMerchandise = async (req, res) => {
 
 module.exports = {
     createProduct, getMerchandise, purchaseHistory,
-    getAllPurchaseHistory, deleteMerchandise, editMerchandise, 
+    getAllPurchaseHistory, deleteMerchandise, editMerchandise,
     totalMerchandise, barGraphMerchandise
 }

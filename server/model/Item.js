@@ -5,6 +5,10 @@ const itemSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  serialItem: {
+    type: String,
+    required: true
+  },
   unit: {
     type: String,
     required: true
@@ -30,6 +34,6 @@ const itemSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
-}, {timestamps:true});
+}, { timestamps: true });
 
 module.exports = mongoose.model('Item', itemSchema);

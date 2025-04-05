@@ -17,6 +17,10 @@ const merchandiseSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-}, {timestamps:true})
+    size_and_stock: [{
+        size: { type: String, required: true },
+        quantity: { type: Number, required: true },
+    }]
+}, { timestamps: true })
 
 module.exports = mongoose.model('Merchandise', merchandiseSchema)

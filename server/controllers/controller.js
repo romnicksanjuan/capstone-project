@@ -5,7 +5,7 @@ const Category = require('../model/category.js');
 const category = require('../model/category.js');
 
 const createItem = async (req, res) => {
-    const { serialNumber, unit, brand, category, condition, quantity } = req.body;
+    const { serialNumber, serialItem, unit, brand, category, condition, quantity } = req.body;
 
     const fontend_link = `https://capstone-project-sand-gamma.vercel.app/borrow-form/${serialNumber}`
     const link = `http://localhost:3000/borrow-form/${serialNumber}`
@@ -18,7 +18,7 @@ const createItem = async (req, res) => {
     console.log(qrBuffer)
 
     const newItem = new Item({
-        serialNumber, unit, brand, category, condition, quantity, link: fontend_link, qr_code_image: {
+        serialNumber, serialItem, unit, brand, category, condition, quantity, link: fontend_link, qr_code_image: {
             data: qrBuffer,
             contentType: 'image/png'
         }
@@ -88,11 +88,11 @@ const fetchItems = async (req, res) => {
 
 const editITem = async (req, res) => {
     const { id } = req.params;
-    const { unit, brand, category, condition, quantity } = req.body;
+    const { serialItem, unit, brand, category, condition, quantity } = req.body;
     try {
         const updatedItem = await Item.findByIdAndUpdate(
             id,
-            { unit, brand, category, condition, quantity },
+            { serialItem, unit, brand, category, condition, quantity },
             { new: true } // Return the updated item after the change
         );
 

@@ -18,6 +18,7 @@ import BorrowedTransaction from './components/BorrowedTransaction.js';
 import MerchandiseTransaction from './components/merchandise/MerchandiseTransaction.js';
 import SignUp from './components/SignUp.js';
 import BorrowForm from './components/BorrowForm.js';
+import ManageMerchandise from './components/merchandise/ManageMerchandise.js';
 
 function App() {
   // pota 
@@ -36,6 +37,7 @@ function App() {
         <Route path='/create-product' element={<CreateProduct />} />
         <Route path='/get-purchase-history' element={<PurchaseHistory />} />
         <Route path='/purchase-transaction-details' element={<MerchandiseTransaction />} />
+        <Route path='/manage-mechandise' element={<ManageMerchandise />} />
         <Route path='/borrow-form/:sn' element={<BorrowForm />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
         {/* <Route path='/test' element={<Test />} /> */}
