@@ -85,7 +85,7 @@ const SignUp = () => {
                             type='password' placeholder='Enter Password' />
                     </div>
 
-                    <p style={{ padding: '5px 0', margin: '0', fontSize: '1.2rem', color: 'black', cursor: 'pointer', }} onClick={() => navigate('/')}>
+                    <p style={{ padding: '5px 0', margin: '0', fontSize: '1.2rem', color: 'white', cursor: 'pointer', }} onClick={() => navigate('/')}>
                         Aleady have an Account? <span style={{ color: "blue" }}>Login</span></p>
 
                     <div style={{ width: '100%', display: 'grid' }}>

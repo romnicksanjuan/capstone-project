@@ -84,8 +84,8 @@ const Login = () => {
                     </div>
 
                     <div>
-                        <p style={{ padding: '5px 0', margin: '0', fontSize: '1.2rem', color: 'black', cursor: 'pointer', }} onClick={() => navigate('/forgot-password')}>Forgot Password</p>
-                        <p style={{ padding: '5px 0', margin: '0', fontSize: '1.2rem', color: 'black', cursor: 'pointer', }}>Dont have Account yet? <span style={{ color: 'blue' }} onClick={() => navigate('/sign-up')}>Sign Up</span></p>
+                        <p style={{ padding: '5px 0', margin: '0', fontSize: '1.2rem', color: 'white', cursor: 'pointer', }} onClick={() => navigate('/forgot-password')}>Forgot Password</p>
+                        <p style={{ padding: '5px 0', margin: '0', fontSize: '1.2rem', color: 'white', cursor: 'pointer', }}>Dont have Account yet? <span style={{ color: 'blue' }} onClick={() => navigate('/sign-up')}>Sign Up</span></p>
                     </div>
 
                     <div style={{ width: '100%', display: 'grid' }}>
