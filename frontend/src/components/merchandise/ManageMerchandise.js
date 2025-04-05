@@ -195,7 +195,7 @@ const ManageMerchandise = () => {
     };
 
     return (
-        <div style={{ width: '70%', margin: "0 auto", display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'whitesmoke' }}>
+        <div style={{ width: '80%', margin: "0 auto", display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'whitesmoke' }}>
 
             <div style={{ width: '90%', backgroundColor: "rgb(255, 187, 0)", padding: '30px', border: '1px solid gray', borderRadius: '5px' }}>
                 <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
