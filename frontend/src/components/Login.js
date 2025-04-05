@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Domain from '../config/config'
 import { useNavigate } from "react-router-dom"
+import img from '../images/design.png'
 
 const Login = () => {
     const navigate = useNavigate()
@@ -45,8 +46,13 @@ const Login = () => {
 
     return (
         <div style={{ width: '100%', height: "100vh", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: "whitesmoke" }}>
-            <div style={{ width: '500px', height: 'auto', backgroundColor: 'rgb(255, 187, 0)', padding: '1rem 2rem', borderRadius: "5px" }}>
-                <form onSubmit={handleSubmit}>
+            <div style={{ display: 'flex', width: '60%', height: 'auto', backgroundColor: 'rgb(255, 187, 0)', padding: '2rem 2rem', borderRadius: "5px" }}>
+
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '50%' }}>
+                    <img src={img} width={300} height={300} />
+                </div>
+
+                <form onSubmit={handleSubmit} style={{ width: '50%' }}>
                     <h2 style={{ textAlign: 'center', color: 'white', fontSize: '25px', padding: '0', margin: "0" }}>Login Form</h2>
                     {errorMessage ? <p style={{
                         color: 'white', backgroundColor: "red", padding: "8px", textAlign: 'center',
