@@ -62,6 +62,12 @@ const BorrowForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+        if (borrower === '' || mobileNumber === '' || purpose === '') {
+            setError('Please fill all field')
+            setMessage('')
+            return
+        }
+
         try {
             const response = await fetch(`${DOMAIN}/borrow-item`, {
                 method: 'POST',
