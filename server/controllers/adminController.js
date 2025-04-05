@@ -114,7 +114,7 @@ const verifyOtp = async (req, res) => {
     const otpRecord = await Otp.findOne({ email, otp });
 
     if (!otpRecord) {
-        return res.status(400).json("Invalid or expired OTP");
+        return res.status(400).json({ success: true, message: "Invalid or expired OTP" });
     }
     // Proceed with password reset
     res.json({ message: "OTP verified!" });

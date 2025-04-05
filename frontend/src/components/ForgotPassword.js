@@ -49,12 +49,13 @@ const ForgotPassword = () => {
                 },
                 body: JSON.stringify({ email, otp })
             })
-
+            const data = await response.json()
             if (!response.ok) {
                 console.log(response.statusText)
+                alert(data.message)
                 return
             }
-            const data = await response.json()
+          
             console.log(data)
             alert(data.message)
 
