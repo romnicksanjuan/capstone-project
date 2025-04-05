@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Domain from '../config/config'
 import { useNavigate } from "react-router-dom"
 
-const Login = () => {
+const SignUp = () => {
     const navigate = useNavigate()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -12,7 +12,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await fetch(`${Domain}/admin/login`, {
+            const response = await fetch(`${Domain}/admin/sign-up`, {
                 method: "POSt",
                 headers: {
                     "Content-Type": "application/json"
@@ -31,7 +31,7 @@ const Login = () => {
             setSuccessMessage(data.message)
             setErrorMessage("")
 
-            navigate("/dashboard")
+
         } catch (error) {
             console.log(error.message)
         }
@@ -43,11 +43,13 @@ const Login = () => {
         setErrorMessage("")
     }, [email, password])
 
+
+
     return (
         <div style={{ width: '100%', height: "100vh", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: "whitesmoke" }}>
             <div style={{ width: '500px', height: 'auto', backgroundColor: 'rgb(255, 187, 0)', padding: '1rem 2rem', borderRadius: "5px" }}>
                 <form onSubmit={handleSubmit}>
-                    <h2 style={{ textAlign: 'center', color: 'white', fontSize: '25px', padding: '0', margin: "0" }}>Login Form</h2>
+                    <h2 style={{ textAlign: 'center', color: 'white', fontSize: '25px', padding: '0', margin: "0" }}>Sign Up Form</h2>
                     {errorMessage ? <p style={{
                         color: 'white', backgroundColor: "red", padding: "8px", textAlign: 'center',
                         fontSize: '1.1rem', borderRadius: '5px'
@@ -83,10 +85,8 @@ const Login = () => {
                             type='password' placeholder='Enter Password' />
                     </div>
 
-                    <div>
-                        <p style={{ padding: '5px 0', margin: '0', fontSize: '1.2rem', color: 'black', cursor: 'pointer', }} onClick={() => navigate('/forgot-password')}>Forgot Password</p>
-                        <p style={{ padding: '5px 0', margin: '0', fontSize: '1.2rem', color: 'black', cursor: 'pointer', }}>Dont have Account yet? <span style={{ color: 'blue' }} onClick={() => navigate('/sign-up')}>Sign Up</span></p>
-                    </div>
+                    <p style={{ padding: '5px 0', margin: '0', fontSize: '1.2rem', color: 'black', cursor: 'pointer', }} onClick={() => navigate('/')}>
+                        Aleady have an Account? <span style={{ color: "blue" }}>Login</span></p>
 
                     <div style={{ width: '100%', display: 'grid' }}>
                         <button style={{
@@ -103,4 +103,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default SignUp

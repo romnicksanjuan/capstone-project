@@ -19,7 +19,7 @@ const addBorrowItem = async (req, res) => {
 
         const saveBorrowItem = newBorrow.save()
         console.log(newBorrow)
-        res.status(200).json(saveBorrowItem)
+        res.status(200).json({ success: true, message: "Borrow Transaction Successfull" })
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -109,5 +109,5 @@ const fetchHistory = async (req, res) => {
 
 module.exports = {
     addBorrowItem, fetchBorrowedItems, totalBorrowedItems, returnItem, fetchHistory,
-    
+
 }

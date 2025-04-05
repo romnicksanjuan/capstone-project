@@ -17,7 +17,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // admin
-router.post("/admin/create", createAdmin)
+router.post("/admin/sign-up", createAdmin)
 router.post("/admin/login", loginAdmin)
 router.post('/admin/forgot-password', forgotPassword)
 router.post("/logout", logout)
@@ -38,7 +38,7 @@ router.get('/display-categories', displayCategories) //display category
 router.delete('/delete-category/:id', deleteCategory) //delete category
 
 // borrow
-router.post('/add-borrow-item', addBorrowItem)
+router.post('/borrow-item', addBorrowItem)
 router.get('/fetch-borrowed-items', middleware, fetchBorrowedItems)// middleware
 router.get('/total-borrowed-items', totalBorrowedItems)
 router.put('/return-item/:id', returnItem)

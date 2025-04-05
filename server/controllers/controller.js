@@ -7,8 +7,8 @@ const category = require('../model/category.js');
 const createItem = async (req, res) => {
     const { serialNumber, unit, brand, category, condition, quantity } = req.body;
 
-    const fontend_link = `https://capstone-project-sand-gamma.vercel.app/item/${serialNumber}`
-    const link = `http://localhost:3000/item/${serialNumber}`
+    const fontend_link = `https://capstone-project-sand-gamma.vercel.app/borrow-form/${serialNumber}`
+    const link = `http://localhost:3000/borrow-form/${serialNumber}`
     // console.log(unit)
     const qrImage = await QRCode.toDataURL(fontend_link);
 

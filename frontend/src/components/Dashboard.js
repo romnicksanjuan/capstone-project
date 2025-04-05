@@ -174,7 +174,7 @@ function Dashboard() {
           <div className={styles.totalItems}>
             <div style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
               <MdInventory size={30} color='white' />
-              <h3 style={{ margin: '0', color: 'white' }}>Unreturned Items</h3>
+              <h3 style={{ margin: '0', color: 'white' }}>Unreturn Items</h3>
             </div>
 
             <h4 style={{ margin: '0', color: 'white', textAlign: 'center', fontSize: '20px' }}>{totalBorrowedItems}</h4>
