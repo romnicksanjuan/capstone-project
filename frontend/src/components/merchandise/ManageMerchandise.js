@@ -227,7 +227,7 @@ const ManageMerchandise = () => {
                             </div>
 
                             {item.size_and_quantity.map((s) => (
-                                <div key={s._id} style={{ display: 'grid', backgroundColor: '', padding: '10px', width: "100px" }}>
+                                <div key={s._id} style={{ display: 'grid', backgroundColor: '',  width: "100px" }}>
                                     <p style={{ fontSize: '23px', textAlign: 'center', color: 'white' }}>{s.size}</p>
                                     <p style={{ fontSize: '23px', textAlign: 'center', color: 'white' }}>{s.quantity}</p>
                                 </div>

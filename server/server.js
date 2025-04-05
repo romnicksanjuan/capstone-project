@@ -19,7 +19,7 @@ mongoose.connect('mongodb+srv://romnick:1234@romnickdb.e14diyv.mongodb.net/capst
 app.use(express.json()); // Ensure this line is included
 app.use(cookieParser())
 app.use(cors({
-  origin: hosted_domain,
+  origin: local_domain,
   methods: ['POST', 'DELETE', 'PUT', 'GET'],
   credentials: true
 }));
