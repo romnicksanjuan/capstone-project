@@ -212,7 +212,7 @@ const ManageMerchandise = () => {
                 <div style={{ display: 'flex', backgroundColor: '', width: '100%', gap: "30px" }}>
 
                     <div style={{ backgroundColor: '', padding: '', }}>
-                        <img src={item.image.data} height={400} width={400} style={{ border: '1px solid gray' }} />
+                        <img src={item.image.data} height={300} width={300} style={{ border: '1px solid gray' }} />
                     </div>
 
                     <div style={{ padding: '10px' }}>
