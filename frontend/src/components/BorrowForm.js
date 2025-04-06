@@ -21,6 +21,8 @@ const BorrowForm = () => {
     const [borrower, setBorrower] = useState('')
     const [mobileNumber, setMobileNumber] = useState('')
     const [purpose, setPurpose] = useState('')
+    const [department, setDepartment] = useState('')
+    const [borrowerDesignation, setBorrowerDesignation] = useState('')
     const [message, setMessage] = useState('')
 
     const navigate = useNavigate()
@@ -62,7 +64,7 @@ const BorrowForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        if (borrower === '' || mobileNumber === '' || purpose === '') {
+        if (borrower === '' || mobileNumber === '' || purpose === '', borrowerDesignation === '', department === '') {
             setError('Please fill all field')
             setMessage('')
             return
@@ -75,7 +77,7 @@ const BorrowForm = () => {
                     'Content-Type': 'application/json',
                     // "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify({ serialNumber, borrower, mobileNumber, purpose })
+                body: JSON.stringify({ serialNumber, borrower, mobileNumber, purpose, department, borrowerDesignation })
             })
 
             const data = await response.json()
@@ -119,6 +121,17 @@ const BorrowForm = () => {
                 <div>
                     <label htmlFor="borrower">Borrower's Name:</label><br />
                     <input className={styles.input} type='text' id="borrower" name="borrower" value={borrower} onChange={(e) => setBorrower(e.target.value)} />
+                </div>
+
+
+                <div>
+                    <label htmlFor="borrower">Borrower's Designation:</label><br />
+                    <input className={styles.input} type='text' id="borrower" name="borrower" value={borrowerDesignation} onChange={(e) => setBorrowerDesignation(e.target.value)} />
+                </div>
+
+                <div>
+                    <label htmlFor="department">Department:</label><br />
+                    <input className={styles.input} type='text' id="department" name="department" value={department} onChange={(e) => setDepartment(e.target.value)} />
                 </div>
 
                 <div>

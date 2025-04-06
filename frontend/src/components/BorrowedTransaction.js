@@ -9,13 +9,14 @@ const BorrowedTransaction = () => {
     console.log(data)
     return (
         <div style={{ display: "flex", alignItems: 'center', justifyContent: 'center', width: "100%", height: '100vh', backgroundColor: "whitesmoke" }}>
-            <div style={{ width: "600px", height: '600px', backgroundColor: "white", border: '1px solid black', borderRadius: '5px', padding: '20px 10px' }}>
+            <div style={{ width: "600px", height: 'auto', backgroundColor: "white", border: '1px solid black', borderRadius: '5px', padding: '20px 10px' }}>
 
-                <div style={{display:'flex',alignItems:'center',marginBottom:'20px'}}>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
                     <img src={logo} width={60} height={60} />
                     <h2 style={{ padding: '20px 0 20px 10px' }}>Borrow Transaction Details</h2>
                 </div>
-                <div style={{ padding: '5px 10px', display: 'grid', gap: '15px' }}>
+
+                <div style={{ padding: '5px 10px', display: 'grid', gap: '10px' }}>
                     <div style={{ display: 'flex', width: '100%' }}>
                         <div style={{ width: '50%' }}>
                             <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Serial Number:</p>
@@ -74,12 +75,31 @@ const BorrowedTransaction = () => {
                     </div>
                     <div style={{ display: 'flex', width: '100%' }}>
                         <div style={{ width: '50%' }}>
-                            <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Borrower:                   </p>
+                            <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Borrower's name:                   </p>
                         </div>
                         <div style={{ width: '50%' }}>
                             <p style={{ color: 'GrayText', fontSize: '19px', }}>{data.borrower}</p>
                         </div>
                     </div>
+
+                    <div style={{ display: 'flex', width: '100%' }}>
+                        <div style={{ width: '50%' }}>
+                            <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Department:                   </p>
+                        </div>
+                        <div style={{ width: '50%' }}>
+                            <p style={{ color: 'GrayText', fontSize: '19px', }}>{data.department}</p>
+                        </div>
+                    </div>
+
+                    <div style={{ display: 'flex', width: '100%' }}>
+                        <div style={{ width: '50%' }}>
+                            <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Borrower's Designation:                   </p>
+                        </div>
+                        <div style={{ width: '50%' }}>
+                            <p style={{ color: 'GrayText', fontSize: '19px', }}>{data.borrower_designation}</p>
+                        </div>
+                    </div>
+
                     <div style={{ display: 'flex', width: '100%' }}>
                         <div style={{ width: '50%' }}>
                             <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Mobile Number:                   </p>
@@ -95,6 +115,24 @@ const BorrowedTransaction = () => {
                         </div>
                         <div style={{ width: '50%' }}>
                             <p style={{ color: 'GrayText', fontSize: '19px', }}>{data.purpose}</p>
+                        </div>
+                    </div>
+
+                    <div style={{ display: 'flex', width: '100%' }}>
+                        <div style={{ width: '50%' }}>
+                            <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Status Before:</p>
+                        </div>
+                        <div style={{ width: '50%' }}>
+                            <p style={{ color: 'GrayText', fontSize: '19px', }}>{data.status_before}</p>
+                        </div>
+                    </div>
+
+                    <div style={{ display: 'flex', width: '100%' }}>
+                        <div style={{ width: '50%' }}>
+                            <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Status After:                   </p>
+                        </div>
+                        <div style={{ width: '50%' }}>
+                            <p style={{ color: 'GrayText', fontSize: '19px', }}>{data.status_after}</p>
                         </div>
                     </div>
                 </div>

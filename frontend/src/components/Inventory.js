@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useReactToPrint } from "react-to-print";
 import style from '../css/Items.module.css'
-import Navbar from './Navbar';
-import DOMAIN from '../config/config';
+import Navbar from './Navbar.js';
+import DOMAIN from '../config/config.js';
 import { useNavigate } from 'react-router-dom';
 import { RiPrinterFill } from "react-icons/ri";
-import Topbar from './Topbar';
+import Topbar from './Topbar.js';
 import { MdDelete, MdAdd, MdCancel } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
@@ -13,7 +13,7 @@ import { IoSearch } from "react-icons/io5";
 import Dropdown from './Category.js'
 
 const token = localStorage.getItem("token")
-const Items = () => {
+const Inventory = () => {
   const contentRef = useRef(null);
   const navigate = useNavigate()
   const [query, setQuery] = useState("");
@@ -80,6 +80,8 @@ const Items = () => {
   const [category, setCategory] = useState('')
   const [condition, setCondition] = useState('')
   const [quantity, setQuantity] = useState(1)
+  const [location, setLocation] = useState('')
+  const [status, setStatus] = useState('')
   const [qrCode, setQrCode] = useState('')
   const [serialItem, setSerialItem] = useState('')
   const [showImage, setShowImage] = useState('')
@@ -161,7 +163,7 @@ const Items = () => {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ serialNumber, serialItem, unit, brand, category, condition, quantity })
+        body: JSON.stringify({ serialNumber, serialItem, unit, brand, category, condition, quantity, location,status })
       });
 
       const data = await response.json()
@@ -198,6 +200,7 @@ const Items = () => {
     setBrand(item.item.brand)
     setCategory(item.item.category)
     setCondition(item.item.condition)
+    setLocation(item.item.location)
     setCategoryValue(item.item.category)
   }
 
@@ -207,6 +210,7 @@ const Items = () => {
     setBrand('')
     setCategory('')
     setCondition('')
+    setLocation('')
   }
 
   const handleSubmitEdit = async (e) => {
@@ -220,7 +224,7 @@ const Items = () => {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ serialNumber, serialItem, unit, brand, category, condition, quantity })
+        body: JSON.stringify({ serialNumber, serialItem, unit, brand, category, condition, location, quantity,status })
       })
 
       if (!window.confirm('Are you sure you want to update this item?')) return
@@ -237,6 +241,8 @@ const Items = () => {
       setCondition('')
       setQuantity('')
       setSerialItem('')
+      setLocation('')
+      setStatus('')
 
       window.location.reload();
     } catch (error) {
@@ -419,7 +425,7 @@ const Items = () => {
           {showForm && (
             <form onSubmit={handleSubmit} style={{
               position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'orange',
-              padding: '30px 30px 35px 30px', height: 'auto', width: '450px', gap: '20px', border: '1px solid black', borderRadius: '5px'
+              padding: '20px', height: 'auto', width: '500px', gap: '20px', border: '1px solid black', borderRadius: '5px'
             }}>
 
 
@@ -439,43 +445,33 @@ const Items = () => {
 
               <div>
                 <label htmlFor="Unit">Unit:</label><br />
-                <input className={style.input} type="text" id="Unit" name="Unit" value={unit} onChange={(e) => setUnit(e.target.value)} />
+                <input className={style.input} type="text" id="Unit" name="Unit" required value={unit} onChange={(e) => setUnit(e.target.value)} />
               </div>
 
               <div>
                 <label htmlFor="brand">Brand:</label><br />
-                <input className={style.input} type='text' id="brand" name="brand" value={brand} onChange={(e) => setBrand(e.target.value)} />
+                <input className={style.input} type='text' id="brand" name="brand" required value={brand} onChange={(e) => setBrand(e.target.value)} />
               </div>
 
               <div>
                 <label htmlFor="category">Category:</label><br />
-                {/* <select
-                  id="category"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  style={{ marginLeft: '10px', marginRight: '10px', height: '40px', marginTop: '5px', marginBottom: '10px', fontSize: '20px' }}
-                >
-                  <option value="" disabled style={{ textAlign: 'center' }}>
-                    -- Choose a Category --
-                  </option>
-                  <option value="Mouse">Mouse</option>
-                  <option value="Keyboard">Keyboard</option>
-                  <option value="Headset">Headset</option>
-                  <option value="Microphone">Microphone</option>
-                  <option value="Speaker">Speaker</option>
-                  <option value="Speaker">Projector</option>
-                  {arrayCategory ? arrayCategory.map((cat) => (
-                    <option key={cat._id} value={cat.category}>{cat.category}</option>
-                  )) : ''}
-                  <option value="add-category" style={{ textAlign: 'center' }}>  Add New Category</option>
-                </select> */}
 
-                <Dropdown items={arrayCategory} categoryFunc={categoryFunc} categoryValue={categoryValue}/>
+                <Dropdown items={arrayCategory} categoryFunc={categoryFunc} categoryValue={categoryValue} />
               </div>
 
               <div>
-                <label htmlFor="status">Condition:</label><br />
-                <input className={style.input} type="text" id="status" name="status" value={condition} onChange={(e) => setCondition(e.target.value)} />
+                <label htmlFor="condition">Condition:</label><br />
+                <input className={style.input} type="text" id="condition" name="condition" required value={condition} onChange={(e) => setCondition(e.target.value)} />
+              </div>
+
+              <div>
+                <label htmlFor="location">Location:</label><br />
+                <input className={style.input} type="text" id="location" name="location" required value={location} onChange={(e) => setLocation(e.target.value)} />
+              </div>
+
+              <div>
+                <label htmlFor="status">Status:</label><br />
+                <input className={style.input} type="text" id="status" name="status" required value={status} onChange={(e) => setStatus(e.target.value)} />
               </div>
 
               {/* <div>
@@ -483,7 +479,7 @@ const Items = () => {
                 <input className={style.input} type="number" id="quantity" name="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
               </div> */}
 
-              <button style={{ height: '40px', width: '100%', border: 'none', fontSize: '20px', borderRadius: '5px', }} type="submit">Submit</button>
+              <button style={{ height: '35px', width: '100%', border: 'none', fontSize: '15px', borderRadius: '5px', }} type="submit">Submit</button>
             </form>
           )}
 
@@ -495,7 +491,7 @@ const Items = () => {
           {editingItemId && (
             <form onSubmit={handleSubmitEdit} style={{
               position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'orange',
-              padding: '30px', height: 'auto', width: '450px', gap: '20px', border: '1px solid black', borderRadius: '5px'
+              padding: '30px', height: 'auto', width: '500px', gap: '20px', border: '1px solid black', borderRadius: '5px'
             }}>
 
 
@@ -553,6 +549,16 @@ const Items = () => {
                 <input className={style.input} type="text" id="status" name="status" value={condition} onChange={(e) => setCondition(e.target.value)} />
               </div>
 
+              <div>
+                <label htmlFor="location">Location:</label><br />
+                <input className={style.input} type="text" id="location" name="location" value={location} onChange={(e) => setLocation(e.target.value)} />
+              </div>
+
+              <div>
+                <label htmlFor="status">Status:</label><br />
+                <input className={style.input} type="text" id="status" name="status" required value={status} onChange={(e) => setStatus(e.target.value)} />
+              </div>
+
 
 
               <button style={{ height: '40px', width: '100%', border: 'none', fontSize: '20px', borderRadius: '5px', }} type="submit">Submit</button>
@@ -572,6 +578,7 @@ const Items = () => {
               <th>Brand</th>
               <th>Category</th>
               <th>Condition</th>
+              <th>Location</th>
               <th>QR Code</th>
               <th>Date Added</th>
               <th>Action</th>
@@ -588,6 +595,7 @@ const Items = () => {
                 <td>{item.item.brand}</td>
                 <td>{item.item.category}</td>
                 <td>{item.item.condition}</td>
+                <td>{item.item.location}</td>
                 <td style={{ width: '10px' }}>
                   <div style={{ display: 'flex', justifyItems: 'center', alignItems: 'center', gap: '5px' }}>
                     {/* Your content here */}
@@ -617,4 +625,4 @@ const Items = () => {
   )
 }
 
-export default Items
+export default Inventory

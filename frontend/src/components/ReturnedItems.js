@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
-import styles from '../css/History.module.css'
+import styles from '../css/ReturnedItems.module.css'
 import DOMAIN from '../config/config'
 import { useNavigate } from 'react-router-dom'
 import TopBar from "./Topbar"
 
 const token = localStorage.getItem("token")
 
-const History = () => {
+const ReturnedItems = () => {
     const navigate = useNavigate()
     const [data, setData] = useState([])
 
@@ -48,7 +48,7 @@ const History = () => {
 
                 <TopBar />
                 
-                <h2 style={{ color: "orange", padding:'10px 0' }}>Borrowed History</h2>
+                <h2 style={{ color: "orange", padding:'10px 0' }}>Returned Items</h2>
                 <table className={styles.styledTable}>
                     <thead>
                         <tr>
@@ -56,7 +56,7 @@ const History = () => {
                             <th>Serial Number</th>
                             <th>Unit</th>
                             <th>Brand</th>
-                            <th>Borrower</th>
+                            <th>Borrower's Name</th>
                             <th>Mobile Number</th>
                             <th>Date Borrowed</th>
                             <th>Date Returned</th>
@@ -83,4 +83,4 @@ const History = () => {
     )
 }
 
-export default History
+export default ReturnedItems

@@ -4,8 +4,9 @@ import { HiCollection } from "react-icons/hi";
 import { RiChatHistoryFill } from "react-icons/ri";
 import { FaShoppingBag } from "react-icons/fa";
 import { IoIosListBox } from "react-icons/io";
-import { IoLogOut } from "react-icons/io5";
+import { IoLogOut,IoSettings } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
+import { FaCodePullRequest } from "react-icons/fa6";
 import DOMAIN from '../config/config';
 const Navbar = () => {
 
@@ -48,17 +49,17 @@ const Navbar = () => {
                         <p style={{ padding: '0' }}>  Dashboard</p>
                     </a>
 
-                    <a style={{ display: 'flex', alignItems: 'center' }} href="/items">
+                    <a style={{ display: 'flex', alignItems: 'center' }} href="/inventory">
                         <IoIosListBox size={26} className='icon' />
                         <p style={{ padding: '0' }}>Inventory</p>
                     </a>
                     <a style={{ display: 'flex', alignItems: 'center' }} href="/borrowed-items">
                         <HiCollection size={26} className='icon' />
-                        <p style={{ padding: '0' }}>Borrowed-Items</p>
+                        <p style={{ padding: '0' }}>Borrowed Items</p>
                     </a>
-                    <a style={{ display: 'flex', alignItems: 'center' }} href="/history">
+                    <a style={{ display: 'flex', alignItems: 'center' }} href="/returned-items">
                         <RiChatHistoryFill size={26} className='icon' />
-                        <p style={{ padding: '0' }}>History</p>
+                        <p style={{ padding: '0' }}>Returned Items</p>
                     </a>
                     <a style={{ display: 'flex', alignItems: 'center' }} href="/merchandise">
                         <FaShoppingBag size={26} className='icon' />
@@ -68,6 +69,16 @@ const Navbar = () => {
                     <a style={{ display: 'flex', alignItems: 'center' }} href="/get-purchase-history">
                         <RiChatHistoryFill size={26} className='icon' />
                         <p style={{ padding: '0' }}> Purchase History</p>
+                    </a>
+
+                    <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} href='/request-items'>
+                        <FaCodePullRequest size={26} className='icon' />
+                        <p style={{ padding: '0' }}> Request Items</p>
+                    </a>
+
+                    <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} href='/settings'>
+                        <IoSettings size={26} className='icon' />
+                        <p style={{ padding: '0' }}> Settings</p>
                     </a>
 
 

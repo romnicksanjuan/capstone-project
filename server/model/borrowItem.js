@@ -18,6 +18,22 @@ const borrowedItem = new mongoose.Schema({
     type: String,
     required: true
   },
+  department: {
+    type: String,
+    required: true
+  },
+  borrower_designation: {
+    type: String,
+    required: true
+  },
+  status_before: {
+    type: String,
+    required: true
+  },
+  status_after: {
+    type: String,
+    default: '--'
+  },
   dateBorrowed: {
     type: Date,
     default: Date.now

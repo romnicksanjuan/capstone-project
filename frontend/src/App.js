@@ -4,9 +4,7 @@ import './App.css';
 
 
 import Dashboard from './components/Dashboard';
-import Items from './components/Items';
 import BorrowedItems from './components/BorrowedItems';
-import History from './components/History';
 import AddBorrowItem from './components/AddBorrowItem';
 import CreateProduct from './components/merchandise/CreateProduct';
 import Merchandise from './components/merchandise/Merchandise.js';
@@ -19,6 +17,10 @@ import MerchandiseTransaction from './components/merchandise/MerchandiseTransact
 import SignUp from './components/SignUp.js';
 import BorrowForm from './components/BorrowForm.js';
 import ManageMerchandise from './components/merchandise/ManageMerchandise.js';
+import Inventory from './components/Inventory.js';
+import ReturnedItems from './components/ReturnedItems.js';
+import Settings from './components/Settings.js';
+import RequestItems from './components/RequestItems.js';
 
 function App() {
   // pota 
@@ -28,10 +30,10 @@ function App() {
         <Route path='/' element={<Login />} />
         <Route path='/sign-up' element={<SignUp />} />
         <Route path='/Dashboard' element={<Dashboard />} />
-        <Route path='/items' element={<Items />} />
+        <Route path='/inventory' element={<Inventory />} />
         <Route path='/borrowed-items' element={<BorrowedItems />} />
         <Route path='/borrowed-transaction-details' element={<BorrowedTransaction />} />
-        <Route path='/history' element={<History />} />
+        <Route path='/returned-items' element={<ReturnedItems />} />
         <Route path='/add-borrow-item' element={<AddBorrowItem />} />
         <Route path='/merchandise' element={<Merchandise />} />
         <Route path='/create-product' element={<CreateProduct />} />
@@ -40,6 +42,9 @@ function App() {
         <Route path='/manage-mechandise' element={<ManageMerchandise />} />
         <Route path='/borrow-form/:sn' element={<BorrowForm />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/settings' element={<Settings />} />
+        <Route path='/request-items' element={<RequestItems />} />
+        
         {/* <Route path='/test' element={<Test />} /> */}
       </Routes>
     </BrowserRouter>
