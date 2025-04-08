@@ -1,9 +1,9 @@
 const express = require('express');
 const multer = require('multer')
-const { createItem, fetchItems, editITem, deleteitem, totalItems, searchItem, propertyPage, barGraph, checkToken, newCategoryFunction, displayCategories, deleteCategory } = require('../controllers/controller.js')
+const { createItem, fetchItems, editITem, deleteitem, totalItems, searchItem, propertyPage, barGraph, checkToken, newCategoryFunction, displayCategories, deleteCategory, getAccessoryFunction, createAccessoryType, deleteAccessoryType } = require('../controllers/controller.js')
 const { addBorrowItem, fetchBorrowedItems, totalBorrowedItems, returnItem, fetchHistory } = require('../controllers/borrowItemController.js');
 const { createProduct, getMerchandise, purchaseHistory, getAllPurchaseHistory, deleteMerchandise, editMerchandise, totalMerchandise, barGraphMerchandise } = require('../controllers/merchandise-controller.js');
-const { createAdmin, loginAdmin, forgotPassword, logout, sendOtp, verifyOtp } = require('../controllers/adminController.js');
+const { createAdmin, loginAdmin, forgotPassword, logout, sendOtp, verifyOtp, changePassword } = require('../controllers/adminController.js');
 
 
 // authehntication
@@ -23,6 +23,7 @@ router.post('/admin/forgot-password', forgotPassword)
 router.post("/logout", logout)
 router.post('/send-otp', sendOtp)
 router.post('/verify-otp', verifyOtp)
+router.post('/change-password', changePassword)
 
 // item
 router.post('/create-item', createItem)
@@ -36,7 +37,9 @@ router.get("/bar-charts", barGraph)
 router.post('/add-category', newCategoryFunction) //add category
 router.get('/display-categories', displayCategories) //display category
 router.delete('/delete-category/:id', deleteCategory) //delete category
-
+router.get('/display-accessory-type', getAccessoryFunction)
+router.post('/add-accessory-type', createAccessoryType) //add accessory
+router.delete('/delete-accessory/:id', deleteAccessoryType) //delete category
 // borrow
 router.post('/borrow-item', addBorrowItem)
 router.get('/fetch-borrowed-items', middleware, fetchBorrowedItems)// middleware

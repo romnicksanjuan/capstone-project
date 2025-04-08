@@ -31,8 +31,13 @@ const Login = () => {
 
             setSuccessMessage(data.message)
             setErrorMessage("")
+            localStorage.setItem('role', data.role)
 
-            navigate("/dashboard")
+            if (data.role !== 'requester') {
+                navigate("/dashboard")
+            } else {
+                navigate("/request-items")
+            }
         } catch (error) {
             console.log(error.message)
         }

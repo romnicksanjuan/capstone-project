@@ -16,8 +16,7 @@ const middleware = (req, res, next) => {
     // console.log("s",token)
     try {
         const decoded = jwt.verify(token, sercretKEy)
-
-        req.admin = decoded
+        req.user = decoded
         // console.log(decoded)
         next()
     } catch (error) {

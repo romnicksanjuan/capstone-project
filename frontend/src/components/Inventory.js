@@ -9,6 +9,7 @@ import Topbar from './Topbar.js';
 import { MdDelete, MdAdd, MdCancel } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
+import Item_Type from './Item_Type.js';
 
 import Dropdown from './Category.js'
 
@@ -24,7 +25,12 @@ const Inventory = () => {
   const [arrayCategory, setArrayCategory] = useState([])
 
   const [displayCategory, setDisplayCategory] = useState('All')
+  const [displayByAccessoryType, setDisplayByAccessoryType] = useState('All')
+  const [itemLength, setItemLength] = useState(0)
   const [originalData, setOriginalData] = useState([])
+
+
+
 
   useEffect(() => {
     const generateSerialNumber = () => {
@@ -86,6 +92,9 @@ const Inventory = () => {
   const [serialItem, setSerialItem] = useState('')
   const [showImage, setShowImage] = useState('')
   const [categoryValue, setCategoryValue] = useState('Select Category')
+  const [type, setType] = useState('')
+  const [typeValue, setTypeValue] = useState('Select Accessory Type')
+  const [typeArray, setTypeArray] = useState([])
   // const [token, setToken] = useState("")
 
   // useEffect(() => {
@@ -103,6 +112,7 @@ const Inventory = () => {
   const handleButtonClick = () => {
     setShowForm(!showForm);
     setCategoryValue('Select a Category')
+    setTypeValue('Select Accessory Type')
   };
 
   const handleSearch = (e) => {
@@ -136,7 +146,8 @@ const Inventory = () => {
 
 
         const data = await response.json(); // Parse JSON response
-        // console.log(data.items)
+        console.log(data.items)
+        setItemLength(data.items.length)
         if (query === '') {
 
           setOriginalData(data.items); // Set the items in state
@@ -163,7 +174,7 @@ const Inventory = () => {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ serialNumber, serialItem, unit, brand, category, condition, quantity, location,status })
+        body: JSON.stringify({ serialNumber, serialItem, unit, brand, category, condition, quantity, location, status, accessory_type: type })
       });
 
       const data = await response.json()
@@ -202,6 +213,8 @@ const Inventory = () => {
     setCondition(item.item.condition)
     setLocation(item.item.location)
     setCategoryValue(item.item.category)
+    setTypeValue(item.item.accessory_type)
+    setStatus(item.item.status)
   }
 
   const handleExitEdit = () => {
@@ -224,7 +237,7 @@ const Inventory = () => {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ serialNumber, serialItem, unit, brand, category, condition, location, quantity,status })
+        body: JSON.stringify({ serialNumber, serialItem, unit, brand, category, condition, location, quantity, status, accessory_type: type })
       })
 
       if (!window.confirm('Are you sure you want to update this item?')) return
@@ -317,19 +330,58 @@ const Inventory = () => {
     setCategory(cat)
   }
 
-  // display by category 
+
+  const itemFunction = (type) => {
+    setType(type)
+  }
+
+  // display type list
   useEffect(() => {
-    const displayByCategory = async () => {
-      if (displayCategory === "All") {
-        setData(originalData)
-        console.log('s')
-      } else {
-        setData(originalData.filter(i => i.item.category === displayCategory))
+    const displayTypes = async () => {
+      try {
+        const response = await fetch(`${DOMAIN}/display-accessory-type`, {
+          method: 'GET'
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          console.log(response.statusText)
+          return
+        }
+
+        console.log('types:', data)
+        setTypeArray(data.type)
+
+      } catch (error) {
+        console.log(error)
       }
     }
+    displayTypes()
+  }, [])
 
-    displayByCategory()
-  }, [displayCategory])
+
+  // display by category and accessory type
+  useEffect(() => {
+    const displayByCategory = async () => {
+      if (displayCategory === "All" && displayByAccessoryType === "All") {
+        setData(originalData);
+        console.log("Filtered Length:", originalData.length);
+        setItemLength(originalData.length)
+      } else {
+        const filtered = originalData.filter((i) => {
+          const matchCategory = displayCategory === "All" || i.item.category === displayCategory;
+          const matchAccessoryType = displayByAccessoryType === "All" || i.item.accessory_type === displayByAccessoryType;
+          return matchCategory && matchAccessoryType;
+        });
+        setData(filtered);
+        console.log("Filtered Length:", filtered.length); // ✅ log the length
+        setItemLength(filtered.length)
+      }
+    };
+    displayByCategory();
+  }, [displayCategory, displayByAccessoryType]);
+
 
 
   return (
@@ -341,46 +393,49 @@ const Inventory = () => {
 
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
-          <div onSubmit={handleSearch} style={{ display: 'grid', gridTemplateColumns: "repeat(3, 1fr)" }} >
-            <input
-              type="text"
-              placeholder="Search item..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              style={{
-                padding: "10px",
-                width: "300px",
-                borderRadius: "5px",
-                border: "1px solid #ccc",
-                fontSize: '15px'
-              }}
-            />
+          <div style={{ display: 'flex', gap: '30px' }}>
+            <div onSubmit={handleSearch} style={{ display: 'flex', }}>
+              <input
+                type="text"
+                placeholder="Search item..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                style={{
+                  padding: "10px",
+                  width: "300px",
+                  borderRadius: "5px",
+                  border: "1px solid #ccc",
+                  fontSize: '15px'
+                }}
+              />
 
-            <div
-              style={{
-                display: "flex",
-                alignItems: 'center',
-                justifyContent: "center",
-                gap: "5px",
-                padding: "5px",
-                marginLeft: "10px",
-                border: "none",
-                borderRadius: "5px",
-                backgroundColor: "#219ebc",
-                color: "#fff",
-                cursor: "pointer",
-                width: '120px',
-                fontSize: '15px'
-              }}
-              onClick={() => searchItem()}
-            >
-              <IoSearch color='white' size={30} />
-              Search
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: 'center',
+                  justifyContent: "center",
+                  gap: "5px",
+                  padding: "5px",
+                  marginLeft: "10px",
+                  border: "none",
+                  borderRadius: "5px",
+                  backgroundColor: "#219ebc",
+                  color: "#fff",
+                  cursor: "pointer",
+                  width: '120px',
+                  fontSize: '15px'
+                }}
+                onClick={() => searchItem()}
+              >
+                <IoSearch color='white' size={30} />
+                Search
+              </div>
             </div>
 
 
 
-            <div style={{ display: 'flex', alignItems: 'center', width: '120px', }}>
+            {/* category selection */}
+            <div style={{ display: 'flex', alignItems: 'center', width: 'auto', }}>
               <select
                 id="category"
                 value={displayCategory}
@@ -395,7 +450,31 @@ const Inventory = () => {
                 )) : ''}
               </select>
             </div>
+
+            {/* accessory type selection */}
+
+            <div style={{ display: 'flex', alignItems: 'center', }}>
+              <select
+                id="category"
+                value={displayByAccessoryType}
+                onChange={(e) => setDisplayByAccessoryType(e.target.value)}
+                style={{ padding: '5px', fontSize: '17px', width: 'auto' }}
+              >
+                <option value="All" style={{ textAlign: 'center' }}>
+                  -- Select Type --
+                </option>
+                {typeArray ? typeArray.map((type) => (
+                  <option key={type._id} value={type.type}>{type.type}</option>
+                )) : ''}
+              </select>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', border:'2px solid gray', padding:"0 10px" }}>
+              {itemLength}
+            </div>
+
           </div>
+
 
 
 
@@ -418,7 +497,8 @@ const Inventory = () => {
             onClick={handleButtonClick}
           >
             <MdAdd color='white' size={30} />
-            Add Item</div>
+            Add Item
+          </div>
 
           {/* add item form */}
 
@@ -457,6 +537,11 @@ const Inventory = () => {
                 <label htmlFor="category">Category:</label><br />
 
                 <Dropdown items={arrayCategory} categoryFunc={categoryFunc} categoryValue={categoryValue} />
+              </div>
+
+              <div>
+                <label htmlFor="type-item">Accessory Type:</label><br />
+                <Item_Type items={typeArray} itemFunction={itemFunction} itemValue={typeValue} />
               </div>
 
               <div>
@@ -544,6 +629,12 @@ const Inventory = () => {
                 <Dropdown items={arrayCategory} categoryFunc={categoryFunc} categoryValue={categoryValue} />
               </div>
 
+
+              <div>
+                <label htmlFor="type-item">Accessory Type:</label><br />
+                <Item_Type items={typeArray} itemFunction={itemFunction} itemValue={typeValue} />
+              </div>
+
               <div>
                 <label htmlFor="status">Condition:</label><br />
                 <input className={style.input} type="text" id="status" name="status" value={condition} onChange={(e) => setCondition(e.target.value)} />
@@ -580,6 +671,8 @@ const Inventory = () => {
               <th>Condition</th>
               <th>Location</th>
               <th>QR Code</th>
+              <th>Status</th>
+              <th>Accessory Type</th>
               <th>Date Added</th>
               <th>Action</th>
             </tr>
@@ -603,6 +696,8 @@ const Inventory = () => {
                     <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={24} />
                   </div>
                 </td>
+                <td>{item.item.status}</td>
+                <td>{item.item.accessory_type}</td>
                 <td>{item.dateAdded}</td>
                 <td style={{ gap: '10px', justifyContent: 'space-between', alignItems: 'center', }}>
                   <div style={{ display: 'flex', justifyContent: "center", gap: '10px' }}>

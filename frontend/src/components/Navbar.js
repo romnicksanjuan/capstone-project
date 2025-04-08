@@ -4,11 +4,14 @@ import { HiCollection } from "react-icons/hi";
 import { RiChatHistoryFill } from "react-icons/ri";
 import { FaShoppingBag } from "react-icons/fa";
 import { IoIosListBox } from "react-icons/io";
-import { IoLogOut,IoSettings } from "react-icons/io5";
+import { IoLogOut, IoSettings } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 import { FaCodePullRequest } from "react-icons/fa6";
 import DOMAIN from '../config/config';
+import { useEffect, useState } from 'react';
 const Navbar = () => {
+
+    const [role, setRole] = useState(null)
 
     const navigate = useNavigate()
     const handleLogout = async () => {
@@ -23,6 +26,19 @@ const Navbar = () => {
         console.log(data.message)
         navigate('/')
     }
+
+
+    // check role 
+    useEffect(() => {
+        const checkRole = async () => {
+            const role = localStorage.getItem('role')
+            setRole(role)
+        }
+        checkRole()
+    }, [])
+
+    if (role === null) return null;
+
     return (
         <>
             {/* <nav className={styles.navbar}>
@@ -41,51 +57,76 @@ const Navbar = () => {
 
             <div className={styles.pages}>
                 <nav className={styles.navbarLinks}>
-                    <a style={{ display: 'flex', alignItems: 'center' }} href="/Dashboard">
-                        < RiDashboardHorizontalFill
-                            size={26}
-                            className='icon'
-                        />
-                        <p style={{ padding: '0' }}>  Dashboard</p>
-                    </a>
+                    {role !== 'requester' ?
+                        <>
+                            <a style={{ display: 'flex', alignItems: 'center' }} href="/Dashboard">
+                                < RiDashboardHorizontalFill
+                                    size={26}
+                                    className='icon'
+                                />
+                                <p style={{ padding: '0' }}>  Dashboard</p>
+                            </a>
 
-                    <a style={{ display: 'flex', alignItems: 'center' }} href="/inventory">
-                        <IoIosListBox size={26} className='icon' />
-                        <p style={{ padding: '0' }}>Inventory</p>
-                    </a>
-                    <a style={{ display: 'flex', alignItems: 'center' }} href="/borrowed-items">
-                        <HiCollection size={26} className='icon' />
-                        <p style={{ padding: '0' }}>Borrowed Items</p>
-                    </a>
-                    <a style={{ display: 'flex', alignItems: 'center' }} href="/returned-items">
-                        <RiChatHistoryFill size={26} className='icon' />
-                        <p style={{ padding: '0' }}>Returned Items</p>
-                    </a>
-                    <a style={{ display: 'flex', alignItems: 'center' }} href="/merchandise">
-                        <FaShoppingBag size={26} className='icon' />
-                        <p style={{ padding: '0' }}>Merchandise</p>
+                            <a style={{ display: 'flex', alignItems: 'center' }} href="/inventory">
+                                <IoIosListBox size={26} className='icon' />
+                                <p style={{ padding: '0' }}>Inventory</p>
+                            </a>
+                            <a style={{ display: 'flex', alignItems: 'center' }} href="/borrowed-items">
+                                <HiCollection size={26} className='icon' />
+                                <p style={{ padding: '0' }}>Borrowed Items</p>
+                            </a>
+                            <a style={{ display: 'flex', alignItems: 'center' }} href="/returned-items">
+                                <RiChatHistoryFill size={26} className='icon' />
+                                <p style={{ padding: '0' }}>Returned Items</p>
+                            </a>
+                            <a style={{ display: 'flex', alignItems: 'center' }} href="/merchandise">
+                                <FaShoppingBag size={26} className='icon' />
+                                <p style={{ padding: '0' }}>Merchandise</p>
 
-                    </a>
-                    <a style={{ display: 'flex', alignItems: 'center' }} href="/get-purchase-history">
-                        <RiChatHistoryFill size={26} className='icon' />
-                        <p style={{ padding: '0' }}> Purchase History</p>
-                    </a>
+                            </a>
+                            <a style={{ display: 'flex', alignItems: 'center' }} href="/get-purchase-history">
+                                <RiChatHistoryFill size={26} className='icon' />
+                                <p style={{ padding: '0' }}> Purchase History</p>
+                            </a>
 
-                    <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} href='/request-items'>
-                        <FaCodePullRequest size={26} className='icon' />
-                        <p style={{ padding: '0' }}> Request Items</p>
-                    </a>
+                            <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} href='/request-items'>
+                                <FaCodePullRequest size={26} className='icon' />
+                                <p style={{ padding: '0' }}> Request Items</p>
+                            </a>
 
-                    <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} href='/settings'>
-                        <IoSettings size={26} className='icon' />
-                        <p style={{ padding: '0' }}> Settings</p>
-                    </a>
+                            <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} href='/settings'>
+                                <IoSettings size={26} className='icon' />
+                                <p style={{ padding: '0' }}> Settings</p>
+                            </a>
 
 
-                    <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={() => handleLogout()}>
-                        <IoLogOut size={26} className='icon' />
-                        <p style={{ padding: '0' }}> Logout</p>
-                    </a>
+                            <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={() => handleLogout()}>
+                                <IoLogOut size={26} className='icon' />
+                                <p style={{ padding: '0' }}> Logout</p>
+                            </a>
+                        </>
+                        :
+
+                        <>
+                            <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} href='/request-items'>
+                                <FaCodePullRequest size={26} className='icon' />
+                                <p style={{ padding: '0' }}> Request Items</p>
+                            </a>
+
+                            <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} href='/settings'>
+                                <IoSettings size={26} className='icon' />
+                                <p style={{ padding: '0' }}> Settings</p>
+                            </a>
+
+
+                            <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={() => handleLogout()}>
+                                <IoLogOut size={26} className='icon' />
+                                <p style={{ padding: '0' }}> Logout</p>
+                            </a>
+                        </>
+                    }
+
+
                 </nav>
             </div>
 

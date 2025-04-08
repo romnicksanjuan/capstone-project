@@ -180,7 +180,7 @@ const getMonths = () => {
     for (let month = 0; month < currentMonth; month++) {
         months.push(new Date(year, month, 1)); // Push start of each month
     }
-    console.log("moths:", months)
+    // console.log("moths:", months)
     return months
 }
 
@@ -214,7 +214,7 @@ const barGraphMerchandise = async (req, res) => {
         // console.log(monthlyData)
 
         // const barGraph = await Item.find({ createdAt: { $lt: dtae } })
-        console.log("monthlydata merchandise", (await monthlyData).map(m => m))
+        // console.log("monthlydata merchandise", (await monthlyData).map(m => m))
         res.json({ success: true, message: "Data Retrieve Successful", monthlyData: (await monthlyData).map(m => m) })
     } catch (error) {
         console.log(error)

@@ -318,7 +318,7 @@ const Merchandise = () => {
 
         <div style={{ width: "100%", display: 'grid', gridTemplateColumns: "repeat(5, 1fr)", gap: "20px", margin: '0 auto', placeItems: 'center' }}>
           {merchandise.map((item) => (
-            <div onClick={() => navigate('/manage-mechandise', { state: item })} key={item._id} style={{ position: 'relative', width: '270px', border: '1px solid gray', height: '370px', backgroundColor: 'white', padding: '10px', }}>
+            <div onClick={() => navigate('/manage-mechandise', { state: item })} key={item._id} style={{ position: 'relative', width: '240px', border: '1px solid gray', height: '370px', backgroundColor: 'white', padding: '10px', }}>
               <div>
                 <img src={item.image.data} style={{ width: '100%', height: 'auto' }} />
               </div>

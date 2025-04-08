@@ -33,6 +33,10 @@ const itemSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  accessory_type: {
+    type: String,
+    required: true
+  },
   link: { type: String, required: true },
   qr_code_image: {
     data: { type: Buffer, required: true },

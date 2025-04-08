@@ -1,4 +1,4 @@
-const Admin = require("../model/admin")
+const User = require("../model/user.js")
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer')
 const Otp = require('../model/otp.js')
@@ -8,16 +8,16 @@ const createAdmin = async (req, res) => {
     const { email, password } = req.body
     console.log(email, password)
     try {
-        const findAdmin = await Admin.findOne({ email })
+        const findUser = await User.findOne({ email })
 
-        if (findAdmin) {
+        if (findUser) {
             res.status(400).json({ success: false, message: "Email is already exist" })
             return
         }
-        const newAdmin = new Admin({ email, password, role: "admin" })
-        const save = await newAdmin.save()
+        const newUser = new User({ email, password, role: "admin" })
+        const save = await newUser.save()
         console.log(save)
-        res.status(200).json({ success: true, message: "Admin Created Successfull" })
+        res.status(200).json({ success: true, message: "User Created Successfull" })
     } catch (error) {
         console.log(error)
     }
@@ -28,14 +28,14 @@ const loginAdmin = async (req, res) => {
     const { email, password } = req.body
     // console.log(email, password)
     try {
-        const findEmail = await Admin.findOne({ email })
+        const findEmail = await User.findOne({ email })
 
         if (!findEmail) {
             res.status(404).json({ success: false, message: "Incorrect Email or Password" })
             return
         }
 
-        const findPassword = await Admin.findOne({ password })
+        const findPassword = await User.findOne({ password })
 
         if (!findPassword) {
             res.status(404).json({ success: false, message: "Incorrect Email or Password" })
@@ -55,7 +55,7 @@ const loginAdmin = async (req, res) => {
             maxAge: 24 * 60 * 60 * 1000,
             // maxAge: 60 * 1000
         })
-        res.status(201).json({ success: true, message: "Login Successfull" })
+        res.status(201).json({ success: true, message: "Login Successfull", token, role: findEmail.role })
 
     } catch (error) {
         console.log(error)
@@ -130,7 +130,7 @@ const forgotPassword = async (req, res) => {
             return res.status(400).json({ success: false, message: "Email is required" })
         }
 
-        const findEmail = await Admin.findOne({ email })
+        const findEmail = await User.findOne({ email })
 
 
         if (!findEmail) {
@@ -141,7 +141,7 @@ const forgotPassword = async (req, res) => {
             return res.status(400).json({ success: false, message: "Password does not match" })
         }
 
-        const save = await Admin.findOneAndUpdate({ email }, { password: newPassword }, { new: true })
+        const save = await User.findOneAndUpdate({ email }, { password: newPassword }, { new: true })
         await save.save()
 
         res.status(200).json({ success: true, message: "Password Reset Successfull" })
@@ -157,16 +157,43 @@ const logout = async (req, res) => {
             secure: true, // Make sure it's false in development if you're not using HTTPS
             sameSite: 'None',
         });
-        console.log("vovo")
+        // console.log("vovo")
         res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {
         console.log(error)
     }
 }
 
+// change password
+const changePassword = async (req, res) => {
+    const { email, oldPassword, newPassword, confirmPassword } = req.body
+
+    // console.log(email, oldPassword, newPassword, confirmPassword)
+
+    try {
+        const checkEmailAndPass = await User.findOne({ email, password: oldPassword })
+
+        if (!checkEmailAndPass) {
+            return res.status(404).json({ success: false, message: 'Incorrect Email of Password' })
+        }
+
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({ success: false, message: 'New Password and Confirm Password Does not Match' })
+        }
+
+        checkEmailAndPass.password = newPassword
+
+        checkEmailAndPass.save()
+
+        res.status(200).json({ success: true, message: 'Password Change Successfull' })
+
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
 module.exports = {
     createAdmin, loginAdmin, forgotPassword, logout,
-    sendOtp, verifyOtp
+    sendOtp, verifyOtp, changePassword
 }

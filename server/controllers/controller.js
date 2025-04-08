@@ -2,10 +2,11 @@ const borrowItem = require('../model/borrowItem.js');
 const Item = require('../model/Item.js')
 const QRCode = require("qrcode");
 const Category = require('../model/category.js');
-const category = require('../model/category.js');
+const AccessoryType = require('../model/item_type_model.js')
+
 
 const createItem = async (req, res) => {
-    const { serialNumber, serialItem, unit, brand, category, condition, location,status } = req.body;
+    const { serialNumber, serialItem, unit, brand, category, condition, location, status, accessory_type } = req.body;
 
     const fontend_link = `https://capstone-project-sand-gamma.vercel.app/borrow-form/${serialNumber}`
     const link = `http://localhost:3000/borrow-form/${serialNumber}`
@@ -18,7 +19,7 @@ const createItem = async (req, res) => {
     console.log(qrBuffer)
 
     const newItem = new Item({
-        serialNumber, serialItem, unit, brand, category, condition, location,status, link: fontend_link, qr_code_image: {
+        serialNumber, serialItem, unit, brand, category, condition, location, status, accessory_type, link: fontend_link, qr_code_image: {
             data: qrBuffer,
             contentType: 'image/png'
         }
@@ -88,11 +89,11 @@ const fetchItems = async (req, res) => {
 
 const editITem = async (req, res) => {
     const { id } = req.params;
-    const { serialItem, unit, brand, category, condition, location,status } = req.body;
+    const { serialItem, unit, brand, category, condition, location, status, accessory_type } = req.body;
     try {
         const updatedItem = await Item.findByIdAndUpdate(
             id,
-            { serialItem, unit, brand, category, condition, location,status },
+            { serialItem, unit, brand, category, condition, location, status, accessory_type },
             { new: true } // Return the updated item after the change
         );
 
@@ -192,7 +193,7 @@ const getMonths = () => {
     for (let month = 0; month < currentMonth; month++) {
         months.push(new Date(year, month, 1)); // Push start of each month
     }
-    console.log("moths:", months)
+    // console.log("moths:", months)
     return months
 }
 
@@ -233,9 +234,11 @@ const barGraph = async (req, res) => {
     }
 }
 
-
+// check token
 const checkToken = (req, res) => {
-    res.json({ success: true, message: 'token is valid' })
+    const decoded = req.user
+    console.log('decoded:', decoded)
+    res.json({ success: true, message: 'token is valid', user: decoded })
 }
 
 
@@ -280,7 +283,54 @@ const deleteCategory = async (req, res) => {
 }
 
 
+// get accessory type
+const getAccessoryFunction = async (req, res) => {
+    try {
+        const type = await AccessoryType.find({})
+
+        if (type.length !== 0) {
+            res.status(200).json({ success: true, message: "Accessory Type Fetch Successfull", type: type })
+            return
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// create Accessory type
+const createAccessoryType = async (req, res) => {
+    const { type } = req.body
+    try {
+
+        if (!type) {
+            res.status(400).json({ success: false, message: "Failed to Create Accessory Type" })
+            return
+        }
+
+        const newType = new AccessoryType({ type })
+        await newType.save()
+
+        const findAccessoryType = await AccessoryType.find({})
+
+        res.status(200).json({ success: true, message: "Accessory Type Created Successfull", type: findAccessoryType })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const deleteAccessoryType = async (req, res) => {
+    const { id } = req.params
+    try {
+        const accessory = await AccessoryType.findByIdAndDelete(id)
+
+        res.status(200).json({ success: true, message: "Accessory Type Deleted Successful" })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 module.exports = {
     createItem, fetchItems, barGraph, editITem, deleteitem, totalItems, searchItem, propertyPage, checkToken,
-    newCategoryFunction, displayCategories, deleteCategory
+    newCategoryFunction, displayCategories, deleteCategory, getAccessoryFunction, createAccessoryType, deleteAccessoryType
 }
