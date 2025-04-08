@@ -43,7 +43,7 @@ const loginAdmin = async (req, res) => {
         }
 
 
-        const payload = { email: findPassword.email, role: findPassword.role }
+        const payload = { id: findEmail._id, email: findPassword.email, role: findPassword.role }
         const sercretKEy = "romnickPogi"
         const token = jwt.sign(payload, sercretKEy, { expiresIn: "10h" })
 

@@ -3,11 +3,12 @@ const multer = require('multer')
 const { createItem, fetchItems, editITem, deleteitem, totalItems, searchItem, propertyPage, barGraph, checkToken, newCategoryFunction, displayCategories, deleteCategory, getAccessoryFunction, createAccessoryType, deleteAccessoryType } = require('../controllers/controller.js')
 const { addBorrowItem, fetchBorrowedItems, totalBorrowedItems, returnItem, fetchHistory } = require('../controllers/borrowItemController.js');
 const { createProduct, getMerchandise, purchaseHistory, getAllPurchaseHistory, deleteMerchandise, editMerchandise, totalMerchandise, barGraphMerchandise } = require('../controllers/merchandise-controller.js');
-const { createAdmin, loginAdmin, forgotPassword, logout, sendOtp, verifyOtp, changePassword } = require('../controllers/adminController.js');
+const { createAdmin, loginAdmin, forgotPassword, logout, sendOtp, verifyOtp, changePassword } = require('../controllers/userController.js');
 
 
 // authehntication
-const { middleware } = require("../middleware/auth.js")
+const { middleware } = require("../middleware/auth.js");
+const { submitRequest, displayRequested, approvalButton, decisionButton, requestCount } = require('../controllers/requestController.js');
 
 
 const router = express.Router();
@@ -59,5 +60,11 @@ router.get("/bar-charts/merchandise", barGraphMerchandise)
 
 // check token
 router.get('/check-token', middleware, checkToken)
+
+// request
+router.post('/submit-request', middleware, submitRequest)
+router.get('/display-requested', middleware, displayRequested)
+router.post('/decision', middleware, decisionButton)
+router.get('/display-request-count', middleware, requestCount)
 
 module.exports = router;

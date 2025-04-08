@@ -5,14 +5,21 @@ import { RiChatHistoryFill } from "react-icons/ri";
 import { FaShoppingBag } from "react-icons/fa";
 import { IoIosListBox } from "react-icons/io";
 import { IoLogOut, IoSettings } from "react-icons/io5";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link,useLocation } from 'react-router-dom';
 import { FaCodePullRequest } from "react-icons/fa6";
 import DOMAIN from '../config/config';
 import { useEffect, useState } from 'react';
 const Navbar = () => {
 
-    const [role, setRole] = useState(null)
+    const location = useLocation();
 
+  const isRequestPage = location.pathname === '/request-items';
+
+//   console.log("isRequestPage", isRequestPage)
+
+    const [role, setRole] = useState(null)
+    const [count, setCount] = useState(null)
+    const [isClick, setIsclick] = useState(false)
     const navigate = useNavigate()
     const handleLogout = async () => {
         if (!window.confirm("Do you want to logout?")) return
@@ -23,9 +30,31 @@ const Navbar = () => {
         })
 
         const data = await response.json()
-        console.log(data.message)
+        // console.log(data.message)
         navigate('/')
     }
+
+    // request count display
+    useEffect(() => {
+        const count = async () => {
+            const response = await fetch(`${DOMAIN}/display-request-count`, {
+                method: 'GET',
+                credentials: 'include'
+            })
+
+            if (!response.ok) {
+                console.log(response.statusText,)
+                return
+            }
+
+            const data = await response.json()
+
+            // console.log(data)
+            setCount(data.requestCountDocument)
+        }
+
+        count()
+    }, [])
 
 
     // check role 
@@ -59,70 +88,97 @@ const Navbar = () => {
                 <nav className={styles.navbarLinks}>
                     {role !== 'requester' ?
                         <>
-                            <a style={{ display: 'flex', alignItems: 'center' }} href="/Dashboard">
+                            <Link
+                                to={"/Dashboard"}
+                                style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                 < RiDashboardHorizontalFill
                                     size={26}
                                     className='icon'
                                 />
                                 <p style={{ padding: '0' }}>  Dashboard</p>
-                            </a>
+                            </Link>
 
-                            <a style={{ display: 'flex', alignItems: 'center' }} href="/inventory">
+                            <Link
+                                to={"/inventory"}
+                                style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                 <IoIosListBox size={26} className='icon' />
                                 <p style={{ padding: '0' }}>Inventory</p>
-                            </a>
-                            <a style={{ display: 'flex', alignItems: 'center' }} href="/borrowed-items">
+                            </Link>
+                            <Link
+                                to={"/borrowed-items"}
+                                style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                 <HiCollection size={26} className='icon' />
                                 <p style={{ padding: '0' }}>Borrowed Items</p>
-                            </a>
-                            <a style={{ display: 'flex', alignItems: 'center' }} href="/returned-items">
+                            </Link>
+                            <Link
+                                to={"/returned-items"}
+                                style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                 <RiChatHistoryFill size={26} className='icon' />
                                 <p style={{ padding: '0' }}>Returned Items</p>
-                            </a>
-                            <a style={{ display: 'flex', alignItems: 'center' }} href="/merchandise">
+                            </Link>
+                            <Link
+                                to={"/merchandise"}
+                                style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                 <FaShoppingBag size={26} className='icon' />
                                 <p style={{ padding: '0' }}>Merchandise</p>
 
-                            </a>
-                            <a style={{ display: 'flex', alignItems: 'center' }} href="/get-purchase-history">
+                            </Link>
+                            <Link
+                                to={"/get-purchase-history"}
+                                style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                 <RiChatHistoryFill size={26} className='icon' />
                                 <p style={{ padding: '0' }}> Purchase History</p>
-                            </a>
+                            </Link>
 
-                            <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} href='/request-items'>
+                            <Link
+                                to={'/request-items'}
+                                onClick={() => setIsclick(!isClick)}
+                                style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
+                            >
                                 <FaCodePullRequest size={26} className='icon' />
                                 <p style={{ padding: '0' }}> Request Items</p>
-                            </a>
+                                {!isRequestPage && count > 0 && !isClick && (
+                                    <p style={{ color: 'white', fontWeight: 'bold', backgroundColor: 'red', padding: '2px 6px', borderRadius: '10px' }}>
+                                        {count}
+                                    </p>
+                                )}
+                            </Link>
 
-                            <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} href='/settings'>
+                            <Link
+                                to={'/settings'}
+                                style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '10px' }}>
                                 <IoSettings size={26} className='icon' />
                                 <p style={{ padding: '0' }}> Settings</p>
-                            </a>
+                            </Link>
 
 
-                            <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={() => handleLogout()}>
+                            <Link style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '10px' }} onClick={() => handleLogout()}>
                                 <IoLogOut size={26} className='icon' />
                                 <p style={{ padding: '0' }}> Logout</p>
-                            </a>
+                            </Link>
                         </>
                         :
 
                         <>
-                            <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} href='/request-items'>
+                            <Link
+                                to={'/request-items'}
+                                style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '10px' }} >
                                 <FaCodePullRequest size={26} className='icon' />
                                 <p style={{ padding: '0' }}> Request Items</p>
-                            </a>
+                            </Link>
 
-                            <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} href='/settings'>
+                            <Link
+                                to={'/settings'}
+                                style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '10px' }}>
                                 <IoSettings size={26} className='icon' />
                                 <p style={{ padding: '0' }}> Settings</p>
-                            </a>
+                            </Link>
 
 
-                            <a style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={() => handleLogout()}>
+                            <Link style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '10px' }} onClick={() => handleLogout()}>
                                 <IoLogOut size={26} className='icon' />
                                 <p style={{ padding: '0' }}> Logout</p>
-                            </a>
+                            </Link>
                         </>
                     }
 
