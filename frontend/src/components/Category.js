@@ -3,7 +3,7 @@ import '../css/Dropdown.css';
 import { MdDelete } from "react-icons/md";
 import DOMAIN from '../config/config';
 
-const Test = ({ items, categoryFunc, categoryValue }) => {
+const Category = ({ items, categoryFunc, categoryValue }) => {
   const [localItems, setLocalItems] = useState(items);
   const [placeholder, setPlaceHolder] = useState(categoryValue);
   const dropdownRef = useRef(null);
@@ -117,4 +117,4 @@ const Test = ({ items, categoryFunc, categoryValue }) => {
   );
 };
 
-export default Test;
+export default Category;

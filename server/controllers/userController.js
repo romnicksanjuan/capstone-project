@@ -5,7 +5,7 @@ const Otp = require('../model/otp.js')
 const crypto = require("crypto")
 
 const createAdmin = async (req, res) => {
-    const { email, password } = req.body
+    const { email, password, gender, department, phoneNumber, designation, dateOfBirth } = req.body
     console.log(email, password)
     try {
         const findUser = await User.findOne({ email })
@@ -14,7 +14,7 @@ const createAdmin = async (req, res) => {
             res.status(400).json({ success: false, message: "Email is already exist" })
             return
         }
-        const newUser = new User({ email, password, role: "admin" })
+        const newUser = new User({ email, password, role: "admin", gender, department, phoneNumber, designation, dateOfBirth })
         const save = await newUser.save()
         console.log(save)
         res.status(200).json({ success: true, message: "User Created Successfull" })

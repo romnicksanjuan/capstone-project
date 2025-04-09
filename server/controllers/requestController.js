@@ -5,11 +5,11 @@ const Approval = require('../model/approval.js')
 
 const submitRequest = async (req, res) => {
     const { department, purpose, date, isFabrication, isRepair, isReplacement, isAdditional,
-        quantity_and_materials,
+        quantity_and_materials, others,
         requestedBy } = req.body;
 
     console.log(department, purpose, date, isFabrication, isRepair, isReplacement, isAdditional,
-        quantity_and_materials,
+        quantity_and_materials, others,
         requestedBy)
     console.log(req.user)
 
@@ -47,16 +47,17 @@ const displayRequested = async (req, res) => {
         // console.log('find user:', findUser)
 
         if (findUser.role === "requester") {
-            const getRequested = await Request.find({ requester: findUser._id, })
+            // const getRequested = await Request.find({ requester: findUser._id, })
+            const getRequested = await Request.find({ requester: findUser._id, }).sort({ createdAt: -1, });
             res.status(200).json({ requestData: getRequested })
         } else if (findUser.role === "dean") {
-            const getRequested = await Request.find({ deanApproval: 'pending' })
+            const getRequested = await Request.find({ deanApproval: 'pending' }).sort({ createdAt: -1, });
             res.status(200).json({ requestData: getRequested })
         } else if (findUser.role === "president") {
-            const getRequested = await Request.find({ deanApproval: 'approved', presidentApproval: 'pending' })
+            const getRequested = await Request.find({ deanApproval: 'approved', presidentApproval: 'pending' }).sort({ createdAt: -1, });
             res.status(200).json({ requestData: getRequested })
         } else if (findUser.role === "admin") {
-            const getRequested = await Request.find({})
+            const getRequested = await Request.find({}).sort({ createdAt: -1, });
             res.status(200).json({ requestData: getRequested })
         }
 
@@ -88,7 +89,7 @@ const decisionButton = async (req, res) => {
                     approvedAt: new Date()
                 })
 
-                return res.status(200).json({ message: 'Request successfully updated.' })
+                return res.status(200).json({ message: 'Your Response has been received successfully' })
             } else {
                 return res.status(400).json({ message: 'Request update failed.' })
             }
@@ -96,7 +97,7 @@ const decisionButton = async (req, res) => {
             const update = await Request.findByIdAndUpdate(requestId, { presidentApproval: decision })
 
             if (update) {
-                return res.status(200).json({ message: 'Request successfully updated.' })
+                return res.status(200).json({ message: 'Your Response has been received successfully' })
             } else {
                 return res.status(400).json({ message: 'Request update failed.' })
             }
@@ -112,7 +113,7 @@ const decisionButton = async (req, res) => {
 // request count
 const requestCount = async (req, res) => {
     const user = req.user
-    console.log('user:', user)
+    // console.log('user:', user)
     try {
 
         const findUser = await User.findOne({ _id: user.id, email: user.email, role: user.role, })

@@ -3,6 +3,7 @@ const Item = require('../model/Item.js')
 const QRCode = require("qrcode");
 const Category = require('../model/category.js');
 const AccessoryType = require('../model/item_type_model.js')
+const User = require("../model/user.js")
 
 
 const createItem = async (req, res) => {
@@ -235,10 +236,20 @@ const barGraph = async (req, res) => {
 }
 
 // check token
-const checkToken = (req, res) => {
+const checkToken = async (req, res) => {
     const decoded = req.user
     console.log('decoded:', decoded)
-    res.json({ success: true, message: 'token is valid', user: decoded })
+
+    const findUser = await User.findById(decoded.id).lean()
+    const formattedDateOfBirth = findUser.dateOfBirth.toLocaleDateString("en-US",{timeZone:'Asia/Manila', day:'numeric', month:'long', year:'numeric'})
+   
+    const result = {
+        ...findUser,
+        dateOfBirth:formattedDateOfBirth
+    }
+  
+    console.log('hays:',  result)
+    res.json({ success: true, message: 'token is valid', user: result })
 }
 
 

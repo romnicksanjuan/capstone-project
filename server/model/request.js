@@ -9,6 +9,7 @@ const requestSchema = new mongoose.Schema({
   isRepair: { type: Boolean, required: false },
   isReplacement: { type: Boolean, required: false },
   isAdditional: { type: Boolean, required: false },
+  others: { type: String, },
   quantity_and_materials: [{
     quantity: { type: Number },
     materials: { type: String }
