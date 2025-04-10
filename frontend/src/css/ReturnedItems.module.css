@@ -57,3 +57,52 @@
     width: 100px;
     text-align: center;
 }
+
+.header {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 50px;
+    /* Space between the header and content */
+    /* font-weight: bold; */
+}
+
+
+@media print {
+
+    .header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-size: 1.5em;
+        margin-bottom: 50px;
+        /* Space between the header and content */
+        /* font-weight: bold; */
+    }
+
+
+    
+    .styledTable {
+        border-collapse: collapse;
+        margin: 15px auto;
+        font-size: 10px;
+        text-align: left;
+        width: 90%;
+    }
+
+    .styledTable th {
+        padding: 10px 5px;
+        border: 1px solid #ddd;
+        font-size: 10;
+    }
+    
+    .styledTable td {
+        padding: 5px 5px;
+        border: 1px solid #ddd;
+        font-size: 8;
+    }
+
+}

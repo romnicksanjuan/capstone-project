@@ -74,7 +74,7 @@ const editMerchandise = async (req, res) => {
     const { id } = req.params
 
     console.log("size_and_quantity", size_and_quantity)
-    console.log(id)
+    // console.log(id)
     try {
         const edit = await Merchandise.findByIdAndUpdate({ _id: id }, { name, price, stock, size_and_stock: size_and_quantity })
         // console.log(edit)
@@ -105,9 +105,8 @@ const purchaseHistory = async (req, res) => {
         })
 
 
-
         const result = finditem.size_and_stock.find(s => s.size === size)
-        console.log("res", result)
+        // console.log("res", result)
         if (result.quantity < quantity) {
             return res.status(400).json({ success: false, message: "Insufficient stock" })
         }

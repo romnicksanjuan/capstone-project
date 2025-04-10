@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import Navbar from '../Navbar'
 import style from '../../css/Items.module.css'
+import s from '../../css/purchaseHistory.module.css'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import DOMAIN from '../../config/config'
@@ -8,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import Topbar from '../Topbar'
 import { useReactToPrint } from "react-to-print";
 import { RiPrinterFill } from "react-icons/ri";
+import img from '../../images/ctc-logoo.jpg'
 
 const token = localStorage.getItem("token")
 const PurchaseHistory = () => {
@@ -81,6 +83,7 @@ const PurchaseHistory = () => {
         documentTitle: `${new Date()}`,
         contentRef: contentRef,
     });
+    
     return (
         < div style={{ display: 'flex' }}>
             <Navbar />
@@ -88,7 +91,7 @@ const PurchaseHistory = () => {
                 <Topbar />
                 <h2 style={{ color: "orange", padding: '10px 0' }}>Purchase History</h2>
 
-                <div style={{display:'flex',gap:'90px'}}>
+                <div style={{ display: 'flex', gap: '90px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', width: '120px', }}>
                         <select
                             value={display}
@@ -105,51 +108,59 @@ const PurchaseHistory = () => {
                         </select>
                     </div>
 
-                    <div style={{marginRight:'10px'}}>
+                    <div style={{ marginRight: '10px' }}>
                         <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={35} />
                     </div>
                 </div>
-                <table className={style.styledTable} ref={contentRef}>
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Merchandise Name</th>
-                            <th>Price</th>
-                            <th>Full Name</th>
-                            <th>Program</th>
-                            <th>Size</th>
-                            <th>Quantity</th>
-                            <th>Date Purchase</th>
 
-                        </tr>
-                    </thead>
+                <div ref={contentRef} >
+                    <div className={style.header}>
+                        <img src={img} width={100} height={100} />
+                        <h4>Ceguera Technological Colleges</h4>
+                    </div>
+                    <table className={style.styledTable}>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th>Full Name</th>
+                                <th>Program</th>
+                                <th>Size</th>
+                                <th>Quantity</th>
+                                <th>Date Purchase</th>
+
+                            </tr>
+                        </thead>
 
 
-                    <tbody>
-                        {/* {data.map((item, index) => (
+                        <tbody>
+                            {/* {data.map((item, index) => (
                                          <tr key={index}> */}
-                        {purchaseHistory.map((item, index) => (
-                            <tr key={index} onClick={() => historyDetails(item)}>
-                                {/* <td className={style.serialNumber}>{item.number}</td> */}
-                                {/* <td className={style.image}>
+                            {purchaseHistory.map((item, index) => (
+                                <tr key={index} onClick={() => historyDetails(item)}>
+                                    {/* <td className={style.serialNumber}>{item.number}</td> */}
+                                    {/* <td className={style.image}>
                                     <img src={item.image.data} style={{ width: '100px', height: '100px' }} />
                                 </td> */}
-                                <td className={style.image}>
-                                    <img src={`data:image/jpeg;base64,${item.merchandise.image.data}`} style={{ width: '70px', height: '70px' }} />
-                                </td>
-                                <td>{item.merchandise.name}</td>
-                                <td>{item.merchandise.price}</td>
-                                <td>{item.fullname}</td>
-                                <td>{item.program}</td>
-                                <td>{item.size}</td>
-                                <td>{item.quantity}</td>
-                                <td>{item.purchaseDate}</td>
-                            </tr>
-                        ))}
-                        {/* ))} */}
-                    </tbody>
+                                    <td className={style.image}>
+                                        <img src={`data:image/jpeg;base64,${item.merchandise.image.data}`} style={{ width: '70px', height: '70px' }} />
+                                    </td>
+                                    <td>{item.merchandise.name}</td>
+                                    <td>{item.merchandise.price}</td>
+                                    <td>{item.fullname}</td>
+                                    <td>{item.program}</td>
+                                    <td>{item.size}</td>
+                                    <td>{item.quantity}</td>
+                                    <td>{item.purchaseDate}</td>
+                                </tr>
+                            ))}
+                            {/* ))} */}
+                        </tbody>
 
-                </table>
+                    </table>
+                </div>
+
             </div>
         </div>
     )

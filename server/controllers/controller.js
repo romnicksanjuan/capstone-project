@@ -252,7 +252,6 @@ const checkToken = async (req, res) => {
     res.json({ success: true, message: 'token is valid', user: result })
 }
 
-
 // add new category
 const newCategoryFunction = async (req, res) => {
     const { newCategory } = req.body

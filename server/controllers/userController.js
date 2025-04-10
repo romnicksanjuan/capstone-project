@@ -174,7 +174,7 @@ const changePassword = async (req, res) => {
         const checkEmailAndPass = await User.findOne({ email, password: oldPassword })
 
         if (!checkEmailAndPass) {
-            return res.status(404).json({ success: false, message: 'Incorrect Email of Password' })
+            return res.status(404).json({ success: false, message: 'Incorrect Email or Password' })
         }
 
         if (newPassword !== confirmPassword) {
