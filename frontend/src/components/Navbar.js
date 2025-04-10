@@ -5,7 +5,7 @@ import { RiChatHistoryFill } from "react-icons/ri";
 import { FaShoppingBag } from "react-icons/fa";
 import { IoIosListBox } from "react-icons/io";
 import { IoLogOut, IoSettings } from "react-icons/io5";
-import { useNavigate, Link,useLocation } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { FaCodePullRequest } from "react-icons/fa6";
 import DOMAIN from '../config/config';
 import { useEffect, useState } from 'react';
@@ -13,9 +13,9 @@ const Navbar = () => {
 
     const location = useLocation();
 
-  const isRequestPage = location.pathname === '/request-items';
+    const isRequestPage = location.pathname === '/request-items';
 
-//   console.log("isRequestPage", isRequestPage)
+    //   console.log("isRequestPage", isRequestPage)
 
     const [role, setRole] = useState(null)
     const [count, setCount] = useState(null)
@@ -39,17 +39,18 @@ const Navbar = () => {
         const count = async () => {
             const response = await fetch(`${DOMAIN}/display-request-count`, {
                 method: 'GET',
-                credentials: 'include'
+                credentials: 'include',
+                headers: {
+                    "Content_Type": "application/json"
+                }
             })
 
             if (!response.ok) {
-                console.log(response.statusText,)
+                console.log(response.statusText)
                 return
             }
-
             const data = await response.json()
-
-            // console.log(data)
+            console.log(data)
             setCount(data.requestCountDocument)
         }
 

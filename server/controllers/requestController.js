@@ -118,7 +118,7 @@ const requestCount = async (req, res) => {
 
         const findUser = await User.findOne({ _id: user.id, email: user.email, role: user.role, })
 
-        console.log('find user:', findUser)
+        // console.log('find user:', findUser)
         if (findUser.role === 'dean') {
             const getRequestedCount = await Request.countDocuments({ deanApproval: 'pending' })
             res.status(200).json({ requestCountDocument: getRequestedCount })
@@ -128,6 +128,8 @@ const requestCount = async (req, res) => {
             res.status(200).json({ requestCountDocument: getRequestedCount })
             return
         }
+
+        res.json({ requestCountDocument: 0 })
 
     } catch (error) {
         console.log(error)

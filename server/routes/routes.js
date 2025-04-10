@@ -41,6 +41,7 @@ router.delete('/delete-category/:id', deleteCategory) //delete category
 router.get('/display-accessory-type', getAccessoryFunction)
 router.post('/add-accessory-type', createAccessoryType) //add accessory
 router.delete('/delete-accessory/:id', deleteAccessoryType) //delete category
+
 // borrow
 router.post('/borrow-item', addBorrowItem)
 router.get('/fetch-borrowed-items', middleware, fetchBorrowedItems)// middleware
