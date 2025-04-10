@@ -5,16 +5,23 @@ const settings = async (req, res) => {
 
     // console.log("testttttttt",user)
     try {
-        const find = await User.findById(user.id)
+        const findUser = await User.findById(user.id).lean()
 
-        console.log('finddddddddddddddddd', find)
+        console.log('finddddddddddddddddd', findUser)
 
-        if ((!find)) {
+        if ((!findUser)) {
             res.status(404).json({ success: false, message: 'error' })
             return
         }
 
-        res.status(200).json({ success: true, message: 'success', user: find })
+        const formattedDateOfBirth = findUser.dateOfBirth.toLocaleDateString("en-US", { timeZone: 'Asia/Manila', day: 'numeric', month: 'long', year: 'numeric' })
+
+        const result = {
+            ...findUser,
+            dateOfBirth: formattedDateOfBirth
+        }
+
+        res.status(200).json({ success: true, message: 'success', user: result })
     } catch (error) {
         console.log(error)
     }
