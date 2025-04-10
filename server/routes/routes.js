@@ -9,6 +9,7 @@ const { createAdmin, loginAdmin, forgotPassword, logout, sendOtp, verifyOtp, cha
 // authehntication
 const { middleware } = require("../middleware/auth.js");
 const { submitRequest, displayRequested, approvalButton, decisionButton, requestCount } = require('../controllers/requestController.js');
+const { settings } = require('../controllers/settingsController.js');
 
 
 const router = express.Router();
@@ -67,5 +68,8 @@ router.post('/submit-request', middleware, submitRequest)
 router.get('/display-requested', middleware, displayRequested)
 router.post('/decision', middleware, decisionButton)
 router.get('/display-request-count', middleware, requestCount)
+
+// settings
+router.get('/settings', middleware, settings)
 
 module.exports = router;

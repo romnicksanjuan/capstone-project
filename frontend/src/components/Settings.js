@@ -27,36 +27,33 @@ function Settings() {
         setRole(role)
     }, [])
 
-    // checkToken
+
+    // settings 
     useEffect(() => {
-        const checkToken = async () => {
+        const settingsFunc = async () => {
             try {
-                const response = await fetch(`${DOMAIN}/check-token`, {
-                    method: 'get',
+                const response = await fetch(`${DOMAIN}/settings`, {
+                    method: 'GET',
                     credentials: 'include'
                 })
 
                 const data = await response.json()
 
                 if (!response.ok) {
-                    console.log('data:', data)
-
-                    if (data.message === 'Access Denied') {
-                        alert("Session Expired, Please Login Again")
-                        navigate("/")
-                    }
-                    return
+                    return console.log(response.statusText)
                 }
-
-                console.log('data:', data)
+                console.log(data)
                 setUser(data.user)
             } catch (error) {
                 console.log(error)
             }
         }
 
-        return () => checkToken()
-    }, [])
+
+        settingsFunc()
+    },[])
+
+  
 
     // change passowrd
     const handleChangePassword = async (e) => {
@@ -132,10 +129,10 @@ function Settings() {
                     {/* Main Content */}
                     <div style={{ backgroundColor: 'white', width: '80%', padding: '20px', borderRadius: '5px', color: '#fff', display: 'flex', justifyContent: 'center' }}>
                         {activeSection === 'profile_information' &&
-                            <div style={{ display: 'flex',justifyContent:'center', width: '80%', margin: '0 auto',  }}>
-                                <div style={{width:'80%', margin: '0 auto', backgroundColor: 'orange', padding:'15px', borderRadius:'2px'}}>
-                                   <h3 style={{marginBottom:'20px', color:'black'}}>Profile Information</h3>
-                                    <div style={{ display: 'flex',}}>
+                            <div style={{ display: 'flex', justifyContent: 'center', width: '80%', margin: '0 auto', }}>
+                                <div style={{ width: '80%', margin: '0 auto', backgroundColor: 'orange', padding: '15px', borderRadius: '2px' }}>
+                                    <h3 style={{ marginBottom: '20px', color: 'black' }}>Profile Information</h3>
+                                    <div style={{ display: 'flex', }}>
                                         <div style={{ width: '50%', }}>
                                             <h4 style={{ marginBottom: "10px", color: 'black' }}>Email:</h4>
                                         </div>
