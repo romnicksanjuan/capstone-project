@@ -21,6 +21,7 @@ import Inventory from './components/Inventory.js';
 import ReturnedItems from './components/ReturnedItems.js';
 import Settings from './components/Settings.js';
 import RequestItems from './components/RequestItems.js';
+import Users from './components/Users.js';
 // import Test from './components/Category.js';
 // import Testing from './components/Test.js';
 
@@ -46,6 +47,7 @@ function App() {
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/settings' element={<Settings />} />
         <Route path='/request-items' element={<RequestItems />} />
+        <Route path='/user-list' element={<Users />} />
 
         
         {/* <Route path='/test' element={<Test />} /> */}

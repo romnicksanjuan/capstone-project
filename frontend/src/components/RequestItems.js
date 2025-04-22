@@ -45,6 +45,36 @@ function RequestItems() {
     const [approve, setApprove] = useState('approved')
     const [reject, setReject] = useState('rejected')
 
+    const [status, setStatus] = useState('')
+
+    // console.log('s', status)
+    useEffect(() => {
+        const updateStatus = async () => {
+            try {
+
+                if (status !== '') {
+                    console.log(items._id)
+                    console.log(status)
+                    const response = await fetch(`${DOMAIN}/update-status/${items._id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status }),
+                        credentials: 'include'
+                    })
+
+                    const data = await response.json()
+                    console.log(data)
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        updateStatus()
+    }, [status])
+
     useEffect(() => {
         const role = localStorage.getItem('role')
         setRole(role)
@@ -91,7 +121,7 @@ function RequestItems() {
                 },
                 body: JSON.stringify({
                     department, purpose, date, isFabrication, isRepair, isReplacement, isAdditional,
-                    quantity_and_materials,others,
+                    quantity_and_materials, others,
                     requestedBy,
                 })
             })
@@ -271,7 +301,18 @@ function RequestItems() {
                     {/* Main Content */}
                     <div style={{ backgroundColor: 'white', width: '80%', padding: '10px', borderRadius: '5px', color: '#fff' }}>
 
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight:"20px" }}>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '20px', marginRight: "20px" }}>
+                            {role === 'admin' && <div style={{ color: 'black' }}>
+                                <select style={{ padding: '5px', textAlignLast: 'center' }} defaultValue="" onChange={(e) => setStatus(e.target.value)}>
+                                    <option value="" disabled>
+                                        -- Mark As --
+                                    </option>
+                                    <option value="ready-for-release">Ready for Release</option>
+                                    <option value="in-progress">In Progress</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="not-available">Not Available</option>
+                                </select>
+                            </div>}
                             <RiPrinterFill onClick={() => handlePrintClick()} color='black' size={24} />
                         </div>
                         {activeSection === items._id &&
@@ -440,6 +481,12 @@ function RequestItems() {
                                         </div> : ''}
 
                                     </div>
+
+                                    {role === 'admin' || role === 'requester' ?
+                                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+                                            <h3>Status: <span style={{ padding: '5px', backgroundColor: 'gray' }}>{items.status === 'ready-for-release' ? 'Ready for Release' :
+                                                items.status === 'in-progress' ? 'In Progress' : items.status === 'completed' ? 'Completed' : items.status === 'not-available' ? 'Not Available' : 'Pending Approval'}</span></h3>
+                                        </div> : ''}
                                 </div>
                             </div>
                         }
@@ -460,7 +507,7 @@ function RequestItems() {
                                     <h3 style={{ textAlign: 'center' }}>REQUEST FOR MATERIALS</h3>
 
                                     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                        <label style={{ color: 'black',}}>Date:</label>
+                                        <label style={{ color: 'black', }}>Date:</label>
                                         <input type="date" style={{
                                             border: 'none',
                                             borderBottom: '1px solid black',
@@ -477,9 +524,9 @@ function RequestItems() {
 
                                     {/* purpose */}
                                     <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-                                        <label style={{ fontWeight: 'bold', color: 'black',fontSize:'13px'  }}>Dep/Lab/Room:</label>
+                                        <label style={{ fontWeight: 'bold', color: 'black', fontSize: '13px' }}>Dep/Lab/Room:</label>
                                         <input type="text" style={{
-                                            fontSize:'13px' ,
+                                            fontSize: '13px',
                                             border: 'none',
                                             borderBottom: '1px solid black',
                                             outline: 'none', // optional: removes blue outline on focus
@@ -494,9 +541,9 @@ function RequestItems() {
                                     </div>
 
                                     <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-                                        <label style={{ fontWeight: 'bold', color: 'black',fontSize:'13px'  }}>Purpose:</label>
+                                        <label style={{ fontWeight: 'bold', color: 'black', fontSize: '13px' }}>Purpose:</label>
                                         <input type="text" style={{
-                                            fontSize:'13px' ,
+                                            fontSize: '13px',
                                             border: 'none',
                                             borderBottom: '1px solid black',
                                             outline: 'none', // optional: removes blue outline on focus
@@ -548,11 +595,11 @@ function RequestItems() {
 
                                     {/* others */}
                                     <div style={{ display: 'flex', marginTop: '10px' }}>
-                                        <label style={{ fontWeight: 'bold', color: 'black',fontSize:'13px'  }}>Others: </label>
+                                        <label style={{ fontWeight: 'bold', color: 'black', fontSize: '13px' }}>Others: </label>
                                         <input type='text'
 
                                             style={{
-                                                fontSize:'13px' ,
+                                                fontSize: '13px',
                                                 border: 'none',
                                                 borderBottom: '1px solid black',
                                                 outline: 'none', // optional: removes blue outline on focus
@@ -569,8 +616,8 @@ function RequestItems() {
                                     <table style={{ width: "100%", marginTop: '10px', borderCollapse: 'collapse' }}>
                                         <thead>
                                             <tr>
-                                                <th style={{ border: '1px solid black',fontSize:'14px'  }}>Quantity</th>
-                                                <th style={{ border: '1px solid black',fontSize:'14px'  }}>Materials</th>
+                                                <th style={{ border: '1px solid black', fontSize: '14px' }}>Quantity</th>
+                                                <th style={{ border: '1px solid black', fontSize: '14px' }}>Materials</th>
                                                 <th style={{ border: 'none' }}></th>
                                             </tr>
                                         </thead>
@@ -601,9 +648,9 @@ function RequestItems() {
 
                                     {/* requested by */}
                                     <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '10px' }}>
-                                        <label style={{ fontWeight: 'bold', color: 'black',fontSize:'13px'  }}>Requested By:</label>
+                                        <label style={{ fontWeight: 'bold', color: 'black', fontSize: '13px' }}>Requested By:</label>
                                         <input type="text" style={{
-                                            fontSize:'13px' ,
+                                            fontSize: '13px',
                                             border: 'none',
                                             borderBottom: '1px solid black',
                                             outline: 'none', // optional: removes blue outline on focus

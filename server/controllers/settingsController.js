@@ -7,7 +7,7 @@ const settings = async (req, res) => {
     try {
         const findUser = await User.findById(user.id).lean()
 
-        console.log('finddddddddddddddddd', findUser)
+        // console.log('finddddddddddddddddd', findUser)
 
         if ((!findUser)) {
             res.status(404).json({ success: false, message: 'error' })

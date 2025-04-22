@@ -90,7 +90,13 @@ const sendOtp = async (req, res) => {
             from: "romnicksanjuan22@gmail.com",
             to: email,
             subject: "Password Reset OTP",
-            text: `Your OTP is ${otp}. It will expire with in 5 minutes.`,
+            text: `Hello, 
+
+We received a request to reset your password. Please use the One-Time Password (OTP) below to proceed with your password change:
+
+OTP: ${otp}
+
+This OTP is valid for 5 minutes. If you did not request this change, please ignore this email or contact support immediately.`,
         };
 
         transporter.sendMail(mailOptions, (error, info) => {
@@ -192,8 +198,53 @@ const changePassword = async (req, res) => {
     }
 }
 
+// get users data
+const getUsers = async (req, res) => {
+    try {
+        const getUsers = await User.find({ role: { $in: ['requester', 'president', 'dean'] } }).lean()
+
+        if (getUsers.length === 0) {
+            res.json({ message: "No Users Found" })
+        }
+        const users = getUsers.map(user => {
+            return {
+                ...user,
+                dateOfBirth: new Date(user.dateOfBirth).toISOString().split('T')[0]
+            }
+        })
+        console.log(users)
+        res.json({ message: "Users Retrieve Success", users })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// update user's role
+const updateUserRole = async (req, res) => {
+    const { id } = req.params
+    const { role } = req.body
+    console.log(id, role)
+    try {
+        await User.findByIdAndUpdate(id, { role }, { new: true })
+        res.json({ message: 'Role Updated Successfull' })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// delete user
+const delUser = async (req, res) => {
+    const { id } = req.params
+    console.log(id)
+    try {
+        await User.findByIdAndDelete(id)
+        res.json({ message: 'User Deleted Successfull' })
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 module.exports = {
     createAdmin, loginAdmin, forgotPassword, logout,
-    sendOtp, verifyOtp, changePassword
+    sendOtp, verifyOtp, changePassword, getUsers, updateUserRole, delUser
 }

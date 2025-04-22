@@ -2,6 +2,8 @@ const Request = require('../model/request.js');
 // const Notification = require('../models/Notification');
 const User = require('../model/user.js');
 const Approval = require('../model/approval.js')
+const nodemailer = require('nodemailer')
+const { message } = require('./emailMessage.js')
 
 const submitRequest = async (req, res) => {
     const { department, purpose, date, isFabrication, isRepair, isReplacement, isAdditional,
@@ -41,11 +43,8 @@ const submitRequest = async (req, res) => {
 const displayRequested = async (req, res) => {
     const user = req.user
     try {
-
         const findUser = await User.findOne({ _id: user.id, email: user.email, })
-
         // console.log('find user:', findUser)
-
         if (findUser.role === "requester") {
             // const getRequested = await Request.find({ requester: findUser._id, })
             const getRequested = await Request.find({ requester: findUser._id, }).sort({ createdAt: -1, });
@@ -60,12 +59,10 @@ const displayRequested = async (req, res) => {
             const getRequested = await Request.find({}).sort({ createdAt: -1, });
             res.status(200).json({ requestData: getRequested })
         }
-
     } catch (error) {
         console.log(error)
     }
 }
-
 // approval
 const decisionButton = async (req, res) => {
     const user = req.user
@@ -136,4 +133,58 @@ const requestCount = async (req, res) => {
     }
 }
 
-module.exports = { submitRequest, displayRequested, decisionButton, requestCount }
+const transporter = nodemailer.createTransport({
+    tls: {
+        rejectUnauthorized: false  // Ignore certificate validation
+    },
+    service: 'gmail',
+    auth: {
+        user: 'romnicksanjuan22@gmail.com',
+        pass: 'miho qtfh mijo xlts'
+    }
+})
+
+const sendEmail = async (email, message) => {
+    try {
+        const mailOptions = {
+            from: "romnicksanjuan22@gmail.com",
+            to: email,
+            subject: "Request Update",
+            text: message,
+        };
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log(error.message)
+                return
+            };
+            res.status(200).json({ message: "email sent!" });
+        });
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const editStatus = async (req, res) => {
+    const { id } = req.params
+    const { status } = req.body
+    console.log(id)
+    try {
+        const updateStatus = await Request.findById(id)
+        updateStatus.status = status
+        updateStatus.save()
+
+        const findUser = await User.findById(updateStatus.requester)
+
+        // console.log('f', findUser)
+        const mes = message(status)
+
+        console.log(mes)
+        await sendEmail(findUser.email, mes)
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+module.exports = { submitRequest, displayRequested, decisionButton, requestCount, editStatus }

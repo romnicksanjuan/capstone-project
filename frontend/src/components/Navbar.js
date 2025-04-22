@@ -7,6 +7,7 @@ import { IoIosListBox } from "react-icons/io";
 import { IoLogOut, IoSettings } from "react-icons/io5";
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { FaCodePullRequest } from "react-icons/fa6";
+import { FaUserAlt } from "react-icons/fa";
 import DOMAIN from '../config/config';
 import { useEffect, useState } from 'react';
 const Navbar = () => {
@@ -50,7 +51,7 @@ const Navbar = () => {
                 return
             }
             const data = await response.json()
-            console.log(data)
+            // console.log(data)
             setCount(data.requestCountDocument)
         }
 
@@ -143,6 +144,13 @@ const Navbar = () => {
                                         {count}
                                     </p>
                                 )}
+                            </Link>
+
+                            <Link
+                                to={'/user-list'}
+                                style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '10px' }}>
+                                <FaUserAlt size={26} className='icon' />
+                                <p style={{ padding: '0' }}> User List</p>
                             </Link>
 
                             <Link

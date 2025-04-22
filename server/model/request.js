@@ -25,6 +25,7 @@ const requestSchema = new mongoose.Schema({
     enum: ['pending', 'approved', 'rejected'],
     default: 'pending'
   },
+  status: { type: String, enum: ['pending-approval', 'ready-for-release', 'in-progress', 'completed', 'not-available'], default: 'pending-approval' }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Request', requestSchema);

@@ -3,12 +3,12 @@ const multer = require('multer')
 const { createItem, fetchItems, editITem, deleteitem, totalItems, searchItem, propertyPage, barGraph, checkToken, newCategoryFunction, displayCategories, deleteCategory, getAccessoryFunction, createAccessoryType, deleteAccessoryType } = require('../controllers/controller.js')
 const { addBorrowItem, fetchBorrowedItems, totalBorrowedItems, returnItem, fetchHistory } = require('../controllers/borrowItemController.js');
 const { createProduct, getMerchandise, purchaseHistory, getAllPurchaseHistory, deleteMerchandise, editMerchandise, totalMerchandise, barGraphMerchandise } = require('../controllers/merchandise-controller.js');
-const { createAdmin, loginAdmin, forgotPassword, logout, sendOtp, verifyOtp, changePassword } = require('../controllers/userController.js');
+const { createAdmin, loginAdmin, forgotPassword, logout, sendOtp, verifyOtp, changePassword, getRequester, getUsers, updateUserRole, delUser } = require('../controllers/userController.js');
 
 
 // authehntication
 const { middleware } = require("../middleware/auth.js");
-const { submitRequest, displayRequested, approvalButton, decisionButton, requestCount } = require('../controllers/requestController.js');
+const { submitRequest, displayRequested, approvalButton, decisionButton, requestCount, editStatus } = require('../controllers/requestController.js');
 const { settings } = require('../controllers/settingsController.js');
 
 
@@ -18,7 +18,7 @@ const storage = multer.memoryStorage();
 
 const upload = multer({ storage });
 
-// admin
+// user
 router.post("/admin/sign-up", createAdmin)
 router.post("/admin/login", loginAdmin)
 router.post('/admin/forgot-password', forgotPassword)
@@ -26,6 +26,9 @@ router.post("/logout", logout)
 router.post('/send-otp', sendOtp)
 router.post('/verify-otp', verifyOtp)
 router.post('/change-password', changePassword)
+router.get('/get-users', getUsers)
+router.put('/update-role/:id', updateUserRole)
+router.delete('/delete-user/:id', delUser)
 
 // item
 router.post('/create-item', createItem)
@@ -68,6 +71,7 @@ router.post('/submit-request', middleware, submitRequest)
 router.get('/display-requested', middleware, displayRequested)
 router.post('/decision', middleware, decisionButton)
 router.get('/display-request-count', middleware, requestCount)
+router.put('/update-status/:id', middleware, editStatus)
 
 // settings
 router.get('/settings', middleware, settings)
