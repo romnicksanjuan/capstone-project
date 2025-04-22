@@ -14,7 +14,7 @@ const createAdmin = async (req, res) => {
             res.status(400).json({ success: false, message: "Email is already exist" })
             return
         }
-        const newUser = new User({ email, password, role: "admin", gender, department, phoneNumber, designation, dateOfBirth })
+        const newUser = new User({ email, password, role: "requester", gender, department, phoneNumber, designation, dateOfBirth })
         const save = await newUser.save()
         console.log(save)
         res.status(200).json({ success: true, message: "User Created Successfull" })
