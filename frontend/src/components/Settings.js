@@ -99,6 +99,7 @@ function Settings() {
     // create dean
     const createDeanHandle = async (e) => {
         e.preventDefault()
+ 
         try {
             const response = await fetch(`${DOMAIN}/create-dean`, {
                 method: 'POST',
@@ -106,7 +107,7 @@ function Settings() {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify({ deanEmail, deanPassword, departmentName, deanName, deanDesignation })
+                body: JSON.stringify({ deanEmail, deanPassword, departmentName, deanName, deanDesignation, accRole })
             })
 
             const data = await response.json()
@@ -140,6 +141,7 @@ function Settings() {
         disDean()
     }, [])
 
+    const [accRole, setAccRole] = useState('')
     const [isEdit, setIsEdit] = useState(false)
     const handleEditClickDean = (dean) => {
         const find = displayDean.find(id => dean._id === id._id)
@@ -150,6 +152,7 @@ function Settings() {
         setDeanDesignation(find.designation || '')
         setDepartmentName(find.department || '')
         setDeanId(find._id)
+        setAccRole(dean.role)
         setIsEdit(true)
     }
 
@@ -166,7 +169,7 @@ function Settings() {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify({ deanEmail, deanPassword, departmentName, deanName, deanDesignation })
+                body: JSON.stringify({ deanEmail, deanPassword, departmentName, deanName, deanDesignation ,accRole})
             })
 
             const data = await response.json()
@@ -239,7 +242,7 @@ function Settings() {
                                 Change Password
                             </li>
 
-                           {role === 'admin' ?  <li style={{
+                            {role === 'admin' ? <li style={{
                                 cursor: 'pointer',
                                 color: activeSection === 'accounts' ? 'white' : 'black',
                                 backgroundColor: activeSection === 'accounts' ? 'orange' : '',
@@ -247,7 +250,7 @@ function Settings() {
                                 borderRadius: '5px'
                             }} onClick={() => setActiveSection('accounts')} >
                                 Account Management
-                            </li> :''}
+                            </li> : ''}
                         </ul>
                     </nav>
 
@@ -396,7 +399,7 @@ function Settings() {
                         {activeSection === 'accounts' && role === 'admin' &&
                             <div style={{ color: 'black', width: '100%', height: '100%' }}>
                                 {!isEdit ? <form onSubmit={createDeanHandle} style={{ width: '70%' }}>
-                                    <h4>College Department Deans</h4>
+                                    <h4>College Department Deans and President</h4>
                                     <div style={{ marginBottom: '10px' }}>
                                         <label style={{ fontSize: '15px', color: 'orange' }}>Email:</label><br />
                                         <input
@@ -462,9 +465,24 @@ function Settings() {
                                             }} />
                                     </div>
 
+
+                                    <div style={{ marginBottom: '10px' }}>
+                                        <label style={{ fontSize: '15px', color: 'orange' }}>Role:</label><br />
+                                        <select
+                                            id="options"
+                                            value={accRole}
+                                            onChange={(e) => setAccRole(e.target.value)}
+                                            style={{ padding: '5px', fontSize: '14px', marginTop: '5px' }}
+                                        >
+                                            <option value="">--Select Role--</option>
+                                            <option value="dean">Dean</option>
+                                            <option value="president">President</option>
+                                        </select>
+                                    </div>
+
                                     <button type='submit' style={{ padding: '4px 5px', fontSize: '15px', width: '100%', borderRadius: '5px', border: 'none', }}>Submit</button>
                                 </form> : <form onSubmit={editDean} style={{ width: '70%' }}>
-                                    <h4>Edit Dean Account</h4>
+                                    <h4>Edit Account</h4>
                                     <div style={{ marginBottom: '10px' }}>
                                         <label style={{ fontSize: '15px', color: 'orange' }}>Email:</label><br />
                                         <input
@@ -530,6 +548,21 @@ function Settings() {
                                             }} />
                                     </div>
 
+
+                                    <div style={{ marginBottom: '10px' }}>
+                                        <label style={{ fontSize: '15px', color: 'orange' }}>Role:</label><br />
+                                        <select
+                                            id="options"
+                                            value={accRole}
+                                            onChange={(e) => setAccRole(e.target.value)}
+                                            style={{ padding: '5px', fontSize: '14px', marginTop: '5px' }}
+                                        >
+                                            <option value="">--Select Role--</option>
+                                            <option value="dean">Dean</option>
+                                            <option value="president">President</option>
+                                        </select>
+                                    </div>
+
                                     <button type='submit' style={{ padding: '4px 5px', fontSize: '15px', width: '100%', borderRadius: '5px', border: 'none', }}>Submit</button>
                                 </form>}
 
@@ -545,6 +578,7 @@ function Settings() {
                                             <th>Department Name</th>
                                             <th>Name</th>
                                             <th>Designation</th>
+                                            <th>Role</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -557,7 +591,7 @@ function Settings() {
                                                 <td>{dean.department}</td>
                                                 <td>{dean.name}</td>
                                                 <td>{dean.designation}</td>
-                                                {/* <td>{dean.designation}</td> */}
+                                                <td>{dean.role}</td>
                                                 {/* <td>{item.item.brand}</td>
                                                 <td>{item.borrower}</td> */}
 

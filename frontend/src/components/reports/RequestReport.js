@@ -92,7 +92,7 @@ const RequestReport = () => {
               <td style={thTdStyle}>{item.date}</td>
               <td style={thTdStyle}>{item.requestedBy}</td>
               {/* <td style={thTdStyle}>{item.location}</td> */}
-              <td style={thTdStyle}>{item.status}</td>
+              <td style={thTdStyle}>{item.presidentApproval}</td>
               <td style={thTdStyle}>{item.purpose}</td>
             </tr>
           ))}

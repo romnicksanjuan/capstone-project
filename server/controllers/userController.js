@@ -26,8 +26,10 @@ const createAdmin = async (req, res) => {
 
 // deam
 const createDean = async (req, res) => {
-    const { deanEmail, deanPassword, departmentName, deanName, deanDesignation, } = req.body
-    console.log(deanEmail, deanPassword, departmentName, deanName, deanDesignation,)
+    const { deanEmail, deanPassword, departmentName, deanName, deanDesignation, accRole } = req.body
+    console.log(deanEmail, deanPassword, departmentName, deanName, deanDesignation, accRole)
+
+    // return
     try {
         const findUser = await User.findOne({ email: deanEmail })
 
@@ -35,7 +37,7 @@ const createDean = async (req, res) => {
             res.status(400).json({ success: false, message: "Email is already exist" })
             return
         }
-        const newUser = new User({ email: deanEmail, role: 'dean', password: deanPassword, department: departmentName, name: deanName, designation: deanDesignation })
+        const newUser = new User({ email: deanEmail, role: accRole, password: deanPassword, department: departmentName, name: deanName, designation: deanDesignation })
         const save = await newUser.save()
         console.log(save)
         res.status(200).json({ success: true, message: "Dean Created Successfull" })
@@ -47,7 +49,7 @@ const createDean = async (req, res) => {
 // display dean
 const displayDean = async (req, res) => {
     try {
-        const getDean = await User.find({ role: 'dean' })
+        const getDean = await User.find({ role: { $in: ['dean', 'president'] } });
 
         if (getDean.length > 0) {
             // console.log(getDean)
@@ -60,15 +62,17 @@ const displayDean = async (req, res) => {
 
 // edit dean
 const editDean = async (req, res) => {
-    const { deanEmail, deanPassword, departmentName, deanName, deanDesignation, } = req.body
+    const { deanEmail, deanPassword, departmentName, deanName, deanDesignation, accRole } = req.body
     const { id } = req.params
 
-    console.log(deanEmail, deanPassword, departmentName, deanName, deanDesignation, id)
+    console.log(deanEmail, deanPassword, departmentName, deanName, deanDesignation, id, accRole)
+
+
     try {
         const findDean = await User.findById(id)
 
         if (findDean) {
-            const updateDean = await User.findByIdAndUpdate(findDean._id, { email: deanEmail, password: deanPassword, department: departmentName, name: deanName, designation: deanDesignation })
+            const updateDean = await User.findByIdAndUpdate(findDean._id, { email: deanEmail, password: deanPassword, department: departmentName, name: deanName, designation: deanDesignation, role: accRole })
             if (updateDean) {
                 res.json({ message: 'Dean Updated Successfull ' })
             }
@@ -101,7 +105,7 @@ const loginAdmin = async (req, res) => {
         // console.log(findEmail)
 
 
-     
+
 
 
         if (!findEmail) {
@@ -113,7 +117,7 @@ const loginAdmin = async (req, res) => {
             res.status(404).json({ success: false, message: "You are unable to Login" });
             return;
         }
-        
+
         const findPassword = await User.findOne({ password })
 
         if (!findPassword) {
