@@ -10,8 +10,11 @@ import { RiPrinterFill } from "react-icons/ri";
 import { useReactToPrint } from "react-to-print";
 // const token = localStorage.getItem("token")
 import img from '../images/ctc-logoo.jpg'
+import { MdCancel } from "react-icons/md";
 
 function RequestItems() {
+    const navigate = useNavigate();
+
     const contentRef = useRef(null)
     const [isShowContent, setIsShowContent] = useState(false)
     const [activeSection, setActiveSection] = useState('')
@@ -21,7 +24,7 @@ function RequestItems() {
     const [department, setDepartment] = useState('')
     const [purpose, setPurpose] = useState('')
 
-    const [date, setDate] = useState(new Date().toISOString().split('T')[0]); // Format to 'yyyy-mm-dd'
+    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
 
     const [isFabrication, setIsFabrication] = useState(false)
     const [isRepair, setIsRepair] = useState(false)
@@ -30,7 +33,7 @@ function RequestItems() {
 
     const [others, setOthers] = useState('')
 
-    const [quantity_and_materials, setQuantity_And_Materials] = useState(Array(5).fill(null).map(() => ({ quantity: '', materials: '' })))
+    const [quantity_and_materials, setQuantity_And_Materials] = useState([{ quantity: '', materials: '' }])
 
     const [requestedBy, setRequestedBy] = useState('')
 
@@ -112,6 +115,13 @@ function RequestItems() {
     // submit request 
     const submitRequest = async (e) => {
         e.preventDefault()
+
+
+        // console.log(department, purpose, date,
+        //     quantity_and_materials,
+        //     requestedBy,)
+
+        // return
         try {
             const response = await fetch(`${DOMAIN}/submit-request`, {
                 method: 'POST',
@@ -153,10 +163,10 @@ function RequestItems() {
 
                 const data = await response.json();
                 setRequestedItems(data.requestData);
-                // console.log(data)
+                console.log(data)
 
-                setActiveSection(data.requestData[0]._id)
-                setItems(data.requestData[0])
+                // setActiveSection(data.requestData[0]._id)
+                // setItems(data.requestData[0])
             } catch (error) {
                 console.log(error);
             }
@@ -263,415 +273,271 @@ function RequestItems() {
             <Navbar />
 
 
-            <div className={styles.Dashboard}>
+            <div style={{ position: 'relative' }} className={styles.Dashboard}>
 
-                {/* {(role === 'admin' || role === 'dean' || role === 'president') ? <Topbar /> : ''} */}
-                <h2 style={{ color: 'orange', textAlign: 'start', margin: "0" }}>Request Items</h2>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <h2 style={{ color: 'orange', textAlign: 'start', margin: "0" }}>Request Items</h2>
 
+                    <button style={{ backgroundColor: 'orange', padding: '5px 7px' }} onClick={() => showForm()}>Create Request</button>
+                </div>
 
-                <div style={{ display: 'flex', minHeight: "95%", width: "100%", height: 'auto', gap: '20px' }}>
-                    <nav style={{ display: 'flex', position: 'relative', padding: '15px', justifyContent: 'center', backgroundColor: 'white', width: "20%", borderRadius: '5px', overflow: 'hidden' }}>
-                        <ul style={{ listStyle: 'none', width: '100%', overflow: 'hidden', }}>
-                            {requesItems ? requesItems.map((item) => (
-                                <li key={item._id} style={{
-                                    overflow: 'hidden',
-                                    cursor: 'pointer',
-                                    color: activeSection === item._id ? 'white' : 'black',
-                                    backgroundColor: activeSection === item._id ? 'orange' : '',
-                                    padding: '5px 10px',
-                                    borderRadius: '5px',
-                                    textOverflow: "ellipsis"
-                                }} onClick={() => handleActiveButton(item._id, item)}>
-                                    {item.department}
-                                </li>
-                            ))
-                                : ''}
-                        </ul>
+                {role === 'dean' || role === 'admin' || role === 'president' ?
+                    <table border="1" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center' }}>
 
+                        <thead >
+                            <tr>
+                                <th>No</th>
+                                <th>Requester Name</th>
+                                <th>Department</th>
+                                {/* <th>Items</th> */}
+                                {/* <th>Quantity</th> */}
+                                <th>Purpose</th>
+                                <th>Endorsed By Dean</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {requesItems.map((request, index) => (
+                                <tr key={index} style={{ cursor: 'pointer' }}>
+                                    <td onClick={() => navigate('/request-full-details', { state: { request: request } })}>{index + 1}</td>
+                                    <td onClick={() => navigate('/request-full-details', { state: { request: request } })}>{request.requestedBy}</td>
+                                    <td onClick={() => navigate('/request-full-details', { state: { request: request } })}>{request.department}</td>
+                                    {/* <td>{request.items}</td> */}
+                                    {/* <td>{request.quantity}</td> */}
+                                    <td onClick={() => navigate('/request-full-details', { state: { request: request } })}>{request.purpose}</td>
+                                    <td>{role === 'dean' ? <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                                        <button onClick={() => decisionButton(request._id, 'approved')} style={{ backgroundColor: 'green', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
+                                            approve
+                                        </button>
 
-                        {role === 'requester' && <div onClick={() => showForm()} style={{
-                            display: 'flex', backgroundColor: 'orange', position: 'absolute', bottom: '5px', justifyContent: 'center',
-                            width: '90%', padding: '5px 10px', cursor: 'pointer', borderRadius: '2px', gap: "5px"
-                        }}>
-                            <MdAddBox color='white' size={25} />
-                            <p style={{ fontSize: '17px', color: 'white' }}>Create Request</p>
-                        </div>}
-                    </nav>
+                                        <button onClick={() => decisionButton(request._id, 'rejected')} style={{ backgroundColor: 'red', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
+                                            reject
+                                        </button>
+                                    </div> : request.deanApproval}</td>
+                                    <td>{role === 'president' ? <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                                        <button onClick={() => decisionButton(request._id, 'approved')} style={{ backgroundColor: 'green', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
+                                            approve
+                                        </button>
 
-                    {/* Main Content */}
-                    <div style={{ backgroundColor: 'white', width: '80%', padding: '10px', borderRadius: '5px', color: '#fff' }}>
+                                        <button onClick={() => decisionButton(request._id, 'rejected')} style={{ backgroundColor: 'red', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
+                                            reject
+                                        </button>
+                                    </div> : request.presidentApproval}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table> : ''}
 
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '20px', marginRight: "20px" }}>
-                            {role === 'admin' && <div style={{ color: 'black' }}>
-                                <select style={{ padding: '5px', textAlignLast: 'center' }} defaultValue="" onChange={(e) => setStatus(e.target.value)}>
-                                    <option value="" disabled>
-                                        -- Mark As --
-                                    </option>
-                                    <option value="ready-for-release">Ready for Release</option>
-                                    <option value="in-progress">In Progress</option>
-                                    <option value="completed">Completed</option>
-                                    <option value="not-available">Not Available</option>
-                                </select>
-                            </div>}
-                            <RiPrinterFill onClick={() => handlePrintClick()} color='black' size={24} />
-                        </div>
-                        {activeSection === items._id &&
-                            <div ref={contentRef} style={{ width: '100%', height: 'auto', margin: '0 auto', color: 'black', }}>
-                                {/* Dep/Lab/Room */}
-                                <div className={style.paper}>
-                                    <div className={style.header}>
-                                        <img src={img} width={100} height={100} />
-                                        <h4>Ceguera Technological Colleges</h4>
-                                    </div>
+                {role === 'requester' && <h4 style={{ marginTop: "5px" }}>My Request</h4>}
+                {/* requester */}
+                {role === 'requester' ?
+                    <table border="1" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center' }}>
+                        <thead >
+                            <tr>
+                                <th>No</th>
+                                <th>Requester Name</th>
+                                <th>Department</th>
+                                <th>Purpose</th>
+                                <th>Endorsed By Dean</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {requesItems.map((request, index) => (
+                                <tr key={index} onClick={() => navigate('/request-full-details', { state: { request: request } })}>
+                                    <td>{index + 1}</td>
+                                    <td>{request.requestedBy}</td>
+                                    <td>{request.department}</td>
+                                    <td>{request.purpose}</td>
+                                    <td>{role === 'dean' ? <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                                        <button onClick={() => decisionButton(request._id, 'approved')} style={{ backgroundColor: 'green', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
+                                            approve
+                                        </button>
 
-                                    <div className={style.receipt}>
-                                        <h3 style={{ textAlign: 'center' }}>CEGUERA</h3>
-                                        <h5 style={{ textAlign: 'center' }}>Technological Colleges</h5>
-                                        <h5 style={{ textAlign: 'center', }}>Iriga Philippines</h5>
-                                        <h3 style={{ textAlign: 'center' }}>REQUEST FOR MATERIALS</h3>
+                                        <button onClick={() => decisionButton(request._id, 'rejected')} style={{ backgroundColor: 'red', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
+                                            reject
+                                        </button>
+                                    </div> : request.deanApproval}</td>
+                                    <td>{role === 'president' ? <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                                        <button onClick={() => decisionButton(request._id, 'approved')} style={{ backgroundColor: 'green', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
+                                            approve
+                                        </button>
 
-                                        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                            <label style={{}}>Date:</label>
-                                            <input type="date"
-                                                disabled
-                                                value={items.date}
-                                                style={{
-                                                    border: 'none',
-                                                    borderBottom: '1px solid black',
-                                                    outline: 'none', // optional: removes blue outline on focus
-                                                    paddingLeft: '5px',
-                                                    fontSize: '15px'
-                                                }} />
-                                        </div>
-
-
-                                        {/* purpose */}
-                                        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-                                            <label style={{ fontWeight: 'bold', fontSize: '13px' }}>Dep/Lab/Room:</label>
-                                            <input type="text" disabled
-                                                value={items.department}
-                                                style={{
-                                                    border: 'none',
-                                                    borderBottom: '1px solid black',
-                                                    outline: 'none', // optional: removes blue outline on focus
-                                                    paddingLeft: '5px',
-                                                    fontSize: '15px',
-                                                    width: "100%"
-                                                }} />
-                                        </div>
-
-                                        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-                                            <label style={{ fontWeight: 'bold', fontSize: '13px' }}>Purpose:</label>
-                                            <input type="text" disabled
-                                                value={items.purpose}
-                                                style={{
-                                                    border: 'none', fontSize: '13px',
-                                                    borderBottom: '1px solid black',
-                                                    outline: 'none', // optional: removes blue outline on focus
-                                                    paddingLeft: '5px',
-                                                    fontSize: '15px',
-                                                    width: "100%"
-                                                }} />
-                                        </div>
+                                        <button onClick={() => decisionButton(request._id, 'rejected')} style={{ backgroundColor: 'red', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
+                                            reject
+                                        </button>
+                                    </div> : request.presidentApproval}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table> : ''}
 
 
 
-                                        {/* check boxes */}
-                                        <div style={{ display: 'flex', justifyContent: "space-around", marginTop: '5px' }}>
-                                            <div style={{ display: 'flex', gap: '5px' }}>
-                                                <input type='checkbox' disabled checked={items.isFabrication} style={{ transform: 'scale(1.2)', }} />
-                                                <label>Fabrication </label>
-                                            </div>
 
-                                            <div style={{ display: 'flex', gap: '5px' }}>
-                                                <input type='checkbox' disabled checked={items.isRepair} style={{ transform: 'scale(1.2)', }} />
-                                                <label>Repair </label>
-                                            </div>
 
-                                            <div style={{ display: 'flex', gap: '5px' }}>
-                                                <input type='checkbox' disabled checked={items.isReplacement} style={{ transform: 'scale(1.2)', }} />
-                                                <label>Replacement </label>
-                                            </div>
 
-                                            <div style={{ display: 'flex', gap: '5px' }}>
-                                                <input type='checkbox' disabled checked={items.isAdditional} style={{ transform: 'scale(1.2)', }} />
-                                                <label>Additional </label>
-                                            </div>
-                                        </div>
 
-                                        {/* others */}
-                                        <div style={{ display: 'flex', marginTop: '10px' }}>
-                                            <label style={{ fontWeight: 'bold', fontSize: '13px' }}>Others: </label>
-                                            <input type='text' disabled
-                                                value={items.others}
-                                                style={{
-                                                    fontSize: '13px',
-                                                    border: 'none',
-                                                    borderBottom: '1px solid black',
-                                                    outline: 'none', // optional: removes blue outline on focus
-                                                    paddingLeft: '5px',
-                                                    fontSize: '15px',
-                                                    width: "100%"
-                                                }} />
-                                        </div>
 
-                                        {/* table request */}
-                                        <table border="1" style={{ width: "100%", marginTop: '10px', borderCollapse: 'collapse' }}>
-                                            <thead>
-                                                <tr>
-                                                    <th style={{ border: '1px solid black', fontSize: '14px' }}>Quantity</th>
-                                                    <th style={{ border: '1px solid black', fontSize: '14px' }}>Materials</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {items.quantity_and_materials.map((item, index) => (
-                                                    <tr key={index}>
-                                                        <td style={{ fontSize: '14px', border: '1px solid black', width: '20%' }}>
-                                                            <input type="number" disabled name={`quantity-${index}`} value={item.quantity || ''} style={{ textAlign: 'center', width: '100%', outline: "none", border: "none", paddingLeft: "10px" }} />
-                                                        </td>
-                                                        <td style={{ fontSize: '14px', border: '1px solid black' }}>
-                                                            <input type="text" disabled name={`materials-${index}`} value={item.materials || ''} style={{ width: '100%', outline: "none", border: "none", paddingLeft: "10px" }} />
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
 
-                                        {/* requested by */}
-                                        <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '10px' }}>
-                                            <label style={{ fontWeight: 'bold', fontSize: '12px' }}>Requested By:</label>
-                                            <input type="text"
-                                                value={items.requestedBy}
-                                                disabled
-                                                style={{
-                                                    border: 'none',
-                                                    borderBottom: '1px solid black',
-                                                    outline: 'none', // optional: removes blue outline on focus
-                                                    paddingLeft: '5px',
-                                                    fontSize: '15px',
-                                                    width: "50%"
-                                                }} />
-                                        </div>
 
-                                        {/* status */}
 
-                                        {role === 'requester' || role === 'admin' ? <div className={style.approvalContainer} >
-                                            <div style={{ display: 'flex', justifyContent: 'flex-start', gap: "10px", alignItems: 'center', marginTop: '10px' }}>
-                                                <label className={style.approval}>Endorsed By Dean:</label>
-                                                <p style={{
-                                                    fontSize: '12px',
-                                                    color: "white", backgroundColor: items.deanApproval === 'approved' ? 'green' : items.deanApproval === 'pending' ? 'orange' : 'red',
-                                                    padding: "5px 10px"
-                                                }}>{items.deanApproval}</p>
-                                            </div>
+                {/* form request */}
+                {showCreateRequestForm ? <form
+                    onSubmit={submitRequest}
+                    style={{
+                        maxWidth: "400px",
+                        margin: "50px auto",
+                        padding: "20px",
+                        border: "1px solid #ccc",
+                        borderRadius: "10px",
+                        boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+                        backgroundColor: "orange",
+                        fontFamily: "Arial, sans-serif",
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)'
+                    }}
+                >
+                    <MdCancel size={25} color='black' onClick={() => setShowCreateRequestForm(!showCreateRequestForm)} />
+                    <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Request Form</h2>
 
-                                            <div style={{ display: 'flex', justifyContent: 'flex-start', gap: "10px", alignItems: 'center', marginTop: '10px' }}>
-                                                <label className={style.approval}>President Approval:</label>
-                                                <p style={{
-                                                    fontSize: '12px',
-                                                    color: "white", backgroundColor: items.presidentApproval === 'approved' ? 'green' : items.presidentApproval === 'pending' ? 'orange' : 'red',
-                                                    padding: "5px 10px"
-                                                }}>{items.presidentApproval}</p>
-                                            </div>
-                                        </div> : ''}
 
-                                        {role === 'dean' || role === 'president' ? <div style={{ display: 'flex', marginTop: '10px', gap: "10px" }}>
-                                            <button className={style.approve} onClick={() => decisionButton(items._id, 'approved')}>Approve</button>
-                                            <button className={style.approve} onClick={() => decisionButton(items._id, 'rejected')}>Reject</button>
-                                        </div> : ''}
+                    <div style={{ marginBottom: "15px" }}>
+                        <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+                            Date:
+                        </label>
+                        <input
+                            type="date"
+                            value={date}
+                            onChange={(e) => setDepartment(e.target.value)}
+                            style={{
+                                width: "100%",
+                                padding: "10px",
+                                border: "1px solid #ccc",
+                                borderRadius: "5px",
+                            }}
+                        />
+                    </div>
 
-                                    </div>
+                    <div style={{ marginBottom: "15px" }}>
+                        <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+                            Department:
+                        </label>
+                        <input
+                            type="text"
+                            value={department}
+                            onChange={(e) => setDepartment(e.target.value)}
+                            style={{
+                                width: "100%",
+                                padding: "10px",
+                                border: "1px solid #ccc",
+                                borderRadius: "5px",
+                            }}
+                        />
+                    </div>
 
-                                    {role === 'admin' || role === 'requester' ?
-                                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
-                                            <h3>Status: <span style={{ padding: '5px', backgroundColor: 'gray' }}>{items.status === 'ready-for-release' ? 'Ready for Release' :
-                                                items.status === 'in-progress' ? 'In Progress' : items.status === 'completed' ? 'Completed' : items.status === 'not-available' ? 'Not Available' : 'Pending Approval'}</span></h3>
-                                        </div> : ''}
+                    <div style={{ marginBottom: "15px" }}>
+                        <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+                            Purpose:
+                        </label>
+                        <input
+                            type="text"
+                            value={purpose}
+                            onChange={(e) => setPurpose(e.target.value)}
+                            style={{
+                                width: "100%",
+                                padding: "10px",
+                                border: "1px solid #ccc",
+                                borderRadius: "5px",
+                            }}
+                        />
+                    </div>
+
+
+
+                    <div>
+                        {quantity_and_materials.map((item, index) => (
+                            <div key={index} style={{ display: 'flex', marginBottom: '10px' }}>
+                                <div>
+                                    {/* <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+                                        Quantity:
+                                    </label> */}
+                                    <input
+                                        type="number"
+                                        placeholder="Quantity"
+                                        value={item.quantity}
+                                        onChange={(e) => handleItemChange(e, 'quantity', index)}
+                                        style={{
+                                            width: "100%",
+                                            padding: "10px",
+                                            border: "1px solid #ccc",
+                                            borderRadius: "5px",
+                                        }}
+                                    />
+                                </div>
+
+
+                                <div>
+                                    {/* <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+                                        Materials:
+                                    </label> */}
+                                    <input
+                                        type="text"
+                                        placeholder="Materials"
+                                        value={item.materials}
+                                        onChange={(e) => handleItemChange(e, 'materials', index)}
+                                        style={{
+                                            width: "100%",
+                                            padding: "10px",
+                                            border: "1px solid #ccc",
+                                            borderRadius: "5px",
+                                        }}
+                                    />
                                 </div>
                             </div>
-                        }
+                        ))}
 
-
-
-
-
-                        {/* form */}
-                        {showCreateRequestForm ?
-                            <div style={{ display: 'flex', justifyContent: 'center', width: '90%', height: 'auto', minHeight: '', margin: '0 auto', color: 'black', }}>
-
-                                {/* Dep/Lab/Room */}
-                                <form onSubmit={submitRequest} style={{ backgroundColor: "white", minWidth: "55%", padding: "10px", padding: "20px", border: '1px solid #000000' }}>
-                                    <h3 style={{ textAlign: 'center' }}>CEGUERA</h3>
-                                    <h5 style={{ textAlign: 'center' }}>Technological Colleges</h5>
-                                    <h5 style={{ textAlign: 'center', }}>Iriga Philippines</h5>
-                                    <h3 style={{ textAlign: 'center' }}>REQUEST FOR MATERIALS</h3>
-
-                                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                        <label style={{ color: 'black', }}>Date:</label>
-                                        <input type="date" style={{
-                                            border: 'none',
-                                            borderBottom: '1px solid black',
-                                            outline: 'none', // optional: removes blue outline on focus
-                                            paddingLeft: '5px',
-                                            fontSize: '15px'
-                                        }}
-                                            required
-                                            value={date}
-                                            onChange={(e) => setDate(e.target.value)}
-                                        />
-                                    </div>
-
-
-                                    {/* purpose */}
-                                    <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-                                        <label style={{ fontWeight: 'bold', color: 'black', fontSize: '13px' }}>Dep/Lab/Room:</label>
-                                        <input type="text" style={{
-                                            fontSize: '13px',
-                                            border: 'none',
-                                            borderBottom: '1px solid black',
-                                            outline: 'none', // optional: removes blue outline on focus
-                                            paddingLeft: '5px',
-                                            fontSize: '15px',
-                                            width: "100%"
-                                        }}
-                                            required
-                                            value={department}
-                                            onChange={(e) => setDepartment(e.target.value)}
-                                        />
-                                    </div>
-
-                                    <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-                                        <label style={{ fontWeight: 'bold', color: 'black', fontSize: '13px' }}>Purpose:</label>
-                                        <input type="text" style={{
-                                            fontSize: '13px',
-                                            border: 'none',
-                                            borderBottom: '1px solid black',
-                                            outline: 'none', // optional: removes blue outline on focus
-                                            paddingLeft: '5px',
-                                            fontSize: '15px',
-                                            width: "100%"
-                                        }}
-                                            required
-                                            value={purpose}
-                                            onChange={(e) => setPurpose(e.target.value)}
-                                        />
-                                    </div>
-
-
-
-                                    {/* check boxes */}
-                                    <div style={{ display: 'flex', justifyContent: "space-around", marginTop: '5px' }}>
-                                        <div style={{ display: 'flex', gap: '5px' }}>
-                                            <input type='checkbox' style={{ transform: 'scale(1.2)', }}
-                                                checked={isFabrication}
-                                                onChange={(e) => setIsFabrication(e.target.checked)} />
-                                            <label style={{ color: 'black' }}>Fabrication </label>
-                                        </div>
-
-                                        <div style={{ display: 'flex', gap: '5px' }}>
-                                            <input type='checkbox' style={{ transform: 'scale(1.2)', }}
-                                                checked={isRepair}
-                                                onChange={(e) => setIsRepair(e.target.checked)}
-                                            />
-                                            <label style={{ color: 'black' }}>Repair </label>
-                                        </div>
-
-                                        <div style={{ display: 'flex', gap: '5px' }}>
-                                            <input type='checkbox' style={{ transform: 'scale(1.2)', }}
-                                                checked={isReplacement}
-                                                onChange={(e) => setIsReplacement(e.target.checked)}
-                                            />
-                                            <label style={{ color: 'black' }}>Replacement </label>
-                                        </div>
-
-                                        <div style={{ display: 'flex', gap: '5px' }}>
-                                            <input type='checkbox' style={{ transform: 'scale(1.2)', }}
-                                                checked={isAdditional}
-                                                onChange={(e) => setIsAdditional(e.target.checked)}
-                                            />
-                                            <label style={{ color: 'black' }}>Additional </label>
-                                        </div>
-                                    </div>
-
-                                    {/* others */}
-                                    <div style={{ display: 'flex', marginTop: '10px' }}>
-                                        <label style={{ fontWeight: 'bold', color: 'black', fontSize: '13px' }}>Others: </label>
-                                        <input type='text'
-
-                                            style={{
-                                                fontSize: '13px',
-                                                border: 'none',
-                                                borderBottom: '1px solid black',
-                                                outline: 'none', // optional: removes blue outline on focus
-                                                paddingLeft: '5px',
-                                                fontSize: '15px',
-                                                width: "100%"
-                                            }}
-                                            value={others}
-                                            onChange={(e) => setOthers(e.target.value)}
-                                        />
-                                    </div>
-
-                                    {/* table request */}
-                                    <table style={{ width: "100%", marginTop: '10px', borderCollapse: 'collapse' }}>
-                                        <thead>
-                                            <tr>
-                                                <th style={{ border: '1px solid black', fontSize: '14px' }}>Quantity</th>
-                                                <th style={{ border: '1px solid black', fontSize: '14px' }}>Materials</th>
-                                                <th style={{ border: 'none' }}></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {quantity_and_materials.map((item, index) => (
-                                                <tr key={index}>
-                                                    <td style={{ border: '1px solid black', width: '20%' }}>
-                                                        <input type="number" name={`quantity-${index}`} value={item.quantity} onChange={(e) => handleItemChange(e, 'quantity', index)} style={{ width: '100%', outline: "none", border: "none", paddingLeft: "10px", textAlign: 'center' }} />
-                                                    </td>
-                                                    <td style={{ border: '1px solid black' }}>
-                                                        <input type="text" name={`materials-${index}`} value={item.materials} onChange={(e) => handleItemChange(e, 'materials', index)} style={{ width: '100%', outline: "none", border: "none", paddingLeft: "10px" }} />
-                                                    </td>
-                                                    <td style={{ border: 'none', }}>
-                                                        <MdDelete color='red' size={20} type='button' style={{ position: '', right: '0' }} onClick={() => deleteField(index)} />
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                    <div style={{ backgroundColor: 'gray', display: 'flex', padding: '2px 5px', cursor: 'pointer', justifyContent: 'start', alignItems: 'center', marginTop: '5px', width: 'fit-content', border: '1px solid darkgray' }} onClick={() => handleAddItem()}>
-
-                                        {/* <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: 'fit-content', border: '1px solid black', }}> */}
-                                        <MdAddBox size={20} color='orange' />
-                                        <p style={{ fontSize: '10px', color: 'white' }}>Add Field</p>
-                                        {/* </div> */}
-
-                                    </div>
-
-                                    {/* requested by */}
-                                    <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '10px' }}>
-                                        <label style={{ fontWeight: 'bold', color: 'black', fontSize: '13px' }}>Requested By:</label>
-                                        <input type="text" style={{
-                                            fontSize: '13px',
-                                            border: 'none',
-                                            borderBottom: '1px solid black',
-                                            outline: 'none', // optional: removes blue outline on focus
-                                            paddingLeft: '5px',
-                                            fontSize: '15px',
-                                            width: "50%"
-                                        }}
-                                            required
-                                            value={requestedBy}
-                                            onChange={(e) => setRequestedBy(e.target.value)}
-                                        />
-                                    </div>
-                                    <button type='submit'
-                                        className={style.submit}>
-                                        Submit Request
-                                    </button>
-                                </form>
-                            </div>
-                            : ''}
+                        <button style={{ padding: '3px 5px' }} type='button' onClick={handleAddItem}>Add More</button>
                     </div>
-                </div>
+
+
+
+                    <div style={{ marginBottom: "15px" }}>
+                        <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+                            Requested By:
+                        </label>
+                        <input
+                            type="text"
+                            value={requestedBy}
+                            onChange={(e) => setRequestedBy(e.target.value)}
+                            style={{
+                                width: "100%",
+                                padding: "10px",
+                                border: "1px solid #ccc",
+                                borderRadius: "5px",
+                            }}
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        style={{
+                            width: "100%",
+                            padding: "10px",
+                            backgroundColor: "#007BFF",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "5px",
+                            fontWeight: "bold",
+                            cursor: "pointer",
+                        }}
+                    >
+                        Submit
+                    </button>
+                </form> : ''}
+
 
             </div>
 

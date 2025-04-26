@@ -18,6 +18,11 @@ const borrowedItem = new mongoose.Schema({
     type: String,
     required: true
   },
+  quantity: {
+    type: Number,
+    required: true,
+    default: 1
+  },
   department: {
     type: String,
     required: true
@@ -44,7 +49,7 @@ const borrowedItem = new mongoose.Schema({
   },
   action: {
     type: String,
-    enum: ['Borrowed', 'Returned'],
+    enum: ['Borrowed', 'Returned', 'Damage', 'Lost'],
     default: 'Borrowed'
   }
 }, { timestamps: true });

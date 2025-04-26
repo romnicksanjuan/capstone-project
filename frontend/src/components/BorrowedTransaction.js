@@ -19,7 +19,7 @@ const BorrowedTransaction = () => {
                 <div style={{ padding: '5px 10px', display: 'grid', gap: '10px' }}>
                     <div style={{ display: 'flex', width: '100%' }}>
                         <div style={{ width: '50%' }}>
-                            <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Serial Number:</p>
+                            <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>PMS Number:</p>
                         </div>
                         <div style={{ width: '50%' }}>
                             <p style={{ color: 'GrayText', fontSize: '19px', }}>{data.item.serialNumber}</p>
@@ -49,14 +49,14 @@ const BorrowedTransaction = () => {
                             <p style={{ color: 'GrayText', fontSize: '19px', }}>{data.item.category}</p>
                         </div>
                     </div>
-                    <div style={{ display: 'flex', width: '100%' }}>
+                    {/* <div style={{ display: 'flex', width: '100%' }}>
                         <div style={{ width: '50%' }}>
                             <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Conditon:                   </p>
                         </div>
                         <div style={{ width: '50%' }}>
                             <p style={{ color: 'GrayText', fontSize: '19px', }}>{data.item.condition}</p>
                         </div>
-                    </div>
+                    </div> */}
                     <div style={{ display: 'flex', width: '100%' }}>
                         <div style={{ width: '50%' }}>
                             <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Date Returned:                   </p>
@@ -120,7 +120,16 @@ const BorrowedTransaction = () => {
 
                     <div style={{ display: 'flex', width: '100%' }}>
                         <div style={{ width: '50%' }}>
-                            <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Status Before:</p>
+                            <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Quantity:                   </p>
+                        </div>
+                        <div style={{ width: '50%' }}>
+                            <p style={{ color: 'GrayText', fontSize: '19px', }}>{data.quantity}</p>
+                        </div>
+                    </div>
+
+                    <div style={{ display: 'flex', width: '100%' }}>
+                        <div style={{ width: '50%' }}>
+                            <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Condition Before:</p>
                         </div>
                         <div style={{ width: '50%' }}>
                             <p style={{ color: 'GrayText', fontSize: '19px', }}>{data.status_before}</p>
@@ -129,7 +138,7 @@ const BorrowedTransaction = () => {
 
                     <div style={{ display: 'flex', width: '100%' }}>
                         <div style={{ width: '50%' }}>
-                            <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Status After:                   </p>
+                            <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Condition After:                   </p>
                         </div>
                         <div style={{ width: '50%' }}>
                             <p style={{ color: 'GrayText', fontSize: '19px', }}>{data.status_after}</p>

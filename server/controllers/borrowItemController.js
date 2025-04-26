@@ -1,28 +1,35 @@
-
+const itemTransfer = require('../model/item_movement.js')
 const borrowItem = require('../model/borrowItem')
 const Item = require('../model/Item.js')
+const stockIn_Out = require('../model/stockIn_out')
+
 
 const addBorrowItem = async (req, res) => {
-    const { serialNumber, borrower, mobileNumber, purpose, department, borrowerDesignation } = req.body
+    const { serialNumber, borrower, mobileNumber, purpose, department, borrowerDesignation, quantity, toLocation } = req.body
 
     const checkSerial = await Item.findOne({ serialNumber })
 
-    console.log("checkSerial:", checkSerial.status)
+    console.log("checkSerial:", serialNumber, borrower, mobileNumber, purpose, department, borrowerDesignation, quantity,toLocation)
 
     try {
         if (!checkSerial) {
             return res.status(404).json({ message: 'Item not found' })
         }
 
-        console.log(checkSerial._id)
+        new itemTransfer({date:new Date(), item: checkSerial.unit, fromLocation: checkSerial.location, toLocation: toLocation}).save()
+
+        console.log(checkSerial.quantity)
+        checkSerial.quantity -= quantity
         const newBorrow = new borrowItem({
             item: checkSerial, serialNumber, borrower, mobileNumber, purpose,
             department, borrower_designation: borrowerDesignation,
-            status_before: checkSerial.status
+            status_before: checkSerial.status, quantity
         })
-
+        await checkSerial.save()
         await newBorrow.save()
-        // console.log(newBorrow)
+
+        new stockIn_Out({ date: new Date(), itemName: checkSerial.unit, action:'Stock Out', quantity, }).save()
+        console.log(newBorrow)
         res.status(200).json({ success: true, message: "Borrow Transaction Successfull" })
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -67,9 +74,9 @@ const totalBorrowedItems = async (req, res) => {
 
 const returnItem = async (req, res) => {
     const { id } = req.params;
-    const { status } = req.body
+    const { condition } = req.body
 
-    console.log("status:", status)
+    console.log("status:", condition)
 
     try {
         const updateTransaction = await borrowItem.findById(id)
@@ -83,10 +90,10 @@ const returnItem = async (req, res) => {
         // update borrow
         updateTransaction.dateReturned = new Date()
         updateTransaction.action = 'Returned'
-        updateTransaction.status_after = status
+        updateTransaction.status_after = condition
 
         // update item
-        updateItem.status = status
+        updateItem.condition = condition
         updateItem.save()
 
         const saveUpdate = await updateTransaction.save()

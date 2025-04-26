@@ -19,10 +19,12 @@ const BorrowForm = () => {
     const [serialNumber, setSerialNumber] = useState('')
     const [brand, setBrand] = useState('')
     const [borrower, setBorrower] = useState('')
+    const [quantity, setQuantity] = useState('')
     const [mobileNumber, setMobileNumber] = useState('')
     const [purpose, setPurpose] = useState('')
     const [department, setDepartment] = useState('')
     const [borrowerDesignation, setBorrowerDesignation] = useState('')
+    const [toLocation, setToLocation] = useState('')
     const [message, setMessage] = useState('')
 
     const navigate = useNavigate()
@@ -64,7 +66,7 @@ const BorrowForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        if (borrower === '' || mobileNumber === '' || purpose === '', borrowerDesignation === '', department === '') {
+        if (borrower === '' || mobileNumber === '' || purpose === '', borrowerDesignation === '', department === '', quantity === '') {
             setError('Please fill all field')
             setMessage('')
             return
@@ -77,7 +79,7 @@ const BorrowForm = () => {
                     'Content-Type': 'application/json',
                     // "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify({ serialNumber, borrower, mobileNumber, purpose, department, borrowerDesignation })
+                body: JSON.stringify({ serialNumber, borrower, mobileNumber, purpose, department, borrowerDesignation, quantity, toLocation })
             })
 
             const data = await response.json()
@@ -142,6 +144,16 @@ const BorrowForm = () => {
                 <div>
                     <label htmlFor="purpose">Purpose:</label><br />
                     <input className={styles.input} type="text" id="purpose" name="purpose" value={purpose} onChange={(e) => setPurpose(e.target.value)} />
+                </div>
+
+                <div>
+                    <label htmlFor="to-location">To Location:</label><br />
+                    <input className={styles.input} type="text" id="to-location" name="to-location" value={toLocation} onChange={(e) => setToLocation(e.target.value)} />
+                </div>
+
+                <div>
+                    <label htmlFor="quantity">Quantity:</label><br />
+                    <input className={styles.input} type="text" id="quantity" name="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                 </div>
 
 

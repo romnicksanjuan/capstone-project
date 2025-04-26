@@ -15,6 +15,7 @@ const submitRequest = async (req, res) => {
         requestedBy)
     console.log(req.user)
 
+    // const findU = await User.findById(req.user.id)
 
     const newRequest = new Request({
         requester: new Object(req.user.id),
@@ -22,7 +23,7 @@ const submitRequest = async (req, res) => {
         purpose, date, isFabrication, isRepair, isReplacement, isAdditional,
         quantity_and_materials,
         requestedBy,
-        status: 'pending'
+        // status: 'pending'
     });
 
     await newRequest.save()
@@ -187,4 +188,19 @@ const editStatus = async (req, res) => {
     }
 }
 
-module.exports = { submitRequest, displayRequested, decisionButton, requestCount, editStatus }
+// request summary
+const getRequestSummaray = async (req, res) => {
+
+    try {
+
+        const getReq = await Request.find()
+
+        if (getReq.length > 0) {
+            res.json(getReq)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+module.exports = { submitRequest, displayRequested, decisionButton, requestCount, editStatus, getRequestSummaray }

@@ -4,10 +4,11 @@ const QRCode = require("qrcode");
 const Category = require('../model/category.js');
 const AccessoryType = require('../model/item_type_model.js')
 const User = require("../model/user.js")
+const StockIn_Out = require('../model/stockIn_out')
 
 
 const createItem = async (req, res) => {
-    const { serialNumber, serialItem, unit, brand, category, condition, location, status, accessory_type } = req.body;
+    const { serialNumber, serialItem, unit, brand, category, condition, location, status, accessory_type, quantity } = req.body;
 
     const fontend_link = `https://capstone-project-sand-gamma.vercel.app/borrow-form/${serialNumber}`
     const link = `http://localhost:3000/borrow-form/${serialNumber}`
@@ -20,11 +21,15 @@ const createItem = async (req, res) => {
     console.log(qrBuffer)
 
     const newItem = new Item({
-        serialNumber, serialItem, unit, brand, category, condition, location, status, accessory_type, link: fontend_link, qr_code_image: {
+        serialNumber, serialItem, unit, brand, category, condition, location, status, quantity, accessory_type, link: fontend_link, qr_code_image: {
             data: qrBuffer,
             contentType: 'image/png'
         }
     })
+
+    if (newItem) {
+        new StockIn_Out({ date: new Date(), itemName: unit, action:'Stock In', quantity, }).save()
+    }
 
 
     try {
@@ -90,11 +95,17 @@ const fetchItems = async (req, res) => {
 
 const editITem = async (req, res) => {
     const { id } = req.params;
-    const { serialItem, unit, brand, category, condition, location, status, accessory_type } = req.body;
+    const { serialItem, unit, brand, category, condition, location, status, accessory_type, quantity } = req.body;
     try {
+        const findItem = await Item.findById(id)
+
+        if (findItem) {
+            const stock = new StockIn_Out({date: new Date(), itemName: unit, action: 'Stock In', quantity: quantity - findItem.quantity})
+            await stock.save()
+        }
         const updatedItem = await Item.findByIdAndUpdate(
             id,
-            { serialItem, unit, brand, category, condition, location, status, accessory_type },
+            { serialItem, unit, brand, category, condition, location, status, accessory_type, quantity },
             { new: true } // Return the updated item after the change
         );
 
@@ -102,6 +113,7 @@ const editITem = async (req, res) => {
             return res.status(404).json({ message: 'Item not found' });
         }
 
+      
         res.status(200).json(updatedItem);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -241,14 +253,14 @@ const checkToken = async (req, res) => {
     console.log('decoded:', decoded)
 
     const findUser = await User.findById(decoded.id).lean()
-    const formattedDateOfBirth = findUser.dateOfBirth.toLocaleDateString("en-US",{timeZone:'Asia/Manila', day:'numeric', month:'long', year:'numeric'})
-   
+    // const formattedDateOfBirth = find findUser.dateOfBirth.toLocaleDateString("en-US", { timeZone: 'Asia/Manila', day: 'numeric', month: 'long', year: 'numeric' })
+
     const result = {
         ...findUser,
-        dateOfBirth:formattedDateOfBirth
+        // dateOfBirth: formattedDateOfBirth
     }
-  
-    console.log('hays:',  result)
+
+    console.log('hays:', result)
     res.json({ success: true, message: 'token is valid', user: result })
 }
 
@@ -340,8 +352,22 @@ const deleteAccessoryType = async (req, res) => {
     }
 }
 
+// get-inventory-summary
+const inventoryReport = async (req, res) => {
+    try {
+        const getInv = await Item.find({})
+
+        if (getInv.length > 0) {
+            res.json(getInv)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 module.exports = {
     createItem, fetchItems, barGraph, editITem, deleteitem, totalItems, searchItem, propertyPage, checkToken,
-    newCategoryFunction, displayCategories, deleteCategory, getAccessoryFunction, createAccessoryType, deleteAccessoryType
+    newCategoryFunction, displayCategories, deleteCategory, getAccessoryFunction, createAccessoryType, deleteAccessoryType,
+    inventoryReport
 }

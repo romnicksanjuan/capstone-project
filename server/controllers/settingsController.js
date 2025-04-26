@@ -14,11 +14,11 @@ const settings = async (req, res) => {
             return
         }
 
-        const formattedDateOfBirth = findUser.dateOfBirth.toLocaleDateString("en-US", { timeZone: 'Asia/Manila', day: 'numeric', month: 'long', year: 'numeric' })
+        // const formattedDateOfBirth = findUser.dateOfBirth.toLocaleDateString("en-US", { timeZone: 'Asia/Manila', day: 'numeric', month: 'long', year: 'numeric' })
 
         const result = {
             ...findUser,
-            dateOfBirth: formattedDateOfBirth
+            // dateOfBirth: formattedDateOfBirth
         }
 
         res.status(200).json({ success: true, message: 'success', user: result })

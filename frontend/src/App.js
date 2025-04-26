@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
 import './App.css';
 
 
@@ -22,6 +21,12 @@ import ReturnedItems from './components/ReturnedItems.js';
 import Settings from './components/Settings.js';
 import RequestItems from './components/RequestItems.js';
 import Users from './components/Users.js';
+import Reports from './components/Reports.js';
+import RequestFullDetails from './components/RequestFullDetails.js';
+import Home from './components/home/Home.js';
+import RequesterSignUp from './components/requesterUser/RequesterSignUp.js';
+import RequesterSignIn from './components/requesterUser/RequesterSignIn.js';
+
 // import Test from './components/Category.js';
 // import Testing from './components/Test.js';
 
@@ -30,7 +35,13 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Login />} />
+        <Route path='/' element={<Home />} />
+        <Route path='/admin-login' element={<Login />} />
+
+        {/* requester */}
+        <Route path='/requester-sign-up' element={<RequesterSignUp />} />
+        <Route path='/requester-login' element={<RequesterSignIn />} />
+
         <Route path='/sign-up' element={<SignUp />} />
         <Route path='/Dashboard' element={<Dashboard />} />
         <Route path='/inventory' element={<Inventory />} />
@@ -48,8 +59,9 @@ function App() {
         <Route path='/settings' element={<Settings />} />
         <Route path='/request-items' element={<RequestItems />} />
         <Route path='/user-list' element={<Users />} />
+        <Route path='/reports' element={<Reports />} />
+        <Route path='/request-full-details' element={<RequestFullDetails />} />
 
-        
         {/* <Route path='/test' element={<Test />} /> */}
       </Routes>
     </BrowserRouter>

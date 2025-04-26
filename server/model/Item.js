@@ -33,6 +33,10 @@ const itemSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  quantity: {
+    type: Number,
+    required: true
+  },
   accessory_type: {
     type: String,
     required: true

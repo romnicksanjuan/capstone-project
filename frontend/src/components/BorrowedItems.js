@@ -4,6 +4,8 @@ import styles from '../css/BorrowedItems.module.css'
 import DOMAIN from '../config/config';
 import { useNavigate } from 'react-router-dom';
 import { MdCancel } from "react-icons/md";
+import { PiWarningOctagonFill } from "react-icons/pi";
+import { IoIosAddCircle } from "react-icons/io";
 
 import Topbar from './Topbar';
 import { PiKeyReturnBold } from "react-icons/pi";
@@ -17,7 +19,7 @@ const BorrowedItems = () => {
   const [isOpenReturenStatus, SetIsOpenReturenStatus] = useState(false)
 
   const [item, setItem] = useState({})
-  const [status, setStatus] = useState('')
+  const [condition, setCondition] = useState('')
   const [message, setMessage] = useState('')
   const [error, serError] = useState(false)
 
@@ -67,7 +69,7 @@ const BorrowedItems = () => {
           "Authorization": `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({status })
+        body: JSON.stringify({ condition })
       })
 
       const data = await response.json()
@@ -86,7 +88,7 @@ const BorrowedItems = () => {
 
   const handleButtonClick = () => {
     SetIsOpenReturenStatus(!isOpenReturenStatus)
-    setStatus('')
+    setCondition('')
   };
 
   // select status
@@ -95,6 +97,60 @@ const BorrowedItems = () => {
     SetIsOpenReturenStatus(!isOpenReturenStatus)
     console.log(item)
   }
+
+
+  // damage / lost 
+  const [formData, setFormData] = useState({
+    // item: '',
+    issue: '',
+    dateReported: '',
+    remarks: '',
+    quantity: '',
+    actionTaken: '',
+  });
+
+  const [itemDamageLost, setItemDamageLost] = useState({})
+  const [isDamageLost, setIsDamageLost] = useState(false)
+
+  const handleDamage_Lost = async (item) => {
+    setItemDamageLost(item)
+    console.log(item)
+    setIsDamageLost(!isDamageLost)
+  }
+
+
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log('Submitted:', formData);
+    try {
+      const response = await fetch(`${DOMAIN}/damage-lost/${itemDamageLost._id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(formData)
+      })
+
+      const data = await response.json()
+
+      console.log(data)
+      alert(data.message)
+      window.location.reload()
+    } catch (error) {
+      console.log(error)
+    }
+    // TODO: Send to backend or handle form logic here
+  };
 
 
 
@@ -124,7 +180,7 @@ const BorrowedItems = () => {
           <thead>
             <tr>
               {/* <th>Serial No.</th> */}
-              <th>Serial Number</th>
+              <th>PMS Number</th>
               <th>Unit</th>
               <th>Brand</th>
               <th>Borrower's Name</th>
@@ -132,6 +188,7 @@ const BorrowedItems = () => {
               <th>Borrower's Designation</th>
               <th>Mobile Number</th>
               <th>Purpose</th>
+              <th>Quantity</th>
               <th>Condition</th>
               <th>Date Borrowed</th>
               <th>Action</th>
@@ -150,12 +207,18 @@ const BorrowedItems = () => {
                 <td>{item.borrower_designation}</td>
                 <td>{item.mobileNumber}</td>
                 <td>{item.purpose}</td>
+                <td>{item.quantity}</td>
                 <td>{item.item.condition}</td>
                 <td>{item.dateBorrowed}</td>
-                <td style={{ display: 'flex', border: 'none', }}>
+                <td style={{ display: 'flex', gap: '5px', border: 'none', }}>
                   <div style={{ display: "flex", alignItems: 'center', borderRadius: "5px", backgroundColor: "#219ebc", padding: '5px', }} onClick={() => handleStatus(item)} >
-                    <PiKeyReturnBold size={20} color='white' />
-                    <p style={{ color: 'white', fontSize: '15px' }}> Return</p>
+                    <PiKeyReturnBold size={20} color='black' />
+                    <p style={{ color: 'white', fontSize: '15px' }}>Return</p>
+                  </div>
+
+                  <div style={{ display: "flex", alignItems: 'center', borderRadius: "5px", backgroundColor: "#219ebc", padding: '5px', }} onClick={() => handleDamage_Lost(item)} >
+                    <PiWarningOctagonFill size={20} color='black' />
+                    <p style={{ color: 'white', fontSize: '15px' }}>Damage/Lost</p>
                   </div>
                 </td>
               </tr>
@@ -182,14 +245,96 @@ const BorrowedItems = () => {
             <p style={{ color: 'white', textAlign: 'center' }}>{message}</p>
           </div>}
           <div>
-            <label htmlFor="status">Set Status:</label><br />
-            <input className={styles.input} type="text" id="status" name="status" value={status} onChange={(e) => setStatus(e.target.value)} />
+            <label htmlFor="status">Set Condition:</label><br />
+            <input className={styles.input} type="text" id="status" name="status" value={condition} onChange={(e) => setCondition(e.target.value)} />
           </div>
 
           <button style={{ height: '40px', width: '100%', border: 'none', fontSize: '20px', borderRadius: '5px', }} type="submit">Return</button>
         </form>
         : ''
       }
+
+      {
+        isDamageLost ?
+          <form onSubmit={handleSubmit} className={styles.formContainer}>
+            < MdCancel size={25} color='black' onClick={() => setIsDamageLost(!isDamageLost)} />
+            <h2 className={styles.heading}>Issue Report Form</h2>
+
+            {/* <div className={styles.formGroup}>
+              <label className={styles.label}>Item</label>
+              <input
+                type="text"
+                name="item"
+                value={formData.item}
+                onChange={handleChange}
+                className={styles.input}
+                required
+              />
+            </div> */}
+
+            <div className={styles.formGroup}>
+              <label className={styles.label}>Issue</label>
+              <select id="issue"    name="issue"
+                value={formData.issue}
+                onChange={handleChange} style={{padding:'5px', width:'200px'}}>
+                <option value="">-- Select --</option>
+                <option value="Damage">Damage</option>
+                <option value="Lost">Lost</option>
+              </select>
+            </div>
+
+            <div className={styles.formGroup}>
+              <label className={styles.label}>Date Reported</label>
+              <input
+                type="date"
+                name="dateReported"
+                value={formData.dateReported}
+                onChange={handleChange}
+                className={styles.input}
+                required
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label className={styles.label}>Remarks</label>
+              <textarea
+                name="remarks"
+                value={formData.remarks}
+                onChange={handleChange}
+                className={styles.textarea}
+                rows="3"
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label className={styles.label}>Quantity</label>
+              <input
+                type='text'
+                name="quantity"
+                value={formData.quantity}
+                onChange={handleChange}
+                className={styles.textarea}
+                rows="3"
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label className={styles.label}>Action Taken</label>
+              <textarea
+                name="actionTaken"
+                value={formData.actionTaken}
+                onChange={handleChange}
+                className={styles.textarea}
+                rows="3"
+              />
+            </div>
+
+            <button type="submit" className={styles.button}>
+              Submit Report
+            </button>
+          </form> : ''
+      }
+
     </div>
 
   )

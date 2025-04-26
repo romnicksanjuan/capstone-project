@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import Domain from '../config/config'
+import Domain from '../../config/config'
 import { useNavigate } from "react-router-dom"
-import img from '../images/ctc-logoo.jpg'
+import img from '../../images/ctc-logoo.jpg'
 
-const Login = () => {
+const RequesterSignIn = () => {
     const navigate = useNavigate()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -13,7 +13,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await fetch(`${Domain}/admin/login`, {
+            const response = await fetch(`${Domain}/requester-login`, {
                 method: "POSt",
                 headers: {
                     "Content-Type": "application/json"
@@ -96,7 +96,7 @@ const Login = () => {
 
                     <div>
                         <p style={{ padding: '5px 0', margin: '0', fontSize: '1.2rem', color: 'white', cursor: 'pointer', }} onClick={() => navigate('/forgot-password')}>Forgot Password</p>
-                        {/* <p style={{ padding: '5px 0', margin: '0', fontSize: '1.2rem', color: 'white', cursor: 'pointer', }}>Dont have Account yet? <span style={{ color: 'blue' }} onClick={() => navigate('/sign-up')}>Sign Up</span></p> */}
+                        <p style={{ padding: '5px 0', margin: '0', fontSize: '1.2rem', color: 'white', cursor: 'pointer', }}>Dont have Account yet? <span style={{ color: 'blue' }} onClick={() => navigate('/requester-sign-up')}>Sign Up</span></p>
                     </div>
 
                     <div style={{ width: '100%', display: 'grid' }}>
@@ -114,4 +114,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default RequesterSignIn

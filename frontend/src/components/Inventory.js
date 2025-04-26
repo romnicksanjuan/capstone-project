@@ -34,7 +34,7 @@ const Inventory = () => {
 
   useEffect(() => {
     const generateSerialNumber = () => {
-      const serial = 'SN-' + new Date().getTime(); // Generates a serial number based on current timestamp
+      const serial = 'PMS-' + new Date().getTime(); // Generates a serial number based on current timestamp
       setSerialNumber(serial.toString());
       console.log(serial)
     };
@@ -93,7 +93,7 @@ const Inventory = () => {
   const [showImage, setShowImage] = useState('')
   const [categoryValue, setCategoryValue] = useState('Select Category')
   const [type, setType] = useState('')
-  const [typeValue, setTypeValue] = useState('Select Accessory Type')
+  const [typeValue, setTypeValue] = useState('Select Item Type')
   const [typeArray, setTypeArray] = useState([])
   // const [token, setToken] = useState("")
 
@@ -112,7 +112,7 @@ const Inventory = () => {
   const handleButtonClick = () => {
     setShowForm(!showForm);
     setCategoryValue('Select a Category')
-    setTypeValue('Select Accessory Type')
+    setTypeValue('Select Item Type')
   };
 
   const handleSearch = (e) => {
@@ -215,6 +215,7 @@ const Inventory = () => {
     setCategoryValue(item.item.category)
     setTypeValue(item.item.accessory_type)
     setStatus(item.item.status)
+    setQuantity(item.item.quantity)
   }
 
   const handleExitEdit = () => {
@@ -228,7 +229,8 @@ const Inventory = () => {
 
   const handleSubmitEdit = async (e) => {
     e.preventDefault()
-
+    // console.log(typeValue)
+    // return
     try {
       const response = await fetch(`${DOMAIN}/edit-item/${editingItemId}`, {
         method: 'PUT',
@@ -237,7 +239,7 @@ const Inventory = () => {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ serialNumber, serialItem, unit, brand, category, condition, location, quantity, status, accessory_type: type })
+        body: JSON.stringify({ serialNumber, serialItem, unit, brand, category, condition, location, quantity, status, accessory_type: typeValue })
       })
 
       if (!window.confirm('Are you sure you want to update this item?')) return
@@ -514,12 +516,12 @@ const Inventory = () => {
               </div>
 
               <div>
-                <label htmlFor="serial-number">Serial Number:</label><br />
+                <label htmlFor="serial-number">PMS Number:</label><br />
                 <input className={style.input} type='text' id="serial-number" name="serial-number" defaultValue={serialNumber} disabled />
               </div>
 
               <div>
-                <label htmlFor="serial-item">Serial Item:</label><br />
+                <label htmlFor="serial-item">Item Description:</label><br />
                 <input className={style.input} type='text' id="serial-item" name="serial-item" value={serialItem} onChange={(e) => setSerialItem(e.target.value)} />
               </div>
 
@@ -534,13 +536,18 @@ const Inventory = () => {
               </div>
 
               <div>
+                <label htmlFor="quantity">Quantity:</label><br />
+                <input className={style.input} type='text' id="quantity" name="quantity" required value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+              </div>
+
+              <div>
                 <label htmlFor="category">Category:</label><br />
 
                 <Dropdown items={arrayCategory} categoryFunc={categoryFunc} categoryValue={categoryValue} />
               </div>
 
               <div>
-                <label htmlFor="type-item">Accessory Type:</label><br />
+                <label htmlFor="type-item">Item Type:</label><br />
                 <Item_Type items={typeArray} itemFunction={itemFunction} itemValue={typeValue} />
               </div>
 
@@ -585,12 +592,12 @@ const Inventory = () => {
               </div>
 
               <div>
-                <label htmlFor="serial-number">Serial Number:</label><br />
+                <label htmlFor="serial-number">PMS Number:</label><br />
                 <input className={style.input} type='text' id="serial-number" name="serial-number" value={serialNumber} onChange={(e) => setBrand(e.target.value)} disabled />
               </div>
 
               <div>
-                <label htmlFor="serial-item">Serial Item:</label><br />
+                <label htmlFor="serial-item">Item Description:</label><br />
                 <input className={style.input} type='text' id="serial-item" name="serial-item" value={serialItem} onChange={(e) => setSerialItem(e.target.value)} />
               </div>
 
@@ -602,6 +609,11 @@ const Inventory = () => {
               <div>
                 <label htmlFor="brand">Brand:</label><br />
                 <input className={style.input} type='text' id="brand" name="brand" value={brand} onChange={(e) => setBrand(e.target.value)} />
+              </div>
+
+              <div>
+                <label htmlFor="quantity">Quantity:</label><br />
+                <input className={style.input} type='text' id="quantity" name="quantity" required value={quantity} onChange={(e) => setQuantity(e.target.value)} />
               </div>
 
               <div>
@@ -631,7 +643,7 @@ const Inventory = () => {
 
 
               <div>
-                <label htmlFor="type-item">Accessory Type:</label><br />
+                <label htmlFor="type-item">Item Type:</label><br />
                 <Item_Type items={typeArray} itemFunction={itemFunction} itemValue={typeValue} />
               </div>
 
@@ -663,8 +675,8 @@ const Inventory = () => {
           <thead>
             <tr>
               {/* <th>Serial No.</th> */}
-              <th>Serial Number</th>
-              <th>Serial Item</th>
+              <th>PMS Number</th>
+              <th>Item Description</th>
               <th>Unit</th>
               <th>Brand</th>
               <th>Category</th>
@@ -672,7 +684,8 @@ const Inventory = () => {
               <th>Location</th>
               <th>QR Code</th>
               <th>Status</th>
-              <th>Accessory Type</th>
+              <th>Item Type</th>
+              <th>Quantity</th>
               <th>Date Added</th>
               <th>Action</th>
             </tr>
@@ -698,6 +711,7 @@ const Inventory = () => {
                 </td>
                 <td>{item.item.status}</td>
                 <td>{item.item.accessory_type}</td>
+                <td>{item.item.quantity}</td>
                 <td>{item.dateAdded}</td>
                 <td style={{ gap: '10px', justifyContent: 'space-between', alignItems: 'center', }}>
                   <div style={{ display: 'flex', justifyContent: "center", gap: '10px' }}>

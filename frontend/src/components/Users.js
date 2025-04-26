@@ -104,7 +104,7 @@ const Users = () => {
                                     <td>{user.phoneNumber}</td>
                                     <td>{user.designation}</td>
                                     <td>{user.dateOfBirth}</td>
-                                    <td style={{ display: 'flex', justifyContent: 'space-between' }}>{user.role}   <FaEdit color='gray' size={20} onClick={() => handleEditRole(user)} /></td>
+                                    <td >{user.role}  </td>
                                     <td style={{ gap: '10px', justifyContent: 'space-between', alignItems: 'center', }}>
                                         <div style={{ display: 'flex', justifyContent: "center", gap: '10px' }}>
                                             <MdDelete color='red' size={27} onClick={() => handleDelete(user)} />

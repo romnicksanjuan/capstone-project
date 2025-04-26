@@ -1,15 +1,19 @@
 const express = require('express');
 const multer = require('multer')
-const { createItem, fetchItems, editITem, deleteitem, totalItems, searchItem, propertyPage, barGraph, checkToken, newCategoryFunction, displayCategories, deleteCategory, getAccessoryFunction, createAccessoryType, deleteAccessoryType } = require('../controllers/controller.js')
+const { createItem, fetchItems, editITem, deleteitem, totalItems, searchItem, propertyPage, barGraph, checkToken, newCategoryFunction, displayCategories, deleteCategory, getAccessoryFunction, createAccessoryType, deleteAccessoryType, inventoryReport } = require('../controllers/controller.js')
 const { addBorrowItem, fetchBorrowedItems, totalBorrowedItems, returnItem, fetchHistory } = require('../controllers/borrowItemController.js');
 const { createProduct, getMerchandise, purchaseHistory, getAllPurchaseHistory, deleteMerchandise, editMerchandise, totalMerchandise, barGraphMerchandise } = require('../controllers/merchandise-controller.js');
-const { createAdmin, loginAdmin, forgotPassword, logout, sendOtp, verifyOtp, changePassword, getRequester, getUsers, updateUserRole, delUser } = require('../controllers/userController.js');
+const { createAdmin, loginAdmin, forgotPassword, logout, sendOtp, verifyOtp, changePassword, getRequester, getUsers, updateUserRole, delUser, createDean, displayDean, editDean, deleteDean, requesterRegister, requesterLogin } = require('../controllers/userController.js');
 
 
 // authehntication
 const { middleware } = require("../middleware/auth.js");
-const { submitRequest, displayRequested, approvalButton, decisionButton, requestCount, editStatus } = require('../controllers/requestController.js');
+const { submitRequest, displayRequested, approvalButton, decisionButton, requestCount, editStatus, getRequestSummaray } = require('../controllers/requestController.js');
 const { settings } = require('../controllers/settingsController.js');
+const { addStock, stockIn } = require('../controllers/stockIn_outController.js');
+const damage_lost = require('../model/damage_lost.js');
+const { damagLost, getDamageLost } = require('../controllers/damageLostController.js');
+const { getItemTransfer } = require('../controllers/item_movementController.js');
 
 
 const router = express.Router();
@@ -29,6 +33,15 @@ router.post('/change-password', changePassword)
 router.get('/get-users', getUsers)
 router.put('/update-role/:id', updateUserRole)
 router.delete('/delete-user/:id', delUser)
+
+// register requester
+router.post('/requester-register', requesterRegister)
+router.post('/requester-login', requesterLogin)
+// dean
+router.post('/create-dean', createDean)
+router.get('/display-dean', displayDean)
+router.put('/edit-dean/:id', editDean)
+router.delete('/delete-dean/:id', deleteDean)
 
 // item
 router.post('/create-item', createItem)
@@ -75,5 +88,24 @@ router.put('/update-status/:id', middleware, editStatus)
 
 // settings
 router.get('/settings', middleware, settings)
+
+// summary report
+router.get('/get-inventory-summary', inventoryReport)
+
+
+// add stock
+router.get('/get-stock-in-out', stockIn)
+
+
+// damage/lost
+router.post('/damage-lost/:id', damagLost)
+router.get('/get-damage-lost',getDamageLost)
+
+
+// request summary
+router.get('/get-request-summary', getRequestSummaray)
+
+// get item transfer
+router.get('/get-item-transfer',getItemTransfer)
 
 module.exports = router;

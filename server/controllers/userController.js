@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer')
 const Otp = require('../model/otp.js')
 const crypto = require("crypto")
 
+// admin
 const createAdmin = async (req, res) => {
     const { email, password, gender, department, phoneNumber, designation, dateOfBirth } = req.body
     console.log(email, password)
@@ -14,7 +15,7 @@ const createAdmin = async (req, res) => {
             res.status(400).json({ success: false, message: "Email is already exist" })
             return
         }
-        const newUser = new User({ email, password, role: "requester", gender, department, phoneNumber, designation, dateOfBirth })
+        const newUser = new User({ email, password, role: "admin", gender, department, phoneNumber, designation, dateOfBirth })
         const save = await newUser.save()
         console.log(save)
         res.status(200).json({ success: true, message: "User Created Successfull" })
@@ -23,18 +24,96 @@ const createAdmin = async (req, res) => {
     }
 }
 
+// deam
+const createDean = async (req, res) => {
+    const { deanEmail, deanPassword, departmentName, deanName, deanDesignation, } = req.body
+    console.log(deanEmail, deanPassword, departmentName, deanName, deanDesignation,)
+    try {
+        const findUser = await User.findOne({ email: deanEmail })
+
+        if (findUser) {
+            res.status(400).json({ success: false, message: "Email is already exist" })
+            return
+        }
+        const newUser = new User({ email: deanEmail, role: 'dean', password: deanPassword, department: departmentName, name: deanName, designation: deanDesignation })
+        const save = await newUser.save()
+        console.log(save)
+        res.status(200).json({ success: true, message: "Dean Created Successfull" })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// display dean
+const displayDean = async (req, res) => {
+    try {
+        const getDean = await User.find({ role: 'dean' })
+
+        if (getDean.length > 0) {
+            // console.log(getDean)
+            res.json(getDean)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// edit dean
+const editDean = async (req, res) => {
+    const { deanEmail, deanPassword, departmentName, deanName, deanDesignation, } = req.body
+    const { id } = req.params
+
+    console.log(deanEmail, deanPassword, departmentName, deanName, deanDesignation, id)
+    try {
+        const findDean = await User.findById(id)
+
+        if (findDean) {
+            const updateDean = await User.findByIdAndUpdate(findDean._id, { email: deanEmail, password: deanPassword, department: departmentName, name: deanName, designation: deanDesignation })
+            if (updateDean) {
+                res.json({ message: 'Dean Updated Successfull ' })
+            }
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+// del dean
+const deleteDean = async (req, res) => {
+    const { id } = req.params
+
+    try {
+        const deleDean = await User.findByIdAndDelete(id)
+
+        if (deleDean) {
+            res.json({ message: 'Dean Deleted Successfull' })
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 const loginAdmin = async (req, res) => {
     const { email, password } = req.body
-    // console.log(email, password)
+    console.log(email, password)
     try {
         const findEmail = await User.findOne({ email })
+
+        // console.log(findEmail)
+
+
+     
+
 
         if (!findEmail) {
             res.status(404).json({ success: false, message: "Incorrect Email or Password" })
             return
         }
 
+        if (findEmail.role !== 'admin' && findEmail.role !== 'dean' && findEmail.role !== 'president') {
+            res.status(404).json({ success: false, message: "You are unable to Login" });
+            return;
+        }
+        
         const findPassword = await User.findOne({ password })
 
         if (!findPassword) {
@@ -201,7 +280,7 @@ const changePassword = async (req, res) => {
 // get users data
 const getUsers = async (req, res) => {
     try {
-        const getUsers = await User.find({ role: { $in: ['requester', 'president', 'dean'] } }).lean()
+        const getUsers = await User.find({ role: { $in: ['requester'] } }).lean()
 
         if (getUsers.length === 0) {
             res.json({ message: "No Users Found" })
@@ -209,7 +288,7 @@ const getUsers = async (req, res) => {
         const users = getUsers.map(user => {
             return {
                 ...user,
-                dateOfBirth: new Date(user.dateOfBirth).toISOString().split('T')[0]
+                dateOfBirth: user.dateOfBirth ? new Date(user.dateOfBirth).toISOString().split('T')[0] : ''
             }
         })
         console.log(users)
@@ -244,7 +323,67 @@ const delUser = async (req, res) => {
     }
 }
 
+// requester register
+const requesterRegister = async (req, res) => {
+    const { email, password, gender, department, phoneNumber, designation, dateOfBirth } = req.body
+
+    console.log(email, password, gender, department, phoneNumber, designation, dateOfBirth)
+    try {
+        const reqRegister = new User({ email, password, gender, department, phoneNumber, designation, dateOfBirth, role: 'requester' })
+        await reqRegister.save()
+
+        res.json({ message: 'Account Created Successfull' })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// requester login
+const requesterLogin = async (req, res) => {
+    const { email, password } = req.body
+    // console.log(email, password)
+    try {
+        const findEmail = await User.findOne({ email })
+
+        if (findEmail.role !== 'requester') {
+            res.status(404).json({ success: false, message: "You are unable to login" })
+            return
+        }
+
+        if (!findEmail) {
+            res.status(404).json({ success: false, message: "Incorrect Email or Password" })
+            return
+        }
+
+        const findPassword = await User.findOne({ password })
+
+        if (!findPassword) {
+            res.status(404).json({ success: false, message: "Incorrect Email or Password" })
+            return
+        }
+
+
+        const payload = { id: findEmail._id, email: findPassword.email, role: findPassword.role }
+        const sercretKEy = "romnickPogi"
+        const token = jwt.sign(payload, sercretKEy, { expiresIn: "10h" })
+
+        res.cookie("token", token, {
+            // withCredentials: true,
+            httpOnly: true,
+            secure: true,       // 🔥 Required for HTTPS
+            sameSite: 'None',    // 🔥 Required for cross-origin cookies
+            maxAge: 24 * 60 * 60 * 1000,
+            // maxAge: 60 * 1000
+        })
+        res.status(201).json({ success: true, message: "Login Successfull", token, role: findEmail.role })
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
     createAdmin, loginAdmin, forgotPassword, logout,
-    sendOtp, verifyOtp, changePassword, getUsers, updateUserRole, delUser
+    sendOtp, verifyOtp, changePassword, getUsers, updateUserRole, delUser, createDean, displayDean,
+    editDean, deleteDean, requesterRegister, requesterLogin
 }

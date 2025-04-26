@@ -110,7 +110,7 @@ const Item_Type = ({ items, itemFunction, itemValue }) => {
                         />
                     </div>
                 ))}
-                <div className='dropdown-item center' onClick={() => newInputType()}>Add Accessory Type</div>
+                <div className='dropdown-item center' onClick={() => newInputType()}>Add Item Type</div>
             </div>
         </div>
     );

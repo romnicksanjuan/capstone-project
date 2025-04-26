@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import Domain from '../config/config'
+import Domain from '../../config/config.js'
 import { useNavigate } from "react-router-dom"
-import img from '../images/ctc-logoo.jpg'
+import img from '../../images/ctc-logoo.jpg'
 
-const SignUp = () => {
+const RequesterSignUp = () => {
     const navigate = useNavigate()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -19,7 +19,7 @@ const SignUp = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await fetch(`${Domain}/admin/sign-up`, {
+            const response = await fetch(`${Domain}/requester-register`, {
                 method: "POSt",
                 headers: {
                     "Content-Type": "application/json"
@@ -164,7 +164,7 @@ const SignUp = () => {
                             type='text' placeholder='Enter Phone Number' />
                     </div>
 
-                    <p style={{ padding: '5px 0', margin: '0', fontSize: '1.2rem', color: 'white', cursor: 'pointer', }} onClick={() => navigate('/')}>
+                    <p style={{ padding: '5px 0', margin: '0', fontSize: '1.2rem', color: 'white', cursor: 'pointer', }} onClick={() => navigate('/requester-login')}>
                         Aleady have an Account? <span style={{ color: "blue" }}>Login</span></p>
 
                     <div style={{ width: '100%', display: 'grid' }}>
@@ -182,4 +182,4 @@ const SignUp = () => {
     )
 }
 
-export default SignUp
+export default RequesterSignUp

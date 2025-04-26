@@ -10,6 +10,7 @@ import { FaCodePullRequest } from "react-icons/fa6";
 import { FaUserAlt } from "react-icons/fa";
 import DOMAIN from '../config/config';
 import { useEffect, useState } from 'react';
+import { BiSolidReport } from "react-icons/bi";
 const Navbar = () => {
 
     const location = useLocation();
@@ -151,6 +152,13 @@ const Navbar = () => {
                                 style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '10px' }}>
                                 <FaUserAlt size={26} className='icon' />
                                 <p style={{ padding: '0' }}> User List</p>
+                            </Link>
+
+                            <Link
+                                to={'/reports'}
+                                style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '10px' }}>
+                                <BiSolidReport size={26} className='icon' />
+                                <p style={{ padding: '0' }}> Reports</p>
                             </Link>
 
                             <Link

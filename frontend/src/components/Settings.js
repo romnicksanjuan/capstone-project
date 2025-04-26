@@ -3,6 +3,8 @@ import Navbar from './Navbar'
 import styles from '../css/Dashboard.module.css'
 import DOMAIN from '../config/config'
 import { useNavigate } from 'react-router-dom'
+import { MdDelete, MdAdd, MdCancel } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
 import Topbar from './Topbar'
 // const token = localStorage.getItem("token")
 
@@ -18,6 +20,13 @@ function Settings() {
 
     const [user, setUser] = useState({})
 
+    // deans account
+    const [deanEmail, setDeanEmail] = useState('')
+    const [deanPassword, setDeanPassword] = useState('')
+    const [departmentName, setDepartmentName] = useState('')
+    const [deanName, setDeanName] = useState('')
+    const [deanDesignation, setDeanDesignation] = useState('')
+
     const navigate = useNavigate()
 
     const [role, setRole] = useState(null)
@@ -26,6 +35,7 @@ function Settings() {
         const role = localStorage.getItem('role')
         setRole(role)
     }, [])
+
 
 
     // settings 
@@ -51,9 +61,9 @@ function Settings() {
 
 
         settingsFunc()
-    },[])
+    }, [])
 
-  
+
 
     // change passowrd
     const handleChangePassword = async (e) => {
@@ -82,6 +92,111 @@ function Settings() {
             setSuccessMessage(data.message)
             setErrorMessage('')
             console.log(data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    // create dean
+    const createDeanHandle = async (e) => {
+        e.preventDefault()
+        try {
+            const response = await fetch(`${DOMAIN}/create-dean`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({ deanEmail, deanPassword, departmentName, deanName, deanDesignation })
+            })
+
+            const data = await response.json()
+
+            console.log(data)
+            alert(data.message)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const [displayDean, setDisplayDean] = useState([])
+    const [deanId, setDeanId] = useState('')
+    // display dean
+    useEffect(() => {
+        const disDean = async () => {
+            try {
+                const response = await fetch(`${DOMAIN}/display-dean`, {
+                    method: 'GET',
+                    credentials: 'include'
+                })
+
+                const data = await response.json()
+                setDisplayDean(data)
+                console.log(data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        disDean()
+    }, [])
+
+    const [isEdit, setIsEdit] = useState(false)
+    const handleEditClickDean = (dean) => {
+        const find = displayDean.find(id => dean._id === id._id)
+        console.log(find)
+        setDeanEmail(find.email || '')
+        setDeanPassword(find.password || '')
+        setDeanName(find.name || '')
+        setDeanDesignation(find.designation || '')
+        setDepartmentName(find.department || '')
+        setDeanId(find._id)
+        setIsEdit(true)
+    }
+
+    // edit dean 
+    const editDean = async (e) => {
+        e.preventDefault()
+        if (!window.confirm('are you sure you want to edit this account?')) {
+            return
+        }
+        try {
+            const response = await fetch(`${DOMAIN}/edit-dean/${deanId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({ deanEmail, deanPassword, departmentName, deanName, deanDesignation })
+            })
+
+            const data = await response.json()
+
+            console.log(data)
+            alert(data.message)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    // dele dean
+    const deleteDean = async (id) => {
+
+        if (!window.confirm('are you sure you want to delete this account?')) {
+            return
+        }
+        try {
+            const response = await fetch(`${DOMAIN}/delete-dean/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+            })
+
+            const data = await response.json()
+
+            console.log(data)
+            alert(data.message)
         } catch (error) {
             console.log(error)
         }
@@ -123,6 +238,16 @@ function Settings() {
                             }} onClick={() => setActiveSection('change_password')} >
                                 Change Password
                             </li>
+
+                           {role === 'admin' ?  <li style={{
+                                cursor: 'pointer',
+                                color: activeSection === 'accounts' ? 'white' : 'black',
+                                backgroundColor: activeSection === 'accounts' ? 'orange' : '',
+                                padding: '5px 20px',
+                                borderRadius: '5px'
+                            }} onClick={() => setActiveSection('accounts')} >
+                                Account Management
+                            </li> :''}
                         </ul>
                     </nav>
 
@@ -160,14 +285,14 @@ function Settings() {
                                         </div>
                                     </div>
 
-                                    <div style={{ display: 'flex', }}>
+                                    {/* <div style={{ display: 'flex', }}>
                                         <div style={{ width: '50%' }}>
                                             <h4 style={{ marginBottom: "10px", color: 'black' }}>Date of Birth:</h4>
                                         </div>
                                         <div style={{ width: '50%' }}>
                                             <p style={{ marginBottom: "10px", color: 'black' }}>{user.dateOfBirth}</p>
                                         </div>
-                                    </div>
+                                    </div> */}
 
 
                                     <div style={{ display: 'flex', }}>
@@ -264,6 +389,188 @@ function Settings() {
 
                                     <button type='submit' style={{ padding: '8px 5px', fontSize: '17px', width: '100%', borderRadius: '5px', border: 'none', }}>Submit</button>
                                 </form>
+                            </div>
+                        }
+
+
+                        {activeSection === 'accounts' && role === 'admin' &&
+                            <div style={{ color: 'black', width: '100%', height: '100%' }}>
+                                {!isEdit ? <form onSubmit={createDeanHandle} style={{ width: '70%' }}>
+                                    <h4>College Department Deans</h4>
+                                    <div style={{ marginBottom: '10px' }}>
+                                        <label style={{ fontSize: '15px', color: 'orange' }}>Email:</label><br />
+                                        <input
+                                            placeholder="Email"
+                                            type='email'
+                                            required
+                                            value={deanEmail}
+                                            onChange={(e) => setDeanEmail(e.target.value)}
+                                            style={{
+                                                padding: '4px 5px', fontSize: '15px', width: '100%', borderRadius: '5px',
+                                            }} />
+                                    </div>
+
+                                    <div style={{ marginBottom: '10px' }}>
+                                        <label style={{ fontSize: '15px', color: 'orange' }}>Password:</label><br />
+                                        <input
+                                            placeholder="Password"
+                                            type='password'
+                                            required
+                                            value={deanPassword}
+                                            onChange={(e) => setDeanPassword(e.target.value)}
+                                            style={{
+                                                padding: '4px 5px', fontSize: '15px', width: '100%', borderRadius: '5px'
+                                            }} />
+                                    </div>
+
+                                    <div style={{ marginBottom: '10px' }}>
+                                        <label style={{ fontSize: '15px', color: 'orange' }}>Department Name:</label><br />
+                                        <input
+                                            placeholder="Department Name"
+                                            type='text'
+                                            required
+                                            value={departmentName}
+                                            onChange={(e) => setDepartmentName(e.target.value)}
+                                            style={{
+                                                padding: '4px 5px', fontSize: '15px', width: '100%', borderRadius: '5px',
+                                            }} />
+                                    </div>
+
+                                    <div style={{ marginBottom: '10px' }}>
+                                        <label style={{ fontSize: '15px', color: 'orange' }}>Name:</label><br />
+                                        <input
+                                            placeholder="Name"
+                                            type='text'
+                                            required
+                                            value={deanName}
+                                            onChange={(e) => setDeanName(e.target.value)}
+                                            style={{
+                                                padding: '4px 5px', fontSize: '15px', width: '100%', borderRadius: '5px'
+                                            }} />
+                                    </div>
+
+                                    <div style={{ marginBottom: '10px' }}>
+                                        <label style={{ fontSize: '15px', color: 'orange' }}>Designation:</label><br />
+                                        <input
+                                            placeholder="Designation"
+                                            type='text'
+                                            required
+                                            value={deanDesignation}
+                                            onChange={(e) => setDeanDesignation(e.target.value)}
+                                            style={{
+                                                padding: '4px 5px', fontSize: '15px', width: '100%', borderRadius: '5px',
+                                            }} />
+                                    </div>
+
+                                    <button type='submit' style={{ padding: '4px 5px', fontSize: '15px', width: '100%', borderRadius: '5px', border: 'none', }}>Submit</button>
+                                </form> : <form onSubmit={editDean} style={{ width: '70%' }}>
+                                    <h4>Edit Dean Account</h4>
+                                    <div style={{ marginBottom: '10px' }}>
+                                        <label style={{ fontSize: '15px', color: 'orange' }}>Email:</label><br />
+                                        <input
+                                            placeholder="Email"
+                                            type='email'
+                                            required
+                                            value={deanEmail}
+                                            onChange={(e) => setDeanEmail(e.target.value || '')}
+                                            style={{
+                                                padding: '4px 5px', fontSize: '15px', width: '100%', borderRadius: '5px',
+                                            }} />
+                                    </div>
+
+                                    <div style={{ marginBottom: '10px' }}>
+                                        <label style={{ fontSize: '15px', color: 'orange' }}>Password:</label><br />
+                                        <input
+                                            placeholder="Password"
+                                            type='password'
+                                            required
+                                            value={deanPassword}
+                                            onChange={(e) => setDeanPassword(e.target.value || '')}
+                                            style={{
+                                                padding: '4px 5px', fontSize: '15px', width: '100%', borderRadius: '5px'
+                                            }} />
+                                    </div>
+
+                                    <div style={{ marginBottom: '10px' }}>
+                                        <label style={{ fontSize: '15px', color: 'orange' }}>Department Name:</label><br />
+                                        <input
+                                            placeholder="Department Name"
+                                            type='text'
+                                            required
+                                            value={departmentName}
+                                            onChange={(e) => setDepartmentName(e.target.value || '')}
+                                            style={{
+                                                padding: '4px 5px', fontSize: '15px', width: '100%', borderRadius: '5px',
+                                            }} />
+                                    </div>
+
+                                    <div style={{ marginBottom: '10px' }}>
+                                        <label style={{ fontSize: '15px', color: 'orange' }}>Name:</label><br />
+                                        <input
+                                            placeholder="Name"
+                                            type='text'
+                                            required
+                                            value={deanName}
+                                            onChange={(e) => setDeanName(e.target.value || '')}
+                                            style={{
+                                                padding: '4px 5px', fontSize: '15px', width: '100%', borderRadius: '5px'
+                                            }} />
+                                    </div>
+
+                                    <div style={{ marginBottom: '10px' }}>
+                                        <label style={{ fontSize: '15px', color: 'orange' }}>Designation:</label><br />
+                                        <input
+                                            placeholder="Designation"
+                                            type='text'
+                                            required
+                                            value={deanDesignation}
+                                            onChange={(e) => setDeanDesignation(e.target.value || '')}
+                                            style={{
+                                                padding: '4px 5px', fontSize: '15px', width: '100%', borderRadius: '5px',
+                                            }} />
+                                    </div>
+
+                                    <button type='submit' style={{ padding: '4px 5px', fontSize: '15px', width: '100%', borderRadius: '5px', border: 'none', }}>Submit</button>
+                                </form>}
+
+
+
+
+                                <table className={styles.styledTable}>
+                                    <thead>
+                                        <tr>
+                                            {/* <th>Serial No.</th> */}
+                                            <th>Email</th>
+                                            <th>Password</th>
+                                            <th>Department Name</th>
+                                            <th>Name</th>
+                                            <th>Designation</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {displayDean ? displayDean.map((dean, index) => (
+                                            <tr key={index}>
+                                                <td>{dean.email}</td>
+                                                <td>{dean.password}</td>
+                                                <td>{dean.department}</td>
+                                                <td>{dean.name}</td>
+                                                <td>{dean.designation}</td>
+                                                {/* <td>{dean.designation}</td> */}
+                                                {/* <td>{item.item.brand}</td>
+                                                <td>{item.borrower}</td> */}
+
+                                                <td style={{ display: 'flex', border: 'none', }}>
+                                                    <div style={{ display: 'flex', justifyContent: "center", gap: '10px' }}>
+                                                        <MdDelete color='red' size={27} onClick={() => deleteDean(dean._id)} />
+                                                        <FaEdit color='blue' size={27} onClick={() => handleEditClickDean(dean)} />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )) : ''}
+                                    </tbody>
+                                </table>
                             </div>
                         }
                     </div>

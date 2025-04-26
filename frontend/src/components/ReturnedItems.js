@@ -74,7 +74,7 @@ const ReturnedItems = () => {
                         <thead>
                             <tr>
                                 {/* <th>Serial No.</th> */}
-                                <th>Serial Number</th>
+                                <th>PMS Number</th>
                                 <th>Unit</th>
                                 <th>Brand</th>
                                 <th>Borrower's Name</th>
