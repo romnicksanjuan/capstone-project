@@ -74,10 +74,12 @@ const ReturnedItems = () => {
                         <thead>
                             <tr>
                                 {/* <th>Serial No.</th> */}
-                                <th>PMS Number</th>
-                                <th>Unit</th>
-                                <th>Brand</th>
+                                {/* <th>PMS Number</th>
+                                <th>Unit</th> */}
+                                {/* <th>Brand</th> */}
                                 <th>Borrower's Name</th>
+                                <th>Department</th>
+                                <th>Purpose</th>
                                 <th>Mobile Number</th>
                                 <th>Date Borrowed</th>
                                 <th>Date Returned</th>
@@ -87,11 +89,12 @@ const ReturnedItems = () => {
                         <tbody>
                             {data.map((item, index) => (
                                 <tr onClick={() => historyDetails(item)} key={index}>
-                                    {/* <td className={styles.serialNumber}>{item.number}</td> */}
-                                    <td>{item.serialNumber}</td>
-                                    <td>{item.item.unit}</td>
-                                    <td>{item.item.brand}</td>
+                                    {/* <td>{item.serialNumber}</td> */}
+                                    {/* <td>{item.item.unit}</td> */}
+                                    {/* <td>{item.item.brand}</td> */}
                                     <td>{item.borrower}</td>
+                                    <td>{item.department}</td>
+                                    <td>{item.purpose}</td>
                                     <td>{item.mobileNumber}</td>
                                     <td>{item.dateBorrowed}</td>
                                     <td>{item.dateReturned}</td>

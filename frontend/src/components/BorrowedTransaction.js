@@ -16,39 +16,44 @@ const BorrowedTransaction = () => {
                     <h2 style={{ padding: '20px 0 20px 10px' }}>Borrow Transaction Details</h2>
                 </div>
 
+
+                <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px' }} border="1" cellPadding="10" cellSpacing="0">
+                    <thead>
+                        <tr>
+                            <th style={{ backgroundColor: 'orange', color: 'white', padding: '10px', textAlign: 'center' }}>PMS Number</th>
+                            <th style={{ backgroundColor: 'orange', color: 'white', padding: '10px', textAlign: 'center' }}>Unit</th>
+                            <th style={{ backgroundColor: 'orange', color: 'white', padding: '10px', textAlign: 'center' }}>Brand</th>
+                            <th style={{ backgroundColor: 'orange', color: 'white', padding: '10px', textAlign: 'center' }}>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {data?.serialNumber?.length > 0 ? (
+                            data.serialNumber.map((i, index) => (
+                                <tr key={index}>
+                                    <td style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }}>{i.item}</td>
+                                    <td style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }}>{i.unit}</td>
+                                    <td style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }}>{i.brand}</td>
+                                    <td style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }}>{i.quantity}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }} colSpan="3">No items available</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+
                 <div style={{ padding: '5px 10px', display: 'grid', gap: '10px' }}>
-                    <div style={{ display: 'flex', width: '100%' }}>
-                        <div style={{ width: '50%' }}>
-                            <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>PMS Number:</p>
-                        </div>
-                        <div style={{ width: '50%' }}>
-                            <p style={{ color: 'GrayText', fontSize: '19px', }}>{data.item.serialNumber}</p>
-                        </div>
-                    </div>
-                    <div style={{ display: 'flex', width: '100%' }}>
-                        <div style={{ width: '50%' }}>
-                            <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Unit:</p>
-                        </div>
-                        <div style={{ width: '50%' }}>
-                            <p style={{ color: 'GrayText', fontSize: '19px', }}>{data.item.unit}</p>
-                        </div>
-                    </div>
-                    <div style={{ display: 'flex', width: '100%' }}>
-                        <div style={{ width: '50%' }}>
-                            <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Brand:                   </p>
-                        </div>
-                        <div style={{ width: '50%' }}>
-                            <p style={{ color: 'GrayText', fontSize: '19px', }}>{data.item.brand}</p>
-                        </div>
-                    </div>
-                    <div style={{ display: 'flex', width: '100%' }}>
+                    
+                    {/* <div style={{ display: 'flex', width: '100%' }}>
                         <div style={{ width: '50%' }}>
                             <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Category:</p>
                         </div>
                         <div style={{ width: '50%' }}>
                             <p style={{ color: 'GrayText', fontSize: '19px', }}>{data.item.category}</p>
                         </div>
-                    </div>
+                    </div> */}
                     {/* <div style={{ display: 'flex', width: '100%' }}>
                         <div style={{ width: '50%' }}>
                             <p style={{ fontSize: '19px', whiteSpace: 'pre', fontWeight: 'bold' }}>Conditon:                   </p>

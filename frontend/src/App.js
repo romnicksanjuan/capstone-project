@@ -26,6 +26,7 @@ import RequestFullDetails from './components/RequestFullDetails.js';
 import Home from './components/home/Home.js';
 import RequesterSignUp from './components/requesterUser/RequesterSignUp.js';
 import RequesterSignIn from './components/requesterUser/RequesterSignIn.js';
+import BorrowedItemFullDetails from './components/BorrowedItemFullDetails.js';
 
 // import Test from './components/Category.js';
 // import Testing from './components/Test.js';
@@ -46,6 +47,7 @@ function App() {
         <Route path='/Dashboard' element={<Dashboard />} />
         <Route path='/inventory' element={<Inventory />} />
         <Route path='/borrowed-items' element={<BorrowedItems />} />
+        <Route path='/borrowed-item-details' element={<BorrowedItemFullDetails />} />
         <Route path='/borrowed-transaction-details' element={<BorrowedTransaction />} />
         <Route path='/returned-items' element={<ReturnedItems />} />
         <Route path='/add-borrow-item' element={<AddBorrowItem />} />
@@ -54,7 +56,7 @@ function App() {
         <Route path='/get-purchase-history' element={<PurchaseHistory />} />
         <Route path='/purchase-transaction-details' element={<MerchandiseTransaction />} />
         <Route path='/manage-mechandise' element={<ManageMerchandise />} />
-        <Route path='/borrow-form/:sn' element={<BorrowForm />} />
+        <Route path='/borrow-form' element={<BorrowForm />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/settings' element={<Settings />} />
         <Route path='/request-items' element={<RequestItems />} />

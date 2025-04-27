@@ -2,37 +2,92 @@ const itemTransfer = require('../model/item_movement.js')
 const borrowItem = require('../model/borrowItem')
 const Item = require('../model/Item.js')
 const stockIn_Out = require('../model/stockIn_out')
+const { Promise } = require('mongoose')
 
 
 const addBorrowItem = async (req, res) => {
-    const { serialNumber, borrower, mobileNumber, purpose, department, borrowerDesignation, quantity, toLocation } = req.body
+    const { serialNumber, borrower, mobileNumber, purpose, department, borrowerDesignation, toLocation } = req.body
 
-    const checkSerial = await Item.findOne({ serialNumber })
 
-    console.log("checkSerial:", serialNumber, borrower, mobileNumber, purpose, department, borrowerDesignation, quantity,toLocation)
+    console.log(serialNumber)
+    // return
+    const checkSerial = await Item.find({ serialNumber: serialNumber.map(sn => sn.item) }).lean()
 
+    //     console.log("checkSerial:", checkSerial)
+    // return
     try {
         if (!checkSerial) {
             return res.status(404).json({ message: 'Item not found' })
         }
 
-        new itemTransfer({date:new Date(), item: checkSerial.unit, fromLocation: checkSerial.location, toLocation: toLocation}).save()
+       const comparePMS = serialNumber.map((item) => {
+            const b = checkSerial.find(i => item.item === i.serialNumber)
+            if (!b) {
+               return false
+            }
 
-        console.log(checkSerial.quantity)
-        checkSerial.quantity -= quantity
-        const newBorrow = new borrowItem({
-            item: checkSerial, serialNumber, borrower, mobileNumber, purpose,
-            department, borrower_designation: borrowerDesignation,
-            status_before: checkSerial.status, quantity
+            return true
         })
-        await checkSerial.save()
+
+        if (comparePMS.includes(false)) {
+            console.log('Some items were not found!');
+            return res.status(404).json({ success: true, message: "Some items were not found!" })
+        }
+
+        // console.log(checkSerial.quantity)
+
+        const updatedSerials = checkSerial.map(async (item) => {
+            const findItem = serialNumber.find(sn => sn.item === item.serialNumber);
+            if (!findItem) return null;
+
+            console.log(`Updating serial ${item.serialNumber}:`, findItem.quantity);
+
+            await new stockIn_Out({
+                date: new Date(),
+                itemName: item.unit,
+                action: 'Stock Out',
+                quantity: findItem.quantity
+            }).save();
+
+            await new itemTransfer({ date: new Date(), item: item.unit, fromLocation: item.location, toLocation: toLocation }).save()
+
+            return Item.findOneAndUpdate(
+                { serialNumber: item.serialNumber },  // Match serialNumber
+                { quantity: item.quantity - findItem.quantity }, // Subtract quantity
+                { new: true, upsert: false }  // Ensure it returns the updated document
+            );
+        })
+
+        console.log('Updated serials:', updatedSerials);
+
+        const newBorrow = new borrowItem({
+            item: checkSerial,
+            serialNumber: serialNumber.map((item) => {
+                const b = checkSerial.find(i => item.item === i.serialNumber)
+                return {
+                    item: item.item,
+                    quantity: item.quantity,
+                    unit: b.unit,
+                    brand: b.brand
+                }
+            }),
+            borrower, mobileNumber, purpose,
+            department, borrower_designation: borrowerDesignation,
+            status_before: 'Working',
+            // quantity
+        })
         await newBorrow.save()
 
-        new stockIn_Out({ date: new Date(), itemName: checkSerial.unit, action:'Stock Out', quantity, }).save()
-        console.log(newBorrow)
+        // await new stockIn_Out({
+        //     date: new Date(),
+        //     itemName: findItem.unit,
+        //     action: 'Stock Out',
+        //     quantity: item.quantity
+        // }).save();
         res.status(200).json({ success: true, message: "Borrow Transaction Successfull" })
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        // res.status(400).json({ message: error.message });
+        console.log(error)
     }
 }
 
@@ -76,14 +131,17 @@ const returnItem = async (req, res) => {
     const { id } = req.params;
     const { condition } = req.body
 
-    console.log("status:", condition)
+    // console.log("status:", condition, id)
+
+    // return
 
     try {
         const updateTransaction = await borrowItem.findById(id)
-        const updateItem = await Item.findOne({ serialNumber: updateTransaction.serialNumber })
 
+        const updateItem = await Item.find({ serialNumber: updateTransaction.serialNumber.map(sn => sn.item) }).lean()
 
-
+        // console.log('u',updateItem)
+        // return
         if (!updateTransaction) {
             return res.status(404).json({ error: 'Transaction not found' });
         }
@@ -93,8 +151,15 @@ const returnItem = async (req, res) => {
         updateTransaction.status_after = condition
 
         // update item
-        updateItem.condition = condition
-        updateItem.save()
+        // updateItem.condition = condition
+        // updateItem.save()
+
+        updateItem.map(async (i) => {
+            return Item.updateOne(
+                { _id: i._id }, // Assuming you're using _id to find the document
+                { condition: condition }
+            );
+        })
 
         const saveUpdate = await updateTransaction.save()
 
@@ -108,19 +173,20 @@ const returnItem = async (req, res) => {
 const fetchHistory = async (req, res) => {
     try {
         const history = await borrowItem.find({ action: 'Returned' }).lean()
+        // console.log('sdsd', history)
+        const historyData = history.map((item) => {
 
-        const historyData = await Promise.all(history.map(async (item) => {
-
-            const findItem = await Item.findById(item.unitId)
-
+            // Check if item is successfully processed
+            console.log('Processed item:', item);
             return {
                 ...item,
-                dateBorrowed: item.dateBorrowed.toLocaleDateString('en-US'),
-                dateReturned: item.dateReturned.toLocaleDateString('en-US')
-            }
-        }))
+                dateBorrowed: new Date(item.dateBorrowed).toLocaleDateString('en-US', { timeZone: 'Asia/Manila', day: 'numeric', month: 'long', year: 'numeric' }),
+                dateReturned: new Date(item.dateReturned).toLocaleDateString('en-US', { timeZone: 'Asia/Manila', day: 'numeric', month: 'long', year: 'numeric' })
+            };
+        })
 
-        // console.log("data history: ", historyData)
+
+        // console.log("data history: ", historyData.map(h => h))
         res.status(200).json(historyData)
     } catch (error) {
         console.log(error)

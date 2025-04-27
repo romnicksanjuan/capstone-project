@@ -10,10 +10,10 @@ const StockIn_Out = require('../model/stockIn_out')
 const createItem = async (req, res) => {
     const { serialNumber, serialItem, unit, brand, category, condition, location, status, accessory_type, quantity } = req.body;
 
-    const fontend_link = `https://capstone-project-sand-gamma.vercel.app/borrow-form/${serialNumber}`
-    const link = `http://localhost:3000/borrow-form/${serialNumber}`
+    // const fontend_link = `https://capstone-project-sand-gamma.vercel.app/borrow-form/${serialNumber}`
+    // const link = `http://localhost:3000/borrow-form/${serialNumber}`
     // console.log(unit)
-    const qrImage = await QRCode.toDataURL(fontend_link);
+    const qrImage = await QRCode.toDataURL(serialNumber);
 
     // Convert base64 to buffer
     const base64Data = qrImage.replace(/^data:image\/png;base64,/, ""); // Remove base64 header
@@ -21,14 +21,14 @@ const createItem = async (req, res) => {
     console.log(qrBuffer)
 
     const newItem = new Item({
-        serialNumber, serialItem, unit, brand, category, condition, location, status, quantity, accessory_type, link: fontend_link, qr_code_image: {
+        serialNumber, serialItem, unit, brand, category, condition, location, status, quantity, accessory_type, qr_code_image: {
             data: qrBuffer,
             contentType: 'image/png'
         }
     })
 
     if (newItem) {
-        new StockIn_Out({ date: new Date(), itemName: unit, action:'Stock In', quantity, }).save()
+        new StockIn_Out({ date: new Date(), itemName: unit, action: 'Stock In', quantity, }).save()
     }
 
 
@@ -96,13 +96,23 @@ const fetchItems = async (req, res) => {
 const editITem = async (req, res) => {
     const { id } = req.params;
     const { serialItem, unit, brand, category, condition, location, status, accessory_type, quantity } = req.body;
+
+
+    console.log(quantity)
+
     try {
         const findItem = await Item.findById(id)
+        console.log(findItem.quantity)
 
         if (findItem) {
-            const stock = new StockIn_Out({date: new Date(), itemName: unit, action: 'Stock In', quantity: quantity - findItem.quantity})
-            await stock.save()
+            const s = quantity - findItem.quantity
+            if (s > 0) {
+                const stock = new StockIn_Out({ date: new Date(), itemName: unit, action: 'Stock In', quantity: quantity - findItem.quantity })
+                await stock.save()
+            }
+
         }
+
         const updatedItem = await Item.findByIdAndUpdate(
             id,
             { serialItem, unit, brand, category, condition, location, status, accessory_type, quantity },
@@ -113,10 +123,12 @@ const editITem = async (req, res) => {
             return res.status(404).json({ message: 'Item not found' });
         }
 
-      
+
         res.status(200).json(updatedItem);
     } catch (err) {
+        console.log(err)
         res.status(500).json({ message: err.message });
+
     }
 
 }

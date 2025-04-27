@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { MdCancel } from "react-icons/md";
 import { PiWarningOctagonFill } from "react-icons/pi";
 import { IoIosAddCircle } from "react-icons/io";
+import BorrowForm from './BorrowForm';
 
 import Topbar from './Topbar';
 import { PiKeyReturnBold } from "react-icons/pi";
@@ -13,6 +14,8 @@ import { PiKeyReturnBold } from "react-icons/pi";
 const token = localStorage.getItem("token")
 
 const BorrowedItems = () => {
+
+  const [isShowForm, setIsShowForm] = useState(false)
 
   const [originalData, setOriginalData] = useState([])
   const [data, setData] = useState([])
@@ -159,10 +162,9 @@ const BorrowedItems = () => {
     <div style={{ display: "flex" }}>
       <Navbar />
       <div className={styles.borrowedItems}>
-
         < Topbar />
         <div>
-          {/* <button style={{
+          <button style={{
             marginTop: "20px",
             marginBottom: "10px",
             padding: "10px",
@@ -172,24 +174,34 @@ const BorrowedItems = () => {
             color: "#fff",
             cursor: "pointer",
             fontSize: '15px'
-          }} onClick={handleButtonClick}>Create Transaction</button> */}
+          }} onClick={() => setIsShowForm(!isShowForm)}>Create Transaction</button>
         </div>
+
+        {isShowForm ? <div style={{
+          position: 'absolute', backgroundColor: 'orange',
+            padding: '20px 30px',
+          height: 'auto', width: '450px', gap: '20px', border: '1px solid black', borderRadius: '5px',
+          top: '50%', left: '50%', transform: 'translate(-50%, -50%)'
+        }}>
+          <MdCancel size={25} color='black' onClick={() => setIsShowForm(!isShowForm)} />
+          <BorrowForm />
+        </div> : ''}
 
         <h2 style={{ color: "orange", padding: '10px 0' }}>Borrowed Items</h2>
         <table className={styles.styledTable}>
           <thead>
             <tr>
               {/* <th>Serial No.</th> */}
-              <th>PMS Number</th>
-              <th>Unit</th>
-              <th>Brand</th>
+              {/* <th>PMS Number</th> */}
+              {/* <th>Unit</th> */}
+              {/* <th>Brand</th> */}
               <th>Borrower's Name</th>
               <th>Department</th>
               <th>Borrower's Designation</th>
               <th>Mobile Number</th>
               <th>Purpose</th>
               <th>Quantity</th>
-              <th>Condition</th>
+              {/* <th>Condition</th> */}
               <th>Date Borrowed</th>
               <th>Action</th>
             </tr>
@@ -198,17 +210,16 @@ const BorrowedItems = () => {
           <tbody>
             {data ? data.map((item, index) => (
               <tr key={index}>
-                {/* <td className={styles.serialNumber}>{item.number}</td> */}
-                <td>{item.serialNumber}</td>
-                <td>{item.item.unit}</td>
-                <td>{item.item.brand}</td>
-                <td>{item.borrower}</td>
-                <td>{item.department}</td>
-                <td>{item.borrower_designation}</td>
-                <td>{item.mobileNumber}</td>
-                <td>{item.purpose}</td>
-                <td>{item.quantity}</td>
-                <td>{item.item.condition}</td>
+                {/* <td>{item.serialNumber}</td> */}
+                {/* <td>{item.item.unit}</td> */}
+                {/* <td>{item.item.brand}</td> */}
+                <td onClick={() => navigate('/borrowed-item-details', { state: { item } })}>{item.borrower}</td>
+                <td onClick={() => navigate('/borrowed-item-details', { state: { item } })}>{item.department}</td>
+                <td onClick={() => navigate('/borrowed-item-details', { state: { item } })}>{item.borrower_designation}</td>
+                <td onClick={() => navigate('/borrowed-item-details', { state: { item } })}>{item.mobileNumber}</td>
+                <td onClick={() => navigate('/borrowed-item-details', { state: { item } })}>{item.purpose}</td>
+                <td onClick={() => navigate('/borrowed-item-details', { state: { item } })}>{item.quantity}</td>
+                {/* <td>{item.item.condition}</td> */}
                 <td>{item.dateBorrowed}</td>
                 <td style={{ display: 'flex', gap: '5px', border: 'none', }}>
                   <div style={{ display: "flex", alignItems: 'center', borderRadius: "5px", backgroundColor: "#219ebc", padding: '5px', }} onClick={() => handleStatus(item)} >
@@ -274,9 +285,9 @@ const BorrowedItems = () => {
 
             <div className={styles.formGroup}>
               <label className={styles.label}>Issue</label>
-              <select id="issue"    name="issue"
+              <select id="issue" name="issue"
                 value={formData.issue}
-                onChange={handleChange} style={{padding:'5px', width:'200px'}}>
+                onChange={handleChange} style={{ padding: '5px', width: '200px' }}>
                 <option value="">-- Select --</option>
                 <option value="Damage">Damage</option>
                 <option value="Lost">Lost</option>
