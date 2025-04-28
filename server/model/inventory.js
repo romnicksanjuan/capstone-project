@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 
 const itemSchema = new mongoose.Schema({
+  PMSNumber: {
+    type: String,
+    required: true
+  },
   serialNumber: {
     type: String,
     required: true
   },
-  serialItem: {
-    type: String,
-    required: true
-  },
-  unit: {
+  itemDescription: {
     type: String,
     required: true
   },
@@ -52,4 +52,4 @@ const itemSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Item', itemSchema);
+module.exports = mongoose.model('Inventory', itemSchema);

@@ -10,6 +10,7 @@ import { RiPrinterFill } from "react-icons/ri";
 import { useReactToPrint } from "react-to-print";
 // const token = localStorage.getItem("token")
 import img from '../images/ctc-logoo.jpg'
+import BorrowForm from './BorrowForm';
 import { MdCancel } from "react-icons/md";
 
 function RequestItems() {
@@ -36,6 +37,7 @@ function RequestItems() {
     const [quantity_and_materials, setQuantity_And_Materials] = useState([{ quantity: '', materials: '' }])
 
     const [requestedBy, setRequestedBy] = useState('')
+    const [toLocation, setToLocation] = useState('')
 
     const [successMessage, setSuccessMessage] = useState('')
 
@@ -49,6 +51,9 @@ function RequestItems() {
     const [reject, setReject] = useState('rejected')
 
     const [status, setStatus] = useState('')
+
+    const [isShowForm, setIsShowForm] = useState(false)
+    const [request, setRequest] = useState({})
 
     // console.log('s', status)
     useEffect(() => {
@@ -132,7 +137,7 @@ function RequestItems() {
                 body: JSON.stringify({
                     department, purpose, date, isFabrication, isRepair, isReplacement, isAdditional,
                     quantity_and_materials, others,
-                    requestedBy,
+                    requestedBy,toLocation
                 })
             })
             if (!response.ok) {
@@ -268,6 +273,14 @@ function RequestItems() {
         return null
     }
 
+    // console.log(request)
+
+    const handlePassData = (request) => {
+        // console.log('r',request)
+        setIsShowForm(!isShowForm)
+        setRequest(request)
+    }
+
     return (
         <div style={{ display: 'flex' }}>
             <Navbar />
@@ -275,10 +288,25 @@ function RequestItems() {
 
             <div style={{ position: 'relative' }} className={styles.Dashboard}>
 
+
+                {isShowForm ? <div style={{
+                    position: 'absolute', backgroundColor: 'orange',
+                    padding: '20px 30px',
+                    height: 'auto', width: '450px', gap: '20px', border: '1px solid black', borderRadius: '5px',
+                    top: '50%', left: '50%', transform: 'translate(-50%, -50%)'
+                }}>
+                    <MdCancel size={25} color='black' onClick={() => setIsShowForm(!isShowForm)} />
+                    <BorrowForm request={request} />
+                </div> : ''}
+
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <h2 style={{ color: 'orange', textAlign: 'start', margin: "0" }}>Request Items</h2>
 
-                    <button style={{ backgroundColor: 'orange', padding: '5px 7px' }} onClick={() => showForm()}>Create Request</button>
+                    {role === 'requester' && <button style={{ backgroundColor: 'orange', color: 'white', padding: '5px 7px', marginRight: '50px' }} onClick={() => showForm()}>Create Request</button>}
+                </div>
+
+                <div>
+
                 </div>
 
                 {role === 'dean' || role === 'admin' || role === 'president' ?
@@ -294,6 +322,7 @@ function RequestItems() {
                                 <th>Purpose</th>
                                 <th>Endorsed By Dean</th>
                                 <th>Status</th>
+                                {role === 'admin' && <th>Action</th>}
                             </tr>
                         </thead>
                         <tbody>
@@ -323,6 +352,9 @@ function RequestItems() {
                                             reject
                                         </button>
                                     </div> : request.presidentApproval}</td>
+                                    {role === 'admin' && <td>
+                                        <button onClick={() => handlePassData(request)}>Create Transaction</button>
+                                    </td>}
                                 </tr>
                             ))}
                         </tbody>
@@ -519,6 +551,17 @@ function RequestItems() {
                                 borderRadius: "5px",
                             }}
                         />
+                    </div>
+
+                    <div>
+                        <label htmlFor="to-location">To Location:</label><br />
+                        <input style={{
+                            width: "100%",
+                            padding: "10px",
+                            border: "1px solid #ccc",
+                            borderRadius: "5px",
+                            marginBottom:'10px'
+                        }} type="text" id="to-location" name="to-location" value={toLocation} onChange={(e) => setToLocation(e.target.value)} />
                     </div>
 
                     <button

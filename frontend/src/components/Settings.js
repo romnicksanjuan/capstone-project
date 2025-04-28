@@ -20,6 +20,8 @@ function Settings() {
 
     const [user, setUser] = useState({})
 
+
+
     // deans account
     const [deanEmail, setDeanEmail] = useState('')
     const [deanPassword, setDeanPassword] = useState('')
@@ -31,10 +33,82 @@ function Settings() {
 
     const [role, setRole] = useState(null)
 
+    const [updateId, setUpdateId] = useState('')
+    const [isUpdate, setIsUpdate] = useState(false)
+
+
+    // profile
+    const [orgProfile, setOrgProfile] = useState('')
+    const [profile, setProfile] = useState('')
+    const [userEmail, setUserEmail] = useState('');
+    const [userRole, setUserRole] = useState('');
+    const [gender, setGender] = useState('');
+    const [department, setDepartment] = useState('');
+    const [designation, setDesignation] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+
+    const [previewUrl, setPreviewUrl] = useState(null);
+    useEffect(() => {
+        if (!profile) {
+            return;
+        }
+
+        const objectUrl = URL.createObjectURL(profile);
+        setPreviewUrl(objectUrl);
+
+        return () => URL.revokeObjectURL(objectUrl); // Clean up old preview
+    }, [profile]);
+
+
+    // update profile
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append('file', profile); // Append the image file
+        formData.append('userEmail', userEmail);
+        formData.append('role', role);
+        formData.append('gender', gender);
+        formData.append('department', department);
+        formData.append('designation', designation);
+        formData.append('phoneNumber', phoneNumber);
+
+        try {
+            const response = await fetch(`${DOMAIN}/update-profile/${updateId}`, {
+                method: 'PUT',
+                credentials: 'include',
+                body: formData, // Don't set Content-Type manually
+            });
+
+            const data = await response.json();
+            console.log(data);
+
+            setSuccessMessage(data.message)
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
     useEffect(() => {
         const role = localStorage.getItem('role')
         setRole(role)
     }, [])
+
+    const handleEdit = (id) => {
+        setUpdateId(id)
+        setIsUpdate(!isUpdate)
+        const formData = {
+            userEmail,
+            role,
+            gender,
+            department,
+            designation,
+            phoneNumber,
+        };
+
+        console.log(formData);
+    }
 
 
 
@@ -54,6 +128,7 @@ function Settings() {
                 }
                 console.log(data)
                 setUser(data.user)
+
             } catch (error) {
                 console.log(error)
             }
@@ -62,6 +137,21 @@ function Settings() {
 
         settingsFunc()
     }, [])
+
+
+    useEffect(() => {
+        if (user?.profileImage?.data) {
+            setOrgProfile(user.profileImage.data);
+        } else {
+            setOrgProfile('');
+        }
+        setUserEmail(user?.email || '')
+        setUserRole(user?.role || '');
+        setGender(user?.gender || '');
+        setDepartment(user?.department || '');
+        setDesignation(user?.designation || '');
+        setPhoneNumber(user?.phoneNumber || '');
+    }, [user])
 
 
 
@@ -99,7 +189,7 @@ function Settings() {
     // create dean
     const createDeanHandle = async (e) => {
         e.preventDefault()
- 
+
         try {
             const response = await fetch(`${DOMAIN}/create-dean`, {
                 method: 'POST',
@@ -169,7 +259,7 @@ function Settings() {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify({ deanEmail, deanPassword, departmentName, deanName, deanDesignation ,accRole})
+                body: JSON.stringify({ deanEmail, deanPassword, departmentName, deanName, deanDesignation, accRole })
             })
 
             const data = await response.json()
@@ -219,6 +309,9 @@ function Settings() {
                 <h2 style={{ color: 'orange', textAlign: 'start', margin: "0 0 10px 0" }}>Settings</h2>
 
 
+
+
+
                 <div style={{ display: 'flex', minHeight: '90%', width: "100%", height: '65vh', gap: '20px', }}>
                     <nav style={{ display: 'flex', justifyContent: 'center', backgroundColor: 'white', width: "20%", borderRadius: '5px' }}>
                         <ul style={{ listStyle: 'none', padding: '15px', }}>
@@ -255,36 +348,167 @@ function Settings() {
                     </nav>
 
                     {/* Main Content */}
-                    <div style={{ backgroundColor: 'white', width: '80%', padding: '20px', borderRadius: '5px', color: '#fff', display: 'flex', justifyContent: 'center' }}>
+                    <div style={{ position: 'relative', backgroundColor: 'white', width: '80%', padding: '20px', borderRadius: '5px', color: '#fff', display: 'flex', justifyContent: 'center' }}>
+
+                        {isUpdate ? <form
+                            onSubmit={handleSubmit}
+
+                            style={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                width: '50%',
+                                margin: '0 auto',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '15px',
+                                marginTop: '20px',
+                                padding: '20px 30px',
+                                border: '1px solid black',
+                                backgroundColor: 'orange'
+                            }}
+                        >
+                            <MdCancel size={25} color='black' onClick={() => setIsUpdate(!isUpdate)} />
+
+                            {successMessage ? <p style={{ color: 'white', fontSize: '16px', backgroundColor: 'green', padding: "7px 5px", textAlign: 'center', borderRadius: '5px' }}>{successMessage}</p> : ''}
+                            <div style={{ display: 'grid', gridTemplateColumns:'repeat(2, 1fr)' }}>
+                                <div style={{ display: 'flex', marginBottom: "10px" }}>
+                                    {(previewUrl || orgProfile) && (
+                                        <img
+                                            src={previewUrl || `data:image/png;base64,${orgProfile}`}
+                                            alt="Profile"
+                                            style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "8px" }}
+                                        />
+                                    )}
+                                </div>
+                                <label>
+                                    Profile:
+                                    <input
+                                        type="file"
+
+                                        onChange={(e) => {
+                                            if (e.target.files && e.target.files[0]) {
+                                                setProfile(e.target.files[0]); // <- This must be a File
+                                            }
+                                        }}
+
+                                        style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                                    />
+                                </label>
+                            </div>
+
+                            <label>
+                                Email:
+                                <input
+                                    type="email"
+                                    value={userEmail}
+                                    onChange={(e) => setUserEmail(e.target.value || '')}
+                                    style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                                />
+                            </label>
+
+                            <label>
+                                Role:
+                                <input
+                                    type="text"
+                                    value={userRole}
+                                    onChange={(e) => setUserRole(e.target.value || '')}
+                                    style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                                />
+                            </label>
+
+                            <label>
+                                Gender:
+                                <input
+                                    type="text"
+                                    value={gender}
+                                    onChange={(e) => setGender(e.target.value || '')}
+                                    style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                                />
+                            </label>
+
+                            <label>
+                                Department:
+                                <input
+                                    type="text"
+                                    value={department}
+                                    onChange={(e) => setDepartment(e.target.value || '')}
+                                    style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                                />
+                            </label>
+
+                            <label>
+                                Designation:
+                                <input
+                                    type="text"
+                                    value={designation}
+                                    onChange={(e) => setDesignation(e.target.value || '')}
+                                    style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                                />
+                            </label>
+
+                            <label>
+                                Phone Number:
+                                <input
+                                    type="tel"
+                                    value={phoneNumber}
+                                    onChange={(e) => setPhoneNumber(e.target.value || '')}
+                                    style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                                />
+                            </label>
+
+                            <button
+                                type="submit"
+                                style={{
+                                    padding: '10px',
+                                    backgroundColor: '#4CAF50',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '5px',
+                                    cursor: 'pointer',
+                                    fontSize: '16px',
+                                }}
+                            >
+                                Submit
+                            </button>
+                        </form> : ''}
+
                         {activeSection === 'profile_information' &&
                             <div style={{ display: 'flex', justifyContent: 'center', width: '80%', margin: '0 auto', }}>
-                                <div style={{ width: '80%', margin: '0 auto', backgroundColor: 'orange', padding: '15px', borderRadius: '2px' }}>
+                                <div style={{ display: 'inline-block', gap: '10px', width: '80%', margin: '0 auto', backgroundColor: 'gray', padding: '15px', borderRadius: '2px' }}>
                                     <h3 style={{ marginBottom: '20px', color: 'black' }}>Profile Information</h3>
+
+                                    <div style={{ display: 'flex', marginBottom: "10px" }}>
+                                        <img src={`data:image/jpeg;base64,${orgProfile}`} style={{ width: "100px", height: '100px' }} />
+                                    </div>
+
                                     <div style={{ display: 'flex', }}>
+
                                         <div style={{ width: '50%', }}>
-                                            <h4 style={{ marginBottom: "10px", color: 'black' }}>Email:</h4>
+                                            <h4 style={{ marginBottom: "10px", color: 'white' }}>Email:</h4>
                                         </div>
                                         <div style={{ width: '50%' }}>
-                                            <p style={{ marginBottom: "10px", color: 'black' }}>{user.email}</p>
+                                            <p style={{ marginBottom: "10px", color: 'white' }}>{user.email}</p>
                                         </div>
                                     </div>
 
 
                                     <div style={{ display: 'flex', }}>
                                         <div style={{ width: '50%' }}>
-                                            <h4 style={{ marginBottom: "10px", color: 'black' }}>Role:</h4>
+                                            <h4 style={{ marginBottom: "10px", color: 'white' }}>Role:</h4>
                                         </div>
                                         <div style={{ width: '50%' }}>
-                                            <p style={{ marginBottom: "10px", color: 'black' }}>{user.role}</p>
+                                            <p style={{ marginBottom: "10px", color: 'white' }}>{user.role}</p>
                                         </div>
                                     </div>
 
                                     <div style={{ display: 'flex', }}>
                                         <div style={{ width: '50%' }}>
-                                            <h4 style={{ marginBottom: "10px", color: 'black' }}>Gender:</h4>
+                                            <h4 style={{ marginBottom: "10px", color: 'white' }}>Gender:</h4>
                                         </div>
                                         <div style={{ width: '50%' }}>
-                                            <p style={{ marginBottom: "10px", color: 'black' }}>{user.gender}</p>
+                                            <p style={{ marginBottom: "10px", color: 'white' }}>{user.gender}</p>
                                         </div>
                                     </div>
 
@@ -300,30 +524,49 @@ function Settings() {
 
                                     <div style={{ display: 'flex', }}>
                                         <div style={{ width: '50%' }}>
-                                            <h4 style={{ marginBottom: "10px", color: 'black' }}>Department:</h4>
+                                            <h4 style={{ marginBottom: "10px", color: 'white' }}>Department:</h4>
                                         </div>
                                         <div style={{ width: '50%' }}>
-                                            <p style={{ marginBottom: "10px", color: 'black' }}>{user.department}</p>
+                                            <p style={{ marginBottom: "10px", color: 'white' }}>{user.department}</p>
                                         </div>
                                     </div>
 
                                     <div style={{ display: 'flex', }}>
                                         <div style={{ width: '50%' }}>
-                                            <h4 style={{ marginBottom: "10px", color: 'black' }}>Designation:</h4>
+                                            <h4 style={{ marginBottom: "10px", color: 'white' }}>Designation:</h4>
                                         </div>
                                         <div style={{ width: '50%' }}>
-                                            <p style={{ marginBottom: "10px", color: 'black' }}>{user.designation}</p>
+                                            <p style={{ marginBottom: "10px", color: 'white' }}>{user.designation}</p>
                                         </div>
                                     </div>
 
                                     <div style={{ display: 'flex', }}>
                                         <div style={{ width: '50%' }}>
-                                            <h4 style={{ marginBottom: "10px", color: 'black' }}>Phone Number:</h4>
+                                            <h4 style={{ marginBottom: "10px", color: 'white' }}>Phone Number:</h4>
                                         </div>
                                         <div style={{ width: '50%' }}>
-                                            <p style={{ marginBottom: "10px", color: 'black' }}>{user.phoneNumber}</p>
+                                            <p style={{ marginBottom: "10px", color: 'white' }}>{user.phoneNumber}</p>
                                         </div>
                                     </div>
+
+
+                                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                                        <button
+                                            onClick={() => handleEdit(user._id)}
+                                            style={{
+                                                padding: '10px 30px',
+                                                backgroundColor: 'orange',
+                                                color: 'white',
+                                                border: 'none',
+                                                borderRadius: '5px',
+                                                cursor: 'pointer',
+                                                fontSize: '16px',
+                                            }}
+                                        >
+                                            Update
+                                        </button>
+                                    </div>
+
                                 </div>
 
                             </div>

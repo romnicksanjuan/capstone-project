@@ -21,7 +21,7 @@ const Inventory = () => {
   const [showForm, setShowForm] = useState(false);
   const [data, setData] = useState([])
 
-  const [serialNumber, setSerialNumber] = useState('');
+  const [PMSNumber, setPMSNumber] = useState('');
   const [arrayCategory, setArrayCategory] = useState([])
 
   const [displayCategory, setDisplayCategory] = useState('All')
@@ -35,7 +35,7 @@ const Inventory = () => {
   useEffect(() => {
     const generateSerialNumber = () => {
       const serial = 'PMS-' + new Date().getTime(); // Generates a serial number based on current timestamp
-      setSerialNumber(serial.toString());
+      setPMSNumber(serial.toString());
       console.log(serial)
     };
 
@@ -81,7 +81,7 @@ const Inventory = () => {
   const [editingItemId, setEditingItemId] = useState(null);
 
 
-  const [unit, setUnit] = useState('')
+  const [itemDescription, setItemDescription] = useState('')
   const [brand, setBrand] = useState('')
   const [category, setCategory] = useState('')
   const [condition, setCondition] = useState('')
@@ -89,7 +89,7 @@ const Inventory = () => {
   const [location, setLocation] = useState('')
   const [status, setStatus] = useState('')
   const [qrCode, setQrCode] = useState('')
-  const [serialItem, setSerialItem] = useState('')
+  const [serialNumber, setSerialNumber] = useState('')
   const [showImage, setShowImage] = useState('')
   const [categoryValue, setCategoryValue] = useState('Select Category')
   const [type, setType] = useState('')
@@ -146,7 +146,7 @@ const Inventory = () => {
 
 
         const data = await response.json(); // Parse JSON response
-        console.log(data.items)
+        console.log('items:',data.items)
         setItemLength(data.items.length)
         if (query === '') {
 
@@ -174,7 +174,7 @@ const Inventory = () => {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ serialNumber, serialItem, unit, brand, category, condition, quantity, location, status, accessory_type: type })
+        body: JSON.stringify({ serialNumber, PMSNumber, itemDescription, brand, category, condition, quantity, location, status, accessory_type: type })
       });
 
       const data = await response.json()
@@ -184,12 +184,12 @@ const Inventory = () => {
       }
 
 
-      setUnit('')
+      setItemDescription('')
       setBrand('')
       setCategory('')
       setCondition('')
       setQuantity('')
-      setSerialItem('')
+      setPMSNumber('')
       setOriginalData(data.items)
       alert('Item Added Successful')
       setShowForm(!showForm)
@@ -206,8 +206,8 @@ const Inventory = () => {
     // console.log(item)
     setEditingItemId(item.item._id)
     setSerialNumber(item.item.serialNumber)
-    setSerialItem(item.item.serialItem)
-    setUnit(item.item.unit)
+    setPMSNumber(item.item.PMSNumber)
+    setItemDescription(item.item.itemDescription)
     setBrand(item.item.brand)
     setCategory(item.item.category)
     setCondition(item.item.condition)
@@ -220,7 +220,7 @@ const Inventory = () => {
 
   const handleExitEdit = () => {
     setEditingItemId(null)
-    setUnit('')
+    setItemDescription('')
     setBrand('')
     setCategory('')
     setCondition('')
@@ -239,7 +239,7 @@ const Inventory = () => {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ serialNumber, serialItem, unit, brand, category, condition, location, quantity, status, accessory_type: typeValue })
+        body: JSON.stringify({ serialNumber, PMSNumber, itemDescription, brand, category, condition, location, quantity, status, accessory_type: typeValue })
       })
 
       if (!window.confirm('Are you sure you want to update this item?')) return
@@ -250,12 +250,12 @@ const Inventory = () => {
       const data = await response.json()
       console.log(data)
 
-      setUnit('')
+      setItemDescription('')
       setBrand('')
       setCategory('')
       setCondition('')
       setQuantity('')
-      setSerialItem('')
+      setSerialNumber('')
       setLocation('')
       setStatus('')
 
@@ -517,17 +517,17 @@ const Inventory = () => {
 
               <div>
                 <label htmlFor="serial-number">PMS Number:</label><br />
-                <input className={style.input} type='text' id="serial-number" name="serial-number" defaultValue={serialNumber} disabled />
+                <input className={style.input} type='text' id="serial-number" name="serial-number" defaultValue={PMSNumber} disabled />
               </div>
 
               <div>
-                <label htmlFor="serial-item">Item Description:</label><br />
-                <input className={style.input} type='text' id="serial-item" name="serial-item" value={serialItem} onChange={(e) => setSerialItem(e.target.value)} />
+                <label htmlFor="serial-item">Serial Number:</label><br />
+                <input className={style.input} type='text' id="serial-item" name="serial-item" value={serialNumber} onChange={(e) => setSerialNumber(e.target.value)} />
               </div>
 
               <div>
-                <label htmlFor="Unit">Unit:</label><br />
-                <input className={style.input} type="text" id="Unit" name="Unit" required value={unit} onChange={(e) => setUnit(e.target.value)} />
+                <label htmlFor="Unit">Item Description:</label><br />
+                <input className={style.input} type="text" id="Unit" name="Unit" required value={itemDescription} onChange={(e) => setItemDescription(e.target.value)} />
               </div>
 
               <div>
@@ -593,17 +593,17 @@ const Inventory = () => {
 
               <div>
                 <label htmlFor="serial-number">PMS Number:</label><br />
-                <input className={style.input} type='text' id="serial-number" name="serial-number" value={serialNumber} onChange={(e) => setBrand(e.target.value)} disabled />
+                <input className={style.input} type='text' id="serial-number" name="serial-number" value={PMSNumber} onChange={(e) => setPMSNumber(e.target.value)} disabled />
               </div>
 
               <div>
-                <label htmlFor="serial-item">Item Description:</label><br />
-                <input className={style.input} type='text' id="serial-item" name="serial-item" value={serialItem} onChange={(e) => setSerialItem(e.target.value)} />
+                <label htmlFor="serial-item">Serial Number:</label><br />
+                <input className={style.input} type='text' id="serial-item" name="serial-item" value={serialNumber} onChange={(e) => setSerialNumber(e.target.value)} />
               </div>
 
               <div>
-                <label htmlFor="unit">Unit:</label><br />
-                <input className={style.input} type="text" id="item" name="item" value={unit} onChange={(e) => setUnit(e.target.value)} />
+                <label htmlFor="unit">Item Description:</label><br />
+                <input className={style.input} type="text" id="item" name="item" value={itemDescription} onChange={(e) => setItemDescription(e.target.value)} />
               </div>
 
               <div>
@@ -676,8 +676,8 @@ const Inventory = () => {
             <tr>
               {/* <th>Serial No.</th> */}
               <th>PMS Number</th>
+              <th>Serial Number</th>
               <th>Item Description</th>
-              <th>Unit</th>
               <th>Brand</th>
               <th>Category</th>
               <th>Condition</th>
@@ -695,9 +695,9 @@ const Inventory = () => {
             {data ? data.map((item, index) => (
               <tr key={index}>
                 {/* <td className={style.serialNumber}>{item.number}</td> */}
+                <td>{item.item.PMSNumber}</td>
                 <td>{item.item.serialNumber}</td>
-                <td>{item.item.serialItem}</td>
-                <td>{item.item.unit}</td>
+                <td>{item.item.itemDescription}</td>
                 <td>{item.item.brand}</td>
                 <td>{item.item.category}</td>
                 <td>{item.item.condition}</td>

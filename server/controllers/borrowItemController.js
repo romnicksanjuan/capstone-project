@@ -1,17 +1,18 @@
 const itemTransfer = require('../model/item_movement.js')
 const borrowItem = require('../model/borrowItem')
-const Item = require('../model/Item.js')
+const Item = require('../model/inventory.js')
 const stockIn_Out = require('../model/stockIn_out')
 const { Promise } = require('mongoose')
 
 
 const addBorrowItem = async (req, res) => {
-    const { serialNumber, borrower, mobileNumber, purpose, department, borrowerDesignation, toLocation } = req.body
+    const { PMSNumber, borrower, mobileNumber, purpose, department, borrowerDesignation, toLocation } = req.body
 
 
-    console.log(serialNumber)
+    console.log(PMSNumber, borrower, mobileNumber, purpose, department, borrowerDesignation, toLocation)
     // return
-    const checkSerial = await Item.find({ serialNumber: serialNumber.map(sn => sn.item) }).lean()
+    // // return
+    const checkSerial = await Item.find({ PMSNumber: PMSNumber.map(sn => sn.item) }).lean()
 
     //     console.log("checkSerial:", checkSerial)
     // return
@@ -20,10 +21,10 @@ const addBorrowItem = async (req, res) => {
             return res.status(404).json({ message: 'Item not found' })
         }
 
-       const comparePMS = serialNumber.map((item) => {
-            const b = checkSerial.find(i => item.item === i.serialNumber)
+        const comparePMS = PMSNumber.map((item) => {
+            const b = checkSerial.find(i => item.item === i.PMSNumber)
             if (!b) {
-               return false
+                return false
             }
 
             return true
@@ -37,22 +38,22 @@ const addBorrowItem = async (req, res) => {
         // console.log(checkSerial.quantity)
 
         const updatedSerials = checkSerial.map(async (item) => {
-            const findItem = serialNumber.find(sn => sn.item === item.serialNumber);
+            const findItem = PMSNumber.find(sn => sn.item === item.PMSNumber);
             if (!findItem) return null;
 
-            console.log(`Updating serial ${item.serialNumber}:`, findItem.quantity);
+            console.log(`Updating serial ${item.PMSNumber}:`, findItem.quantity);
 
             await new stockIn_Out({
                 date: new Date(),
-                itemName: item.unit,
+                itemName: item.itemDescription,
                 action: 'Stock Out',
                 quantity: findItem.quantity
             }).save();
 
-            await new itemTransfer({ date: new Date(), item: item.unit, fromLocation: item.location, toLocation: toLocation }).save()
+            await new itemTransfer({ date: new Date(), item: item.itemDescription, fromLocation: item.location, toLocation: toLocation }).save()
 
             return Item.findOneAndUpdate(
-                { serialNumber: item.serialNumber },  // Match serialNumber
+                { PMSNumber: item.PMSNumber },  // Match serialNumber
                 { quantity: item.quantity - findItem.quantity }, // Subtract quantity
                 { new: true, upsert: false }  // Ensure it returns the updated document
             );
@@ -62,12 +63,14 @@ const addBorrowItem = async (req, res) => {
 
         const newBorrow = new borrowItem({
             item: checkSerial,
-            serialNumber: serialNumber.map((item) => {
-                const b = checkSerial.find(i => item.item === i.serialNumber)
+            PMSNumber: PMSNumber.map((item) => {
+                const b = checkSerial.find(i => item.item === i.PMSNumber)
+
+                console.log('b', b)
                 return {
-                    item: item.item,
+                    item: b.PMSNumber,
                     quantity: item.quantity,
-                    unit: b.unit,
+                    itemDescription: b.itemDescription,
                     brand: b.brand
                 }
             }),
@@ -138,7 +141,7 @@ const returnItem = async (req, res) => {
     try {
         const updateTransaction = await borrowItem.findById(id)
 
-        const updateItem = await Item.find({ serialNumber: updateTransaction.serialNumber.map(sn => sn.item) }).lean()
+        const updateItem = await Item.find({ PMSNumber: updateTransaction.PMSNumber.map(sn => sn.item) }).lean()
 
         // console.log('u',updateItem)
         // return

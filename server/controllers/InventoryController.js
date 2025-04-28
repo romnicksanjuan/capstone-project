@@ -1,19 +1,21 @@
 const borrowItem = require('../model/borrowItem.js');
-const Item = require('../model/Item.js')
+const Item = require('../model/inventory.js')
 const QRCode = require("qrcode");
 const Category = require('../model/category.js');
 const AccessoryType = require('../model/item_type_model.js')
 const User = require("../model/user.js")
-const StockIn_Out = require('../model/stockIn_out')
+const StockIn_Out = require('../model/stockIn_out.js')
 
 
 const createItem = async (req, res) => {
-    const { serialNumber, serialItem, unit, brand, category, condition, location, status, accessory_type, quantity } = req.body;
+    const { serialNumber, PMSNumber, itemDescription, brand, category, condition, location, status, accessory_type, quantity } = req.body;
 
+    // console.log(serialNumber, PMSNumber, itemDesicription, brand, category, condition, location, status, accessory_type, quantity)
+    // return
     // const fontend_link = `https://capstone-project-sand-gamma.vercel.app/borrow-form/${serialNumber}`
     // const link = `http://localhost:3000/borrow-form/${serialNumber}`
     // console.log(unit)
-    const qrImage = await QRCode.toDataURL(serialNumber);
+    const qrImage = await QRCode.toDataURL(PMSNumber);
 
     // Convert base64 to buffer
     const base64Data = qrImage.replace(/^data:image\/png;base64,/, ""); // Remove base64 header
@@ -21,14 +23,14 @@ const createItem = async (req, res) => {
     console.log(qrBuffer)
 
     const newItem = new Item({
-        serialNumber, serialItem, unit, brand, category, condition, location, status, quantity, accessory_type, qr_code_image: {
+        serialNumber, PMSNumber, itemDescription, brand, category, condition, location, status, quantity, accessory_type, qr_code_image: {
             data: qrBuffer,
             contentType: 'image/png'
         }
     })
 
     if (newItem) {
-        new StockIn_Out({ date: new Date(), itemName: unit, action: 'Stock In', quantity, }).save()
+        new StockIn_Out({ date: new Date(), itemName: itemDescription, action: 'Stock In', quantity, }).save()
     }
 
 
@@ -95,11 +97,11 @@ const fetchItems = async (req, res) => {
 
 const editITem = async (req, res) => {
     const { id } = req.params;
-    const { serialItem, unit, brand, category, condition, location, status, accessory_type, quantity } = req.body;
+    const { serialNumber, itemDesicription, brand, category, condition, location, status, accessory_type, quantity } = req.body;
 
 
-    console.log(quantity)
-
+    // console.log(serialNumber, itemDesicription, brand, category, condition, location, status, accessory_type, quantity)
+    // return
     try {
         const findItem = await Item.findById(id)
         console.log(findItem.quantity)
@@ -107,7 +109,7 @@ const editITem = async (req, res) => {
         if (findItem) {
             const s = quantity - findItem.quantity
             if (s > 0) {
-                const stock = new StockIn_Out({ date: new Date(), itemName: unit, action: 'Stock In', quantity: quantity - findItem.quantity })
+                const stock = new StockIn_Out({ date: new Date(), itemName: itemDesicription, action: 'Stock In', quantity: quantity - findItem.quantity })
                 await stock.save()
             }
 
@@ -115,7 +117,7 @@ const editITem = async (req, res) => {
 
         const updatedItem = await Item.findByIdAndUpdate(
             id,
-            { serialItem, unit, brand, category, condition, location, status, accessory_type, quantity },
+            { serialNumber, itemDesicription, brand, category, condition, location, status, accessory_type, quantity },
             { new: true } // Return the updated item after the change
         );
 
@@ -165,7 +167,7 @@ const totalItems = async (req, res) => {
 const searchItem = async (req, res) => {
     const { query } = req.query
 
-    const search = await Item.find({ unit: { $regex: query, $options: 'i' } })
+    const search = await Item.find({ itemDesicription: { $regex: query, $options: 'i' } })
 
     console.log(search)
 

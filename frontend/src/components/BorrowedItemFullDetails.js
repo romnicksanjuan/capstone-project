@@ -14,17 +14,17 @@ const BorrowedItemFullDetails = () => {
                     <thead>
                         <tr>
                             <th style={{ backgroundColor: 'orange', color: 'white', padding: '10px', textAlign: 'center' }}>PMS Number</th>
-                            <th style={{ backgroundColor: 'orange', color: 'white', padding: '10px', textAlign: 'center' }}>Unit</th>
+                            <th style={{ backgroundColor: 'orange', color: 'white', padding: '10px', textAlign: 'center' }}>Item Description</th>
                             <th style={{ backgroundColor: 'orange', color: 'white', padding: '10px', textAlign: 'center' }}>Brand</th>
                             <th style={{ backgroundColor: 'orange', color: 'white', padding: '10px', textAlign: 'center' }}>Quantity</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {item?.serialNumber?.length > 0 ? (
-                            item.serialNumber.map((i, index) => (
+                        {item?.PMSNumber?.length > 0 ? (
+                            item.PMSNumber.map((i, index) => (
                                 <tr key={index}>
                                     <td style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }}>{i.item}</td>
-                                    <td style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }}>{i.unit}</td>
+                                    <td style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }}>{i.itemDescription}</td>
                                     <td style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }}>{i.brand}</td>
                                     <td style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }}>{i.quantity}</td>
                                 </tr>

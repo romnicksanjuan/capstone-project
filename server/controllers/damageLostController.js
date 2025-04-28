@@ -1,4 +1,4 @@
-const Item = require('../model/Item.js')
+// const Item = require('../model/Item.js')
 const damage_lost = require('../model/damage_lost')
 const borrowedItems = require('../model/borrowItem.js')
 
@@ -11,11 +11,15 @@ const damagLost = async (req, res) => {
 
     try {
         const findBorrow = await borrowedItems.findById(id)
+
+
+        console.log(findBorrow)
+        // return
         if (findBorrow) {
 
             console.log(findBorrow)
 
-            const damage_llost = new damage_lost({ unit: findBorrow.item.unit, issue, remarks, dateReported, quantity, actionTaken })
+            const damage_llost = new damage_lost({ itemDescription: findBorrow.item[0].itemDescription, issue, remarks, dateReported, quantity, actionTaken })
             await damage_llost.save()
             findBorrow.action = issue
             findBorrow.save()
@@ -34,18 +38,18 @@ const getDamageLost = async (req, res) => {
 
 
     try {
-      const get = await damage_lost.find().lean()
-      console.log(get)
+        const get = await damage_lost.find().lean()
+        console.log(get)
 
-      
+
         if (get.length > 0) {
             const result = get.map(i => {
-                return{
+                return {
                     ...i,
                     dateReported: new Date(i.dateReported).toLocaleDateString('en-US', { timeZone: 'Asia/Manila', day: 'numeric', month: 'long', year: 'numeric' })
                 }
-              })
-              res.json(result)
+            })
+            res.json(result)
         }
 
     } catch (error) {
@@ -56,4 +60,4 @@ const getDamageLost = async (req, res) => {
 
 
 
-module.exports = { damagLost ,getDamageLost}
+module.exports = { damagLost, getDamageLost }

@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer')
 const Otp = require('../model/otp.js')
 const crypto = require("crypto")
-
 // admin
 const createAdmin = async (req, res) => {
     const { email, password, gender, department, phoneNumber, designation, dateOfBirth } = req.body
@@ -94,6 +93,60 @@ const deleteDean = async (req, res) => {
     } catch (error) {
         console.log(error)
     }
+}
+
+
+// update profile
+const updateProfile = async (req, res) => {
+    const { id } = req.params
+    const {
+        userEmail,
+        role,
+        gender,
+        department,
+        designation,
+        phoneNumber } = req.body
+
+    
+
+    try {
+        const up = await User.findByIdAndUpdate(id, {
+            ...(req.file && {
+              profileImage: {
+                data: req.file.buffer,
+                contentType: req.file.mimetype,
+              },
+            }),
+            email: userEmail,
+            role,
+            gender,
+            department,
+            designation,
+            phoneNumber,
+          }, { new: true }); // Optional: Returns the updated document
+          
+
+        if (up) {
+            console.log(up)
+            res.json({message: 'Profile Updated Successfull'})
+        }
+    } catch (error) {
+        console.log(error)
+    }
+
+    // console.log(
+    //     id, userEmail,
+    //     role,
+    //     gender,
+    //     department,
+    //     designation,
+    // phoneNumber)
+
+    const file = req.file;
+
+    console.log(file)
+
+
 }
 
 const loginAdmin = async (req, res) => {
@@ -389,5 +442,5 @@ const requesterLogin = async (req, res) => {
 module.exports = {
     createAdmin, loginAdmin, forgotPassword, logout,
     sendOtp, verifyOtp, changePassword, getUsers, updateUserRole, delUser, createDean, displayDean,
-    editDean, deleteDean, requesterRegister, requesterLogin
+    editDean, deleteDean, requesterRegister, requesterLogin, updateProfile
 }

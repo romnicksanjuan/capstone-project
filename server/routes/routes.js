@@ -1,9 +1,9 @@
 const express = require('express');
 const multer = require('multer')
-const { createItem, fetchItems, editITem, deleteitem, totalItems, searchItem, propertyPage, barGraph, checkToken, newCategoryFunction, displayCategories, deleteCategory, getAccessoryFunction, createAccessoryType, deleteAccessoryType, inventoryReport } = require('../controllers/controller.js')
+const { createItem, fetchItems, editITem, deleteitem, totalItems, searchItem, propertyPage, barGraph, checkToken, newCategoryFunction, displayCategories, deleteCategory, getAccessoryFunction, createAccessoryType, deleteAccessoryType, inventoryReport } = require('../controllers/InventoryController.js')
 const { addBorrowItem, fetchBorrowedItems, totalBorrowedItems, returnItem, fetchHistory } = require('../controllers/borrowItemController.js');
 const { createProduct, getMerchandise, purchaseHistory, getAllPurchaseHistory, deleteMerchandise, editMerchandise, totalMerchandise, barGraphMerchandise } = require('../controllers/merchandise-controller.js');
-const { createAdmin, loginAdmin, forgotPassword, logout, sendOtp, verifyOtp, changePassword, getRequester, getUsers, updateUserRole, delUser, createDean, displayDean, editDean, deleteDean, requesterRegister, requesterLogin } = require('../controllers/userController.js');
+const { createAdmin, loginAdmin, forgotPassword, logout, sendOtp, verifyOtp, changePassword, getRequester, getUsers, updateUserRole, delUser, createDean, displayDean, editDean, deleteDean, requesterRegister, requesterLogin, updateProfile } = require('../controllers/userController.js');
 
 
 // authehntication
@@ -107,5 +107,10 @@ router.get('/get-request-summary', getRequestSummaray)
 
 // get item transfer
 router.get('/get-item-transfer',getItemTransfer)
+
+
+
+// update profile
+router.put('/update-profile/:id', upload.single('file'), updateProfile)
 
 module.exports = router;

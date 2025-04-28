@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const reportSchema = new mongoose.Schema({
-  unit: {
+  itemDescription: {
     type: String,
     required: true,
   },

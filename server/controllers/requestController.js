@@ -8,21 +8,23 @@ const { message } = require('./emailMessage.js')
 const submitRequest = async (req, res) => {
     const { department, purpose, date, isFabrication, isRepair, isReplacement, isAdditional,
         quantity_and_materials, others,
-        requestedBy } = req.body;
+        requestedBy, toLocation } = req.body;
 
     console.log(department, purpose, date, isFabrication, isRepair, isReplacement, isAdditional,
         quantity_and_materials, others,
         requestedBy)
     console.log(req.user)
 
-    // const findU = await User.findById(req.user.id)
+    const findU = await User.findById(req.user.id)
 
     const newRequest = new Request({
         requester: new Object(req.user.id),
+        requesterData: findU,
         department,
         purpose, date, isFabrication, isRepair, isReplacement, isAdditional,
         quantity_and_materials,
         requestedBy,
+        toLocation
         // status: 'pending'
     });
 

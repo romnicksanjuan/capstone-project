@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 
 const requestSchema = new mongoose.Schema({
   requester: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  requesterData: { type: mongoose.Schema.Types.Mixed, required: true },
   // requesterName: { type: String, required: true },
   department: { type: String, required: true },
   purpose: { type: String, required: true },
@@ -25,6 +26,10 @@ const requestSchema = new mongoose.Schema({
     type: String,
     enum: ['pending', 'approved', 'rejected'],
     default: 'pending'
+  },
+  toLocation: {
+    type: String,
+    required: true,
   },
   // status: { type: String, enum: ['pending-approval', 'ready-for-release', 'in-progress', 'completed', 'not-available'], default: 'pending-approval' }
 }, { timestamps: true });

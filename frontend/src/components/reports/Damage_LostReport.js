@@ -91,7 +91,7 @@ const Damage_LostReport = () => {
         <tbody>
           {damageLost.map((item, index) => (
             <tr key={index}>
-              <td style={thTdStyle}>{item.unit}</td>
+              <td style={thTdStyle}>{item.itemDescription}</td>
               <td style={thTdStyle}>{item.issue}</td>
               <td style={thTdStyle}>{item.dateReported}</td>
               <td style={thTdStyle}>{item.remarks}</td>

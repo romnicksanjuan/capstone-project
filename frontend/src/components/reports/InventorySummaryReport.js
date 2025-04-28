@@ -90,7 +90,7 @@ const InventorySummaryReport = () => {
         <tbody>
           {inventoryReport.map((item, index) => (
             <tr key={index}>
-              <td style={thTdStyle}>{item.unit}</td>
+              <td style={thTdStyle}>{item.itemDescription}</td>
               <td style={thTdStyle}>{item.category}</td>
               <td style={thTdStyle}>{item.location}</td>
               <td style={thTdStyle}>{item.quantity}</td>

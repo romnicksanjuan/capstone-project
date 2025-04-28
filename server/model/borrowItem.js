@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 
 const borrowedItem = new mongoose.Schema({
   item: { type: mongoose.Schema.Types.Mixed, required: true },
-  serialNumber: [{
+  PMSNumber: [{
     item: { type: String },
     quantity: { type: Number },
-    unit:  { type: String },
+    itemDescription:  { type: String },
     brand:  { type: String },
   }],
   borrower: {

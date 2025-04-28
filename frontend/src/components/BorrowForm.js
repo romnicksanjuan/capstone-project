@@ -8,24 +8,26 @@ import styles from '../css/BorrowedItems.module.css'
 import DOMAIN from '../config/config'
 import { MdDelete } from "react-icons/md";
 
-const BorrowForm = () => {
+const BorrowForm = ({ request }) => {
+
+    console.log('request:', request)
     // const { sn } = useParams()
     const [item, setItem] = useState({})
     // console.log(form)
-//  const [isShowForm, setIsShowForm] = useState(form)
+    //  const [isShowForm, setIsShowForm] = useState(form)
 
     const [error, setError] = useState('')
     const [isClick, setIsClick] = useState(false)
 
-    const [serialNumber, setSerialNumber] = useState([{ item: '', quantity: '' }])
+    const [PMSNumber, setPMSNumber] = useState([{ item: '', quantity: '' }])
     const [brand, setBrand] = useState('')
-    const [borrower, setBorrower] = useState('')
+    const [borrower, setBorrower] = useState(request.requestedBy)
     const [quantity, setQuantity] = useState('')
-    const [mobileNumber, setMobileNumber] = useState('')
-    const [purpose, setPurpose] = useState('')
-    const [department, setDepartment] = useState('')
-    const [borrowerDesignation, setBorrowerDesignation] = useState('')
-    const [toLocation, setToLocation] = useState('')
+    const [mobileNumber, setMobileNumber] = useState(request.requesterData.phoneNumber)
+    const [purpose, setPurpose] = useState(request.purpose)
+    const [department, setDepartment] = useState(request.requesterData.department)
+    const [borrowerDesignation, setBorrowerDesignation] = useState(request.requesterData.designation)
+    const [toLocation, setToLocation] = useState(request.toLocation)
     const [message, setMessage] = useState('')
 
     const navigate = useNavigate()
@@ -62,7 +64,7 @@ const BorrowForm = () => {
             setError('')
         }
         f()
-    }, [ borrower, mobileNumber, purpose])
+    }, [borrower, mobileNumber, purpose])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -83,7 +85,7 @@ const BorrowForm = () => {
                     'Content-Type': 'application/json',
                     // "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify({ serialNumber, borrower, mobileNumber, purpose, department, borrowerDesignation, quantity, toLocation })
+                body: JSON.stringify({ PMSNumber, borrower, mobileNumber, purpose, department, borrowerDesignation, quantity, toLocation })
             })
 
             const data = await response.json()
@@ -104,17 +106,17 @@ const BorrowForm = () => {
 
 
     const handleItemChange = (e, field, index) => {
-        const updatedItems = [...serialNumber];
+        const updatedItems = [...PMSNumber];
         updatedItems[index][field] = e.target.value;
-        setSerialNumber(updatedItems);
+        setPMSNumber(updatedItems);
     };
 
     const handleAddItem = () => {
-        setSerialNumber([...serialNumber, { item: '', quantity: '' }]);
+        setPMSNumber([...PMSNumber, { item: '', quantity: '' }]);
     };
 
     const deleteField = (index) => {
-        setSerialNumber(serialNumber.filter((_, i) => i !== index))
+        setPMSNumber(PMSNumber.filter((_, i) => i !== index))
     }
 
 
@@ -125,19 +127,19 @@ const BorrowForm = () => {
             // padding: '20px 30px',
             //  height: 'auto', width: '450px', gap: '20px', border: '1px solid black', borderRadius: '5px'
         }}>
-              {/* <MdCancel size={25} color='black' onClick={() => setIsShowForm(!isShowForm)}/> */}
-              {error && <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'red', height: '40px', }}>
+            {/* <MdCancel size={25} color='black' onClick={() => setIsShowForm(!isShowForm)}/> */}
+            {error && <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'red', height: '40px', }}>
                 <p style={{ color: 'white', textAlign: 'center' }}>{error}</p>
             </div>}
 
             {message && <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'green', height: '40px', }}>
                 <p style={{ color: 'white', textAlign: 'center' }}>{message}</p>
             </div>}
-            <h2 style={{marginBottom:'10px'}}>Create Transaction</h2>
-           
+            <h2 style={{ marginBottom: '10px' }}>Create Transaction</h2>
+
             <div>
-                {serialNumber.map((item, index) => (
-                    <div key={index} style={{ display: 'flex', marginBottom: '10px' , justifyContent:'center', alignItems:'center'}}>
+                {PMSNumber.map((item, index) => (
+                    <div key={index} style={{ display: 'flex', marginBottom: '10px', justifyContent: 'center', alignItems: 'center' }}>
                         <div>
                             {/* <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
                                                   Quantity:
