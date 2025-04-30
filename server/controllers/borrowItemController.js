@@ -2,13 +2,11 @@ const itemTransfer = require('../model/item_movement.js')
 const borrowItem = require('../model/borrowItem')
 const Item = require('../model/inventory.js')
 const stockIn_Out = require('../model/stockIn_out')
-const { Promise } = require('mongoose')
+const DepartmentUsage = require('../model/departmentUsageReport.js')
 
 
 const addBorrowItem = async (req, res) => {
     const { PMSNumber, borrower, mobileNumber, purpose, department, borrowerDesignation, toLocation } = req.body
-
-
     console.log(PMSNumber, borrower, mobileNumber, purpose, department, borrowerDesignation, toLocation)
     // return
     // // return
@@ -48,6 +46,12 @@ const addBorrowItem = async (req, res) => {
                 itemName: item.itemDescription,
                 action: 'Stock Out',
                 quantity: findItem.quantity
+            }).save();
+
+            await new DepartmentUsage({
+                department: department,
+                PMSNumber: findItem.item,
+                totalIssued: findItem.quantity
             }).save();
 
             await new itemTransfer({ date: new Date(), item: item.itemDescription, fromLocation: item.location, toLocation: toLocation }).save()

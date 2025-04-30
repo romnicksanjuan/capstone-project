@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import Navbar from './Navbar'
 import styles from '../css/Dashboard.module.css'
 import DOMAIN from '../config/config'
-import { useNavigate } from 'react-router-dom'
+import { data, useNavigate } from 'react-router-dom'
 import Topbar from './Topbar'
 import { MdAddBox, MdDelete } from "react-icons/md";
 import style from '../css/Request.module.css'
@@ -15,6 +15,9 @@ import { MdCancel } from "react-icons/md";
 
 function RequestItems() {
     const navigate = useNavigate();
+
+    // department useState
+    const [depArray, setDepArray] = useState([])
 
     const contentRef = useRef(null)
     const [isShowContent, setIsShowContent] = useState(false)
@@ -54,6 +57,32 @@ function RequestItems() {
 
     const [isShowForm, setIsShowForm] = useState(false)
     const [request, setRequest] = useState({})
+
+
+    // get department
+    useEffect(() => {
+        const getDepartment = async () => {
+            try {
+                const response = await fetch(`${DOMAIN}/get-department`, {
+                    method: 'GET',
+                    credentials: 'include',
+                })
+                const data = await response.json()
+
+                if (!response.ok) {
+                    // setError()
+                }
+
+                console.log('data:', data)
+                setDepArray(data)
+
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        getDepartment()
+    }, [])
 
     // console.log('s', status)
     useEffect(() => {
@@ -120,8 +149,6 @@ function RequestItems() {
     // submit request 
     const submitRequest = async (e) => {
         e.preventDefault()
-
-
         // console.log(department, purpose, date,
         //     quantity_and_materials,
         //     requestedBy,)
@@ -137,7 +164,7 @@ function RequestItems() {
                 body: JSON.stringify({
                     department, purpose, date, isFabrication, isRepair, isReplacement, isAdditional,
                     quantity_and_materials, others,
-                    requestedBy,toLocation
+                    requestedBy, toLocation
                 })
             })
             if (!response.ok) {
@@ -281,6 +308,8 @@ function RequestItems() {
         setRequest(request)
     }
 
+
+
     return (
         <div style={{ display: 'flex' }}>
             <Navbar />
@@ -406,14 +435,6 @@ function RequestItems() {
 
 
 
-
-
-
-
-
-
-
-
                 {/* form request */}
                 {showCreateRequestForm ? <form
                     onSubmit={submitRequest}
@@ -454,11 +475,16 @@ function RequestItems() {
                     </div>
 
                     <div style={{ marginBottom: "15px" }}>
-                        <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+                        <label
+                            style={{
+                                display: "block",
+                                marginBottom: "5px",
+                                fontWeight: "bold",
+                            }}
+                        >
                             Department:
                         </label>
-                        <input
-                            type="text"
+                        <select
                             value={department}
                             onChange={(e) => setDepartment(e.target.value)}
                             style={{
@@ -467,8 +493,14 @@ function RequestItems() {
                                 border: "1px solid #ccc",
                                 borderRadius: "5px",
                             }}
-                        />
+                        >
+                            <option value="">-- Select Department --</option>
+                            {depArray ? depArray.map((dep, index) => (
+                                <option key={index} value={dep.department}>{dep.department}</option>
+                            )) : ''}
+                        </select>
                     </div>
+
 
                     <div style={{ marginBottom: "15px" }}>
                         <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
@@ -560,7 +592,7 @@ function RequestItems() {
                             padding: "10px",
                             border: "1px solid #ccc",
                             borderRadius: "5px",
-                            marginBottom:'10px'
+                            marginBottom: '10px'
                         }} type="text" id="to-location" name="to-location" value={toLocation} onChange={(e) => setToLocation(e.target.value)} />
                     </div>
 

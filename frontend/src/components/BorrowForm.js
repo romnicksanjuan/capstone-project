@@ -87,7 +87,6 @@ const BorrowForm = ({ request }) => {
                 },
                 body: JSON.stringify({ PMSNumber, borrower, mobileNumber, purpose, department, borrowerDesignation, quantity, toLocation })
             })
-
             const data = await response.json()
 
             if (!response.ok) {

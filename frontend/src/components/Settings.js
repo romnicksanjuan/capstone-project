@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom'
 import { MdDelete, MdAdd, MdCancel } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import Topbar from './Topbar'
+import SignUp from './SignUp'
+import DepartmentPage from './department/DepartmentPage'
 // const token = localStorage.getItem("token")
 
 function Settings() {
@@ -295,6 +297,29 @@ function Settings() {
         }
     }
 
+
+    const [adminData, setAdminData] = useState([])
+    useEffect(() => {
+        const admin = async () => {
+            try {
+                const response = await fetch(`${DOMAIN}/display-admins`, {
+                    method: 'GET',
+                    credentials: 'include'
+                })
+                const data = await response.json()
+                setAdminData(data)
+                console.log(data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        admin()
+    }, [])
+
+    const [isCreateAdmin, setIsCreateAdmin] = useState(false)
+
+
     if (role === null) {
         return null
     }
@@ -307,12 +332,136 @@ function Settings() {
                 {/* {(role === 'admin' || role === 'dean' || role === 'president') ? <Topbar /> : ''} */}
 
                 <h2 style={{ color: 'orange', textAlign: 'start', margin: "0 0 10px 0" }}>Settings</h2>
+                {isUpdate ? <form
+                    onSubmit={handleSubmit}
 
+                    style={{
+                        zIndex: '1',
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '50%',
+                        margin: '0 auto',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '15px',
+                        marginTop: '20px',
+                        padding: '20px 30px',
+                        border: '1px solid black',
+                        backgroundColor: 'orange'
+                    }}
+                >
+                    <MdCancel size={25} color='black' onClick={() => setIsUpdate(!isUpdate)} />
 
+                    {successMessage ? <p style={{ color: 'white', fontSize: '16px', backgroundColor: 'green', padding: "7px 5px", textAlign: 'center', borderRadius: '5px' }}>{successMessage}</p> : ''}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
+                        <div style={{ display: 'flex', marginBottom: "10px" }}>
+                            {(previewUrl || orgProfile) && (
+                                <img
+                                    src={previewUrl || `data:image/png;base64,${orgProfile}`}
+                                    alt="Profile"
+                                    style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "8px" }}
+                                />
+                            )}
+                        </div>
+                        <label>
+                            Profile:
+                            <input
+                                type="file"
 
+                                onChange={(e) => {
+                                    if (e.target.files && e.target.files[0]) {
+                                        setProfile(e.target.files[0]); // <- This must be a File
+                                    }
+                                }}
+
+                                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                            />
+                        </label>
+                    </div>
+
+                    <label>
+                        Email:
+                        <input
+                            type="email"
+                            value={userEmail}
+                            onChange={(e) => setUserEmail(e.target.value || '')}
+                            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                        />
+                    </label>
+
+                    <label>
+                        Role:
+                        <input
+                            type="text"
+                            value={userRole}
+                            onChange={(e) => setUserRole(e.target.value || '')}
+                            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                        />
+                    </label>
+
+                    <label>
+                        Gender:
+                        <input
+                            type="text"
+                            value={gender}
+                            onChange={(e) => setGender(e.target.value || '')}
+                            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                        />
+                    </label>
+
+                    <label>
+                        Department:
+                        <input
+                            type="text"
+                            value={department}
+                            onChange={(e) => setDepartment(e.target.value || '')}
+                            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                        />
+                    </label>
+
+                    <label>
+                        Designation:
+                        <input
+                            type="text"
+                            value={designation}
+                            onChange={(e) => setDesignation(e.target.value || '')}
+                            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                        />
+                    </label>
+
+                    <label>
+                        Phone Number:
+                        <input
+                            type="tel"
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value || '')}
+                            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                        />
+                    </label>
+
+                    <button
+                        type="submit"
+                        style={{
+                            padding: '10px',
+                            backgroundColor: '#4CAF50',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                            fontSize: '16px',
+                        }}
+                    >
+                        Submit
+                    </button>
+                </form> : ''}
 
 
                 <div style={{ display: 'flex', minHeight: '90%', width: "100%", height: '65vh', gap: '20px', }}>
+
+
+
                     <nav style={{ display: 'flex', justifyContent: 'center', backgroundColor: 'white', width: "20%", borderRadius: '5px' }}>
                         <ul style={{ listStyle: 'none', padding: '15px', }}>
                             <li style={{
@@ -342,137 +491,33 @@ function Settings() {
                                 padding: '5px 20px',
                                 borderRadius: '5px'
                             }} onClick={() => setActiveSection('accounts')} >
-                                Account Management
+                                Dean/President Account
+                            </li> : ''}
+                            {/* department-page */}
+                            {role === 'admin' ? <li style={{
+                                cursor: 'pointer',
+                                color: activeSection === 'admin' ? 'white' : 'black',
+                                backgroundColor: activeSection === 'admin' ? 'orange' : '',
+                                padding: '5px 20px',
+                                borderRadius: '5px'
+                            }} onClick={() => setActiveSection('admin')} >
+                                Admin Account
+                            </li> : ''}
+
+                            {role === 'admin' ? <li style={{
+                                cursor: 'pointer',
+                                color: activeSection === 'department-page' ? 'white' : 'black',
+                                backgroundColor: activeSection === 'department-page' ? 'orange' : '',
+                                padding: '5px 20px',
+                                borderRadius: '5px'
+                            }} onClick={() => setActiveSection('department-page')} >
+                                Department
                             </li> : ''}
                         </ul>
                     </nav>
 
                     {/* Main Content */}
                     <div style={{ position: 'relative', backgroundColor: 'white', width: '80%', padding: '20px', borderRadius: '5px', color: '#fff', display: 'flex', justifyContent: 'center' }}>
-
-                        {isUpdate ? <form
-                            onSubmit={handleSubmit}
-
-                            style={{
-                                position: 'absolute',
-                                top: '50%',
-                                left: '50%',
-                                transform: 'translate(-50%, -50%)',
-                                width: '50%',
-                                margin: '0 auto',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '15px',
-                                marginTop: '20px',
-                                padding: '20px 30px',
-                                border: '1px solid black',
-                                backgroundColor: 'orange'
-                            }}
-                        >
-                            <MdCancel size={25} color='black' onClick={() => setIsUpdate(!isUpdate)} />
-
-                            {successMessage ? <p style={{ color: 'white', fontSize: '16px', backgroundColor: 'green', padding: "7px 5px", textAlign: 'center', borderRadius: '5px' }}>{successMessage}</p> : ''}
-                            <div style={{ display: 'grid', gridTemplateColumns:'repeat(2, 1fr)' }}>
-                                <div style={{ display: 'flex', marginBottom: "10px" }}>
-                                    {(previewUrl || orgProfile) && (
-                                        <img
-                                            src={previewUrl || `data:image/png;base64,${orgProfile}`}
-                                            alt="Profile"
-                                            style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "8px" }}
-                                        />
-                                    )}
-                                </div>
-                                <label>
-                                    Profile:
-                                    <input
-                                        type="file"
-
-                                        onChange={(e) => {
-                                            if (e.target.files && e.target.files[0]) {
-                                                setProfile(e.target.files[0]); // <- This must be a File
-                                            }
-                                        }}
-
-                                        style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                    />
-                                </label>
-                            </div>
-
-                            <label>
-                                Email:
-                                <input
-                                    type="email"
-                                    value={userEmail}
-                                    onChange={(e) => setUserEmail(e.target.value || '')}
-                                    style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                />
-                            </label>
-
-                            <label>
-                                Role:
-                                <input
-                                    type="text"
-                                    value={userRole}
-                                    onChange={(e) => setUserRole(e.target.value || '')}
-                                    style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                />
-                            </label>
-
-                            <label>
-                                Gender:
-                                <input
-                                    type="text"
-                                    value={gender}
-                                    onChange={(e) => setGender(e.target.value || '')}
-                                    style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                />
-                            </label>
-
-                            <label>
-                                Department:
-                                <input
-                                    type="text"
-                                    value={department}
-                                    onChange={(e) => setDepartment(e.target.value || '')}
-                                    style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                />
-                            </label>
-
-                            <label>
-                                Designation:
-                                <input
-                                    type="text"
-                                    value={designation}
-                                    onChange={(e) => setDesignation(e.target.value || '')}
-                                    style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                />
-                            </label>
-
-                            <label>
-                                Phone Number:
-                                <input
-                                    type="tel"
-                                    value={phoneNumber}
-                                    onChange={(e) => setPhoneNumber(e.target.value || '')}
-                                    style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                />
-                            </label>
-
-                            <button
-                                type="submit"
-                                style={{
-                                    padding: '10px',
-                                    backgroundColor: '#4CAF50',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '5px',
-                                    cursor: 'pointer',
-                                    fontSize: '16px',
-                                }}
-                            >
-                                Submit
-                            </button>
-                        </form> : ''}
 
                         {activeSection === 'profile_information' &&
                             <div style={{ display: 'flex', justifyContent: 'center', width: '80%', margin: '0 auto', }}>
@@ -850,6 +895,63 @@ function Settings() {
                                 </table>
                             </div>
                         }
+
+                        {activeSection === 'admin' && <div>
+                            <div onClick={() => navigate('/sign-up')} style={{
+                                backgroundColor: 'orange',
+                                 display: 'flex', padding: '5px',
+                                justifyContent: 'center', alignItems: 'center', width: '150px', cursor: 'pointer'
+                            }}>
+                                <MdAdd size={24} color='white' />
+                                <p>Creat Admin</p>
+                            </div>
+                            <table className={styles.styledTable}>
+                                <thead>
+                                    <tr>
+                                        {/* <th>Serial No.</th> */}
+                                        <th>Email</th>
+                                        <th>Password</th>
+                                        {/* <th>Department Name</th> */}
+                                        <th>Name</th>
+                                        <th>Designation</th>
+                                        <th>Role</th>
+                                        {/* <th>Action</th> */}
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {adminData ? adminData.map((admin, index) => (
+                                        <tr key={index}>
+                                            <td style={{ color: 'black' }}>{admin.email}</td>
+                                            <td style={{ color: 'black' }}>{admin.password}</td>
+                                            {/* <td style={{color:'black'}}>{dean.department}</td> */}
+                                            <td style={{ color: 'black' }}>{admin.name}</td>
+                                            <td style={{ color: 'black' }}>{admin.designation}</td>
+                                            <td style={{ color: 'black' }}>{admin.role}</td>
+                                            {/* <td>{item.item.brand}</td>
+                                                <td>{item.borrower}</td> */}
+
+                                            {/* <td style={{ display: 'flex', border: 'none', }}>
+                                                    <div style={{ display: 'flex', justifyContent: "center", gap: '10px' }}>
+                                                        <MdDelete color='red' size={27} onClick={() => deleteDean(dean._id)} />
+                                                        <FaEdit color='blue' size={27} onClick={() => handleEditClickDean(dean)} />
+                                                    </div>
+                                                </td> */}
+                                        </tr>
+                                    )) : ''}
+                                </tbody>
+                            </table>
+                        </div>}
+
+
+                        {activeSection === 'department-page' ? <div>
+                            <div style={{
+                                // backgroundColor: 'orange',
+                                 display: 'flex', padding: '5px',
+                                justifyContent: 'center', alignItems: 'center', width: '100%', cursor: 'pointer'
+                            }}> <DepartmentPage /> </div>
+                        </div> : ''}
+
                     </div>
                 </div>
 

@@ -1,30 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import DOMAIN from "../../config/config";
+import { useReactToPrint } from "react-to-print";
+import { RiPrinterFill } from "react-icons/ri";
+import img from '../../images/ctc-logoo.jpg'
+import styles from '../reports-css/RequestReport.module.css';
 
-const inventoryData = [
-  {
-    itemName: "Laptop",
-    category: "Electronics",
-    location: "IT Department",
-    quantity: 12,
-    status: "Available",
-  },
-  {
-    itemName: "Printer Ink",
-    category: "Consumables",
-    location: "Supply Room",
-    quantity: 25,
-    status: "In Stock",
-  },
-  {
-    itemName: "Ethernet Cable",
-    category: "Accessories",
-    location: "IT Department",
-    quantity: 50,
-    status: "In Use",
-  },
-];
 
 const tableStyle = {
   width: "100%",
@@ -55,7 +36,7 @@ const containerStyle = {
 };
 
 const RequestReport = () => {
-
+  const contentRef = useRef()
   const [requestReport, setRequestReport] = useState([])
   useEffect(() => {
     const getRequestSummary = async () => {
@@ -73,31 +54,56 @@ const RequestReport = () => {
 
     getRequestSummary()
   }, [])
+
+  // printer
+  const reactToPrintFn = useReactToPrint({
+    documentTitle: `${new Date()}`,
+    contentRef: contentRef,
+  });
   return (
     <div style={containerStyle}>
-      <h2 style={titleStyle}>Request Report</h2>
-      <table style={tableStyle}>
-        <thead style={headerStyle}>
-          <tr>
-            <th style={thTdStyle}>Date</th>
-            <th style={thTdStyle}>Requestor</th>
-            {/* <th style={thTdStyle}>Item Name</th> */}
-            <th style={thTdStyle}>Status</th>
-            <th style={thTdStyle}>Purpose</th>
-          </tr>
-        </thead>
-        <tbody>
-          {requestReport.map((item, index) => (
-            <tr key={index}>
-              <td style={thTdStyle}>{item.date}</td>
-              <td style={thTdStyle}>{item.requestedBy}</td>
-              {/* <td style={thTdStyle}>{item.location}</td> */}
-              <td style={thTdStyle}>{item.presidentApproval}</td>
-              <td style={thTdStyle}>{item.purpose}</td>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <h2 style={{ color: "orange", padding: '10px 0' }}>Request Report</h2>
+        <div style={{ marginRight: '10px' }}>
+          <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={35} />
+        </div>
+      </div>
+
+
+      <div ref={contentRef}>
+        <div className={styles.header}>
+          <img src={img} width={100} height={100} />
+          <h4>Ceguera Technological Colleges</h4>
+        </div>
+        <table className={styles.styledTable}>
+          <thead>
+            <tr>
+              {/* <th>Serial No.</th> */}
+              {/* <th>PMS Number</th>
+                                                        <th>Unit</th> */}
+              {/* <th>Brand</th> */}
+              <th>Date</th>
+              <th>Requestor</th>
+              {/* <th style={thTdStyle}>Item Name</th> */}
+              <th>Status</th>
+              <th>Purpose</th>
+
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {requestReport.map((item, index) => (
+              <tr key={index}>
+                <td style={thTdStyle}>{item.date}</td>
+                <td style={thTdStyle}>{item.requestedBy}</td>
+                {/* <td style={thTdStyle}>{item.location}</td> */}
+                <td style={thTdStyle}>{item.presidentApproval}</td>
+                <td style={thTdStyle}>{item.purpose}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

@@ -3,7 +3,7 @@ const multer = require('multer')
 const { createItem, fetchItems, editITem, deleteitem, totalItems, searchItem, propertyPage, barGraph, checkToken, newCategoryFunction, displayCategories, deleteCategory, getAccessoryFunction, createAccessoryType, deleteAccessoryType, inventoryReport } = require('../controllers/InventoryController.js')
 const { addBorrowItem, fetchBorrowedItems, totalBorrowedItems, returnItem, fetchHistory } = require('../controllers/borrowItemController.js');
 const { createProduct, getMerchandise, purchaseHistory, getAllPurchaseHistory, deleteMerchandise, editMerchandise, totalMerchandise, barGraphMerchandise } = require('../controllers/merchandise-controller.js');
-const { createAdmin, loginAdmin, forgotPassword, logout, sendOtp, verifyOtp, changePassword, getRequester, getUsers, updateUserRole, delUser, createDean, displayDean, editDean, deleteDean, requesterRegister, requesterLogin, updateProfile } = require('../controllers/userController.js');
+const { createAdmin, loginAdmin, forgotPassword, logout, sendOtp, verifyOtp, changePassword, getRequester, getUsers, updateUserRole, delUser, createDean, displayDean, editDean, deleteDean, requesterRegister, requesterLogin, updateProfile, displayAdmins } = require('../controllers/userController.js');
 
 
 // authehntication
@@ -14,6 +14,8 @@ const { addStock, stockIn } = require('../controllers/stockIn_outController.js')
 const damage_lost = require('../model/damage_lost.js');
 const { damagLost, getDamageLost } = require('../controllers/damageLostController.js');
 const { getItemTransfer } = require('../controllers/item_movementController.js');
+const { createDepartment, getDepartment, delDep } = require('../controllers/departmentController.js');
+const { getDepartmentReport } = require('../controllers/departmentUsageController.js');
 
 
 const router = express.Router();
@@ -42,6 +44,9 @@ router.post('/create-dean', createDean)
 router.get('/display-dean', displayDean)
 router.put('/edit-dean/:id', editDean)
 router.delete('/delete-dean/:id', deleteDean)
+
+// admins
+router.get('/display-admins', displayAdmins)
 
 // item
 router.post('/create-item', createItem)
@@ -99,18 +104,26 @@ router.get('/get-stock-in-out', stockIn)
 
 // damage/lost
 router.post('/damage-lost/:id', damagLost)
-router.get('/get-damage-lost',getDamageLost)
+router.get('/get-damage-lost', getDamageLost)
 
 
 // request summary
 router.get('/get-request-summary', getRequestSummaray)
 
 // get item transfer
-router.get('/get-item-transfer',getItemTransfer)
+router.get('/get-item-transfer', getItemTransfer)
 
 
 
 // update profile
 router.put('/update-profile/:id', upload.single('file'), updateProfile)
+
+// department
+router.post('/create-department', createDepartment)
+router.get('/get-department', getDepartment)
+router.delete('/delete-department/:id', delDep)
+
+// display department usage report 
+router.get('/department-usage', getDepartmentReport)
 
 module.exports = router;

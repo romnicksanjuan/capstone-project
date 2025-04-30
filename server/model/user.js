@@ -6,12 +6,12 @@ const userSchema = new mongoose.Schema({
     },
     email: { type: String, },
     password: { type: String, },
-    name: { type: String, },
-    gender: { type: String, },
-    department: { type: String, },
-    phoneNumber: { type: String, },
-    designation: { type: String, },
-    dateOfBirth: { type: Date, },
+    name: { type: String,  default: 'N/A'},
+    gender: { type: String,  default: 'N/A'},
+    department: { type: String, default: 'N/A'},
+    phoneNumber: { type: String, default: 'N/A' },
+    designation: { type: String, default: 'N/A' },
+    dateOfBirth: { type: Date,  default: 'N/A'},
     role: { type: String, required: true, enum: ['dean', 'president', 'admin', 'requester'] },
 }, { timestamps: true }
 )

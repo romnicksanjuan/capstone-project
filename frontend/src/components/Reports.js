@@ -15,6 +15,7 @@ import StockIn_Out_Report from './reports/StockIn_Out_Report'
 import ItemMovementReport from './reports/ItemMovementReport'
 import Damage_LostReport from './reports/Damage_LostReport'
 import RequestReport from './reports/RequestReport'
+import DepartmentUsageReport from './reports/DepartmentUsageReport'
 
 function Reports() {
     const [activeSection, setActiveSection] = useState('inventory-report')
@@ -85,15 +86,15 @@ function Reports() {
                                 Request Report
                             </li>
 
-                            {/* <li style={{
+                            <li style={{
                                 cursor: 'pointer',
-                                color: activeSection === 'item-report' ? 'white' : 'black',
-                                backgroundColor: activeSection === 'item-report' ? 'orange' : '',
+                                color: activeSection === 'department-usage-report' ? 'white' : 'black',
+                                backgroundColor: activeSection === 'department-usage-report' ? 'orange' : '',
                                 padding: '5px 20px',
                                 borderRadius: '5px'
-                            }} onClick={() => setActiveSection('item-report')} >
-                                Item Movement Report
-                            </li> */}
+                            }} onClick={() => setActiveSection('department-usage-report')} >
+                                Department Usage Report
+                            </li>
                         </ul>
                     </nav>
 
@@ -110,7 +111,7 @@ function Reports() {
                         {activeSection === 'item-report' ? <ItemMovementReport /> : ''}
                         {activeSection === 'damage-report' ? <Damage_LostReport /> : ''}
                         {activeSection === 'request-report' ? <RequestReport /> : ''}
-                        {/* {activeSection === 'request-report' ? <RequestReport /> : ''} */}
+                        {activeSection === 'department-usage-report' ? <DepartmentUsageReport /> : ''}
 
                         
                     </div>

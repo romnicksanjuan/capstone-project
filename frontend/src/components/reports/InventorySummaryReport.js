@@ -1,30 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import DOMAIN from "../../config/config";
+import { useReactToPrint } from "react-to-print";
+import { RiPrinterFill } from "react-icons/ri";
+import img from '../../images/ctc-logoo.jpg'
+import styles from '../reports-css/InventorySummaryReport.module.css'
 
-const inventoryData = [
-  {
-    itemName: "Laptop",
-    category: "Electronics",
-    location: "IT Department",
-    quantity: 12,
-    status: "Available",
-  },
-  {
-    itemName: "Printer Ink",
-    category: "Consumables",
-    location: "Supply Room",
-    quantity: 25,
-    status: "In Stock",
-  },
-  {
-    itemName: "Ethernet Cable",
-    category: "Accessories",
-    location: "IT Department",
-    quantity: 50,
-    status: "In Use",
-  },
-];
 
 const tableStyle = {
   width: "100%",
@@ -46,7 +27,7 @@ const titleStyle = {
   fontSize: "24px",
   fontWeight: "bold",
   marginBottom: "20px",
-  color:'black'
+  color: 'black'
 };
 
 const containerStyle = {
@@ -55,13 +36,14 @@ const containerStyle = {
 };
 
 const InventorySummaryReport = () => {
+  const contentRef = useRef()
 
   const [inventoryReport, setInventoryReport] = useState([])
   useEffect(() => {
-    const getInventorySummary = async() =>  {
+    const getInventorySummary = async () => {
       try {
-        const response = await fetch(`${DOMAIN}/get-inventory-summary`,{
-          method:'GET'
+        const response = await fetch(`${DOMAIN}/get-inventory-summary`, {
+          method: 'GET'
         })
 
         const data = await response.json()
@@ -73,32 +55,57 @@ const InventorySummaryReport = () => {
     }
 
     getInventorySummary()
-  },[])
+  }, [])
+
+  // printer
+  const reactToPrintFn = useReactToPrint({
+    documentTitle: `${new Date()}`,
+    contentRef: contentRef,
+  });
   return (
     <div style={containerStyle}>
-      <h2 style={titleStyle}>Inventory Summary Report</h2>
-      <table style={tableStyle}>
-        <thead style={headerStyle}>
-          <tr>
-            <th style={thTdStyle}>Item Name</th>
-            <th style={thTdStyle}>Category</th>
-            <th style={thTdStyle}>Location</th>
-            <th style={thTdStyle}>Quantity</th>
-            <th style={thTdStyle}>Condition</th>
-          </tr>
-        </thead>
-        <tbody>
-          {inventoryReport.map((item, index) => (
-            <tr key={index}>
-              <td style={thTdStyle}>{item.itemDescription}</td>
-              <td style={thTdStyle}>{item.category}</td>
-              <td style={thTdStyle}>{item.location}</td>
-              <td style={thTdStyle}>{item.quantity}</td>
-              <td style={thTdStyle}>{item.condition}</td>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <h2 style={{ color: "orange", padding: '10px 0' }}>Inventory Summary Report</h2>
+        <div style={{ marginRight: '10px' }}>
+          <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={35} />
+        </div>
+      </div>
+
+
+
+      <div ref={contentRef}>
+        <div className={styles.header}>
+          <img src={img} width={100} height={100} />
+          <h4>Ceguera Technological Colleges</h4>
+        </div>
+        <table className={styles.styledTable}>
+          <thead>
+            <tr>
+              {/* <th>Serial No.</th> */}
+              {/* <th>PMS Number</th>
+                                                  <th>Unit</th> */}
+              {/* <th>Brand</th> */}
+              <th >Item Name</th>
+              <th >Category</th>
+              <th >Location</th>
+              <th>Quantity</th>
+              <th>Condition</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {inventoryReport.map((item, index) => (
+              <tr key={index}>
+                <td style={thTdStyle}>{item.itemDescription}</td>
+                <td style={thTdStyle}>{item.category}</td>
+                <td style={thTdStyle}>{item.location}</td>
+                <td style={thTdStyle}>{item.quantity}</td>
+                <td style={thTdStyle}>{item.condition}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

@@ -7,6 +7,7 @@ const SignUp = () => {
     const navigate = useNavigate()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [name, setName] = useState("")
     const [gender, setGender] = useState("")
     const [department, setDepartment] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
@@ -25,7 +26,7 @@ const SignUp = () => {
                     "Content-Type": "application/json"
                 },
                 credentials: "include",
-                body: JSON.stringify({ email, password, gender, department, phoneNumber, designation, dateOfBirth })
+                body: JSON.stringify({ email, password, gender, name, phoneNumber, designation, dateOfBirth })
             })
 
             const data = await response.json()
@@ -38,7 +39,7 @@ const SignUp = () => {
             setErrorMessage("")
             setEmail('')
             setPassword('')
-            setDepartment('')
+            setName('')
             setGender('')
             setPhoneNumber('')
             setdateOfBirth(new Date())
@@ -67,7 +68,7 @@ const SignUp = () => {
                 </div>
 
                 <form onSubmit={handleSubmit} style={{ width: '50%' }}>
-                    <h2 style={{ textAlign: 'center', color: 'white', fontSize: '25px', padding: '0', margin: "0" }}>Sign Up Form</h2>
+                    <h2 style={{ textAlign: 'center', color: 'white', fontSize: '25px', padding: '0', margin: "0" }}>Create Admin Account</h2>
                     {errorMessage ? <p style={{
                         color: 'white', backgroundColor: "red", padding: "8px", textAlign: 'center',
                         fontSize: '1.1rem', borderRadius: '5px'
@@ -141,15 +142,15 @@ const SignUp = () => {
                     </div>
 
                     <div style={{ width: '100%', }}>
-                        <label>Department:</label><br />
+                        <label>Name:</label><br />
                         <input style={{
                             width: '100%', boxSizing: 'border-box', height: '45px',
                             padding: '2px 5px 2px 5px', fontSize: "14px", borderRadius: '5px', margin: '2px 0', border: 'none'
                         }}
-                            value={department}
-                            onChange={(e) => setDepartment(e.target.value)}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                             required
-                            type='text' placeholder='Enter Department' />
+                            type='text' placeholder='Enter Name' />
                     </div>
 
                     <div style={{ width: '100%', }}>
@@ -164,8 +165,8 @@ const SignUp = () => {
                             type='text' placeholder='Enter Phone Number' />
                     </div>
 
-                    <p style={{ padding: '5px 0', margin: '0', fontSize: '1.2rem', color: 'white', cursor: 'pointer', }} onClick={() => navigate('/')}>
-                        Aleady have an Account? <span style={{ color: "blue" }}>Login</span></p>
+                    {/* <p style={{ padding: '5px 0', margin: '0', fontSize: '1.2rem', color: 'white', cursor: 'pointer', }} onClick={() => navigate('/')}>
+                        Aleady have an Account? <span style={{ color: "blue" }}>Login</span></p> */}
 
                     <div style={{ width: '100%', display: 'grid' }}>
                         <button style={{

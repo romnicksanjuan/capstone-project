@@ -1,11 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
-import DOMAIN from "../../config/config";
+import React, { useEffect, useState, useRef } from 'react'
+import DOMAIN from '../../config/config'
+import { useSearchParams } from 'react-router-dom';
 import { useReactToPrint } from "react-to-print";
 import { RiPrinterFill } from "react-icons/ri";
 import img from '../../images/ctc-logoo.jpg'
-import styles from '../reports-css/Damage_LostReport.module.css';
-
+import styles from '../reports-css/DepartmentUsageReport.module.css'
 const tableStyle = {
   width: "100%",
   borderCollapse: "collapse",
@@ -15,8 +14,7 @@ const tableStyle = {
 const thTdStyle = {
   border: "1px solid #ccc",
   padding: "10px",
-  color: "black",
-  color: 'black'
+  color: "black"
 };
 
 const headerStyle = {
@@ -35,22 +33,28 @@ const containerStyle = {
   fontFamily: "Arial, sans-serif",
 };
 
-const Damage_LostReport = () => {
+
+const DepartmentUsageReport = () => {
   const contentRef = useRef()
-  const [damageLost, setDamageLost] = useState([])
+  const [DepartmentUsageReport, setDepartmentUsageReport] = useState([])
+  // console.log('test')
   useEffect(() => {
-    const getDamageLost = async () => {
+    const getreport = async () => {
       try {
-        const response = await fetch(`${DOMAIN}/get-damage-lost`, {
-          method: 'GET'
+        const response = await fetch(`${DOMAIN}/department-usage`, {
+          method: 'GET',
+          credentials: 'include'
         })
+
         const data = await response.json()
-        setDamageLost(data)
+
+        console.log(data)
+        setDepartmentUsageReport(data)
       } catch (error) {
         console.log(error)
       }
     }
-    getDamageLost()
+    getreport()
   }, [])
 
   // printer
@@ -61,7 +65,7 @@ const Damage_LostReport = () => {
   return (
     <div style={containerStyle}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <h2 style={{ color: "orange", padding: '10px 0' }}>Damage/Lost Items Report</h2>
+        <h2 style={{ color: "orange", padding: '10px 0' }}>Department Usage Report</h2>
         <div style={{ marginRight: '10px' }}>
           <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={35} />
         </div>
@@ -75,31 +79,25 @@ const Damage_LostReport = () => {
         <table className={styles.styledTable}>
           <thead>
             <tr>
-              <th>Item Name</th>
-              <th>Issue</th>
-              <th>Date Reported</th>
-              <th>Remarks</th>
-              <th>Quantity</th>
-              <th>Action Taken</th>
+              <th>Department</th>
+              <th>Item</th>
+              <th>Total Issued</th>
             </tr>
           </thead>
 
           <tbody>
-            {damageLost.map((item, index) => (
+            {DepartmentUsageReport.map((item, index) => (
               <tr key={index}>
+                <td style={thTdStyle}>{item.department}</td>
                 <td style={thTdStyle}>{item.itemDescription}</td>
-                <td style={thTdStyle}>{item.issue}</td>
-                <td style={thTdStyle}>{item.dateReported}</td>
-                <td style={thTdStyle}>{item.remarks}</td>
-                <td style={thTdStyle}>{item.quantity}</td>
-                <td style={thTdStyle}>{item.actionTaken}</td>
+                <td style={thTdStyle}>{item.totalIssued}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Damage_LostReport;
+export default DepartmentUsageReport

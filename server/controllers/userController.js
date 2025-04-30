@@ -5,7 +5,7 @@ const Otp = require('../model/otp.js')
 const crypto = require("crypto")
 // admin
 const createAdmin = async (req, res) => {
-    const { email, password, gender, department, phoneNumber, designation, dateOfBirth } = req.body
+    const { email, password, gender, department, phoneNumber, designation, dateOfBirth, name } = req.body
     console.log(email, password)
     try {
         const findUser = await User.findOne({ email })
@@ -14,7 +14,7 @@ const createAdmin = async (req, res) => {
             res.status(400).json({ success: false, message: "Email is already exist" })
             return
         }
-        const newUser = new User({ email, password, role: "admin", gender, department, phoneNumber, designation, dateOfBirth })
+        const newUser = new User({ email, password, role: "admin", gender, department, phoneNumber, designation, dateOfBirth, name })
         const save = await newUser.save()
         console.log(save)
         res.status(200).json({ success: true, message: "User Created Successfull" })
@@ -107,15 +107,15 @@ const updateProfile = async (req, res) => {
         designation,
         phoneNumber } = req.body
 
-    
+
 
     try {
         const up = await User.findByIdAndUpdate(id, {
             ...(req.file && {
-              profileImage: {
-                data: req.file.buffer,
-                contentType: req.file.mimetype,
-              },
+                profileImage: {
+                    data: req.file.buffer,
+                    contentType: req.file.mimetype,
+                },
             }),
             email: userEmail,
             role,
@@ -123,12 +123,12 @@ const updateProfile = async (req, res) => {
             department,
             designation,
             phoneNumber,
-          }, { new: true }); // Optional: Returns the updated document
-          
+        }, { new: true }); // Optional: Returns the updated document
+
 
         if (up) {
             console.log(up)
-            res.json({message: 'Profile Updated Successfull'})
+            res.json({ message: 'Profile Updated Successfull' })
         }
     } catch (error) {
         console.log(error)
@@ -145,6 +145,24 @@ const updateProfile = async (req, res) => {
     const file = req.file;
 
     console.log(file)
+
+
+}
+
+const displayAdmins = async (req, res) => {
+
+    try {
+        const getAdmins = await User.find({ role: 'admin' })
+
+        if (getAdmins.length > 0) {
+            res.json(getAdmins)
+            console.log(getAdmins)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+
+
 
 
 }
@@ -442,5 +460,5 @@ const requesterLogin = async (req, res) => {
 module.exports = {
     createAdmin, loginAdmin, forgotPassword, logout,
     sendOtp, verifyOtp, changePassword, getUsers, updateUserRole, delUser, createDean, displayDean,
-    editDean, deleteDean, requesterRegister, requesterLogin, updateProfile
+    editDean, deleteDean, requesterRegister, requesterLogin, updateProfile,displayAdmins
 }
