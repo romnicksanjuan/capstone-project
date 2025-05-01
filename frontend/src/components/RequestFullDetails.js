@@ -36,7 +36,7 @@ const RequestFullDetails = () => {
                 </tbody>
             </table>
 
-            <p style={{ color: 'black' }}>Endorsed By Dean: <span>{request.deanApproval}</span></p>
+            <p style={{ color: 'black' }}>Endorsed By Dean: <span>{request.endorsedBy}</span></p>
             <p style={{ color: 'black' }}>Status: <span>{request.presidentApproval}</span></p>
         </div>
         </div >

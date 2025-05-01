@@ -39,7 +39,7 @@ const createDean = async (req, res) => {
         const newUser = new User({ email: deanEmail, role: accRole, password: deanPassword, department: departmentName, name: deanName, designation: deanDesignation })
         const save = await newUser.save()
         console.log(save)
-        res.status(200).json({ success: true, message: "Dean Created Successfull" })
+        res.status(200).json({ success: true, message: "Account Created Successfull" })
     } catch (error) {
         console.log(error)
     }

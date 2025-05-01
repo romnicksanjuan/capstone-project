@@ -27,6 +27,10 @@ const requestSchema = new mongoose.Schema({
     enum: ['pending', 'approved', 'rejected'],
     default: 'pending'
   },
+  endorsedBy: {
+    type: String,
+    default: '-'
+  },
   toLocation: {
     type: String,
     required: true,

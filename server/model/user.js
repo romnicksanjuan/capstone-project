@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
     department: { type: String, default: 'N/A'},
     phoneNumber: { type: String, default: 'N/A' },
     designation: { type: String, default: 'N/A' },
-    dateOfBirth: { type: Date,  default: 'N/A'},
+    // dateOfBirth: { type: Date,  default: 'N/A'},
     role: { type: String, required: true, enum: ['dean', 'president', 'admin', 'requester'] },
 }, { timestamps: true }
 )

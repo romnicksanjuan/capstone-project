@@ -89,7 +89,10 @@ const Navbar = () => {
 
             <div className={styles.pages}>
                 <nav className={styles.navbarLinks}>
-                    {role !== 'requester' ?
+
+                    {/* admin */}
+                    {role === 'admin' &&
+
                         <>
                             <Link
                                 to={"/Dashboard"}
@@ -174,8 +177,39 @@ const Navbar = () => {
                                 <p style={{ padding: '0' }}> Logout</p>
                             </Link>
                         </>
-                        :
 
+
+                    }
+
+
+                    {role === 'dean' || role === 'president' ?
+                        <>
+                            <Link
+                                to={'/request-items'}
+                                onClick={() => setIsclick(!isClick)}
+                                style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
+                            >
+                                <FaCodePullRequest size={26} className='icon' />
+                                <p style={{ padding: '0' }}> Request Items</p>
+                                {!isRequestPage && count > 0 && !isClick && (
+                                    <p style={{ color: 'white', fontWeight: 'bold', backgroundColor: 'red', padding: '2px 6px', borderRadius: '10px' }}>
+                                        {count}
+                                    </p>
+                                )}
+                            </Link>
+                            <Link style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '10px' }} onClick={() => handleLogout()}>
+                                <IoLogOut size={26} className='icon' />
+                                <p style={{ padding: '0' }}> Logout</p>
+                            </Link>
+                        </>
+
+                        : ''
+                    }
+
+
+
+                    {/* requester */}
+                    {role === 'requester' &&
                         <>
                             <Link
                                 to={'/request-items'}

@@ -45,18 +45,24 @@ const submitRequest = async (req, res) => {
 // display-requested
 const displayRequested = async (req, res) => {
     const user = req.user
+    // console.log('user:', user)
+
+    // return
     try {
         const findUser = await User.findOne({ _id: user.id, email: user.email, })
         // console.log('find user:', findUser)
+        // return
         if (findUser.role === "requester") {
             // const getRequested = await Request.find({ requester: findUser._id, })
             const getRequested = await Request.find({ requester: findUser._id, }).sort({ createdAt: -1, });
             res.status(200).json({ requestData: getRequested })
         } else if (findUser.role === "dean") {
-            const getRequested = await Request.find({ deanApproval: 'pending' }).sort({ createdAt: -1, });
+            const getRequested = await Request.find({ deanApproval: 'pending', department: findUser.department }).sort({ createdAt: -1, });
+            // console.log('getRequested:', getRequested)
             res.status(200).json({ requestData: getRequested })
         } else if (findUser.role === "president") {
             const getRequested = await Request.find({ deanApproval: 'approved', presidentApproval: 'pending' }).sort({ createdAt: -1, });
+            console.log('getRequested:', getRequested)
             res.status(200).json({ requestData: getRequested })
         } else if (findUser.role === "admin") {
             const getRequested = await Request.find({}).sort({ createdAt: -1, });
@@ -72,13 +78,14 @@ const decisionButton = async (req, res) => {
     const { decision, requestId } = req.body
     // console.log(decision)
     // console.log(requestId)
-    // console.log(user)
+    // console.log('user:',user)
+    // return
     try {
         const approver = await User.findOne({ _id: user.id, email: user.email })
         // console.log("approver : ", approver)
 
         if (approver.role === "dean") {
-            const update = await Request.findByIdAndUpdate(requestId, { deanApproval: decision })
+            const update = await Request.findByIdAndUpdate(requestId, { deanApproval: decision, endorsedBy: approver.name })
 
             if (update) {
                 await Approval.create({

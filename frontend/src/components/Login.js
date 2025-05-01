@@ -33,10 +33,10 @@ const Login = () => {
             setErrorMessage("")
             localStorage.setItem('role', data.role)
 
-            if (data.role !== 'requester') {
-                navigate("/dashboard")
-            } else {
+            if (data.role === 'requester' || data.role === 'dean' || data.role === 'president') {
                 navigate("/request-items")
+            } else {
+                navigate("/Dashboard")
             }
         } catch (error) {
             console.log(error.message)

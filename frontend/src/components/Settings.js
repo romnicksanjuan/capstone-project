@@ -320,6 +320,37 @@ function Settings() {
     const [isCreateAdmin, setIsCreateAdmin] = useState(false)
 
 
+
+    // department
+    const [depArray, setDepArray] = useState([])
+
+
+    useEffect(() => {
+        const getDepartment = async () => {
+            try {
+                const response = await fetch(`${DOMAIN}/get-department`, {
+                    method: 'GET',
+                    credentials: 'include',
+                })
+
+                const data = await response.json()
+
+                if (!response.ok) {
+                    //  setError()
+                    return
+                }
+
+                console.log('get-department:', data)
+                setDepArray(data)
+
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        getDepartment()
+    }, [])
+
     if (role === null) {
         return null
     }
@@ -715,16 +746,27 @@ function Settings() {
                                     </div>
 
                                     <div style={{ marginBottom: '10px' }}>
-                                        <label style={{ fontSize: '15px', color: 'orange' }}>Department Name:</label><br />
-                                        <input
-                                            placeholder="Department Name"
-                                            type='text'
-                                            required
+                                        <label>Department Name:</label><br />
+                                        <select
+                                            id="options"
                                             value={departmentName}
                                             onChange={(e) => setDepartmentName(e.target.value)}
                                             style={{
-                                                padding: '4px 5px', fontSize: '15px', width: '100%', borderRadius: '5px',
-                                            }} />
+                                                width: '100%',
+                                                boxSizing: 'border-box',
+                                                height: '45px',
+                                                padding: '2px 5px',
+                                                fontSize: "14px",
+                                                borderRadius: '5px',
+                                                margin: '2px 0',
+                                                // border: 'none'
+                                            }}
+                                        >
+                                            <option value="">--Select Department--</option>
+                                            {depArray && depArray.map((dep, index) => (
+                                                <option key={index} value={dep.department}>{dep.department}</option>
+                                            ))}
+                                        </select>
                                     </div>
 
                                     <div style={{ marginBottom: '10px' }}>
@@ -797,7 +839,7 @@ function Settings() {
                                             }} />
                                     </div>
 
-                                    <div style={{ marginBottom: '10px' }}>
+                                    {/* <div style={{ marginBottom: '10px' }}>
                                         <label style={{ fontSize: '15px', color: 'orange' }}>Department Name:</label><br />
                                         <input
                                             placeholder="Department Name"
@@ -808,7 +850,31 @@ function Settings() {
                                             style={{
                                                 padding: '4px 5px', fontSize: '15px', width: '100%', borderRadius: '5px',
                                             }} />
+                                    </div> */}
+                                    <div style={{ marginBottom: '10px' }}>
+                                        <label>Department Name:</label><br />
+                                        <select
+                                            id="options"
+                                            value={departmentName}
+                                            onChange={(e) => setDepartmentName(e.target.value)}
+                                            style={{
+                                                width: '100%',
+                                                boxSizing: 'border-box',
+                                                height: '45px',
+                                                padding: '2px 5px',
+                                                fontSize: "14px",
+                                                borderRadius: '5px',
+                                                margin: '2px 0',
+                                                // border: 'none'
+                                            }}
+                                        >
+                                            <option value="">--Select Department--</option>
+                                            {depArray && depArray.map((dep, index) => (
+                                                <option key={index} value={dep.department}>{dep.department}</option>
+                                            ))}
+                                        </select>
                                     </div>
+
 
                                     <div style={{ marginBottom: '10px' }}>
                                         <label style={{ fontSize: '15px', color: 'orange' }}>Name:</label><br />
@@ -899,7 +965,7 @@ function Settings() {
                         {activeSection === 'admin' && <div>
                             <div onClick={() => navigate('/sign-up')} style={{
                                 backgroundColor: 'orange',
-                                 display: 'flex', padding: '5px',
+                                display: 'flex', padding: '5px',
                                 justifyContent: 'center', alignItems: 'center', width: '150px', cursor: 'pointer'
                             }}>
                                 <MdAdd size={24} color='white' />
@@ -947,7 +1013,7 @@ function Settings() {
                         {activeSection === 'department-page' ? <div>
                             <div style={{
                                 // backgroundColor: 'orange',
-                                 display: 'flex', padding: '5px',
+                                display: 'flex', padding: '5px',
                                 justifyContent: 'center', alignItems: 'center', width: '100%', cursor: 'pointer'
                             }}> <DepartmentPage /> </div>
                         </div> : ''}

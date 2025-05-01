@@ -16,6 +16,35 @@ const RequesterSignUp = () => {
     const [errorMessage, setErrorMessage] = useState("")
     const [successMessage, setSuccessMessage] = useState("")
 
+    const [depArray, setDepArray] = useState([])
+
+
+    useEffect(() => {
+        const getDepartment = async () => {
+            try {
+                const response = await fetch(`${Domain}/get-department`, {
+                    method: 'GET',
+                    credentials: 'include',
+                })
+
+                const data = await response.json()
+
+                if (!response.ok) {
+                    //  setError()
+                    return
+                }
+
+                console.log('get-department:', data)
+                setDepArray(data)
+
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        getDepartment()
+    }, [])
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
@@ -43,7 +72,7 @@ const RequesterSignUp = () => {
             setPhoneNumber('')
             setdateOfBirth(new Date())
             setDesignation('')
-          
+
 
         } catch (error) {
             console.log(error.message)
@@ -142,14 +171,17 @@ const RequesterSignUp = () => {
 
                     <div style={{ width: '100%', }}>
                         <label>Department:</label><br />
-                        <input style={{
+                        <select id="options" value={department} onChange={(e) => setDepartment(e.target.value)} style={{
                             width: '100%', boxSizing: 'border-box', height: '45px',
                             padding: '2px 5px 2px 5px', fontSize: "14px", borderRadius: '5px', margin: '2px 0', border: 'none'
-                        }}
-                            value={department}
-                            onChange={(e) => setDepartment(e.target.value)}
-                            required
-                            type='text' placeholder='Enter Department' />
+                        }}>
+                            <option value="">--Select Department--</option>
+                            {depArray ? depArray.map((dep, index) => (
+                                <>
+                                    <option value={dep.department}>{dep.department}</option>
+                                </>
+                            )) : ''}
+                        </select>
                     </div>
 
                     <div style={{ width: '100%', }}>

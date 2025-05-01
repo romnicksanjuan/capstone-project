@@ -85,32 +85,32 @@ function RequestItems() {
     }, [])
 
     // console.log('s', status)
-    useEffect(() => {
-        const updateStatus = async () => {
-            try {
+    // useEffect(() => {
+    //     const updateStatus = async () => {
+    //         try {
 
-                if (status !== '') {
-                    console.log(items._id)
-                    console.log(status)
-                    const response = await fetch(`${DOMAIN}/update-status/${items._id}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ status }),
-                        credentials: 'include'
-                    })
+    //             if (status !== '') {
+    //                 console.log(items._id)
+    //                 console.log(status)
+    //                 const response = await fetch(`${DOMAIN}/update-status/${items._id}`, {
+    //                     method: 'PUT',
+    //                     headers: {
+    //                         'Content-Type': 'application/json'
+    //                     },
+    //                     body: JSON.stringify({ status }),
+    //                     credentials: 'include'
+    //                 })
 
-                    const data = await response.json()
-                    console.log(data)
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        }
+    //                 const data = await response.json()
+    //                 console.log(data)
+    //             }
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
 
-        updateStatus()
-    }, [status])
+    //     updateStatus()
+    // }, [status])
 
     useEffect(() => {
         const role = localStorage.getItem('role')
@@ -174,6 +174,8 @@ function RequestItems() {
             console.log(data)
             // setSuccessMessage(data.message)
             alert(data.message)
+            setShowCreateRequestForm(!showCreateRequestForm)
+            window.location.reload()
         } catch (error) {
             console.log(error)
         }
@@ -195,7 +197,7 @@ function RequestItems() {
 
                 const data = await response.json();
                 setRequestedItems(data.requestData);
-                console.log(data)
+                console.log("test:", data)
 
                 // setActiveSection(data.requestData[0]._id)
                 // setItems(data.requestData[0])
@@ -208,6 +210,9 @@ function RequestItems() {
 
     // approval
     const decisionButton = async (requestId, decision) => {
+        if (!window.confirm('Confirmation')) {
+            return
+        }
         console.log(requestId)
         try {
             const response = await fetch(`${DOMAIN}/decision`, {
@@ -356,7 +361,7 @@ function RequestItems() {
                         </thead>
                         <tbody>
                             {requesItems.map((request, index) => (
-                                <tr key={index} style={{ cursor: 'pointer' }}>
+                                <tr style={{ cursor: 'pointer', padding: '20px' }}>
                                     <td onClick={() => navigate('/request-full-details', { state: { request: request } })}>{index + 1}</td>
                                     <td onClick={() => navigate('/request-full-details', { state: { request: request } })}>{request.requestedBy}</td>
                                     <td onClick={() => navigate('/request-full-details', { state: { request: request } })}>{request.department}</td>
@@ -365,23 +370,23 @@ function RequestItems() {
                                     <td onClick={() => navigate('/request-full-details', { state: { request: request } })}>{request.purpose}</td>
                                     <td>{role === 'dean' ? <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                                         <button onClick={() => decisionButton(request._id, 'approved')} style={{ backgroundColor: 'green', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
-                                            approve
+                                            Endorse
                                         </button>
 
                                         <button onClick={() => decisionButton(request._id, 'rejected')} style={{ backgroundColor: 'red', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
-                                            reject
+                                            Disaprove
                                         </button>
-                                    </div> : request.deanApproval}</td>
-                                    <td>{role === 'president' ? <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                                    </div> : request.endorsedBy}</td>
+                                    <td>{role === 'president' ? <div style={{ display: 'flex', justifyContent: 'space-around',  padding: '3px'}}>
                                         <button onClick={() => decisionButton(request._id, 'approved')} style={{ backgroundColor: 'green', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
-                                            approve
+                                            Approve
                                         </button>
 
                                         <button onClick={() => decisionButton(request._id, 'rejected')} style={{ backgroundColor: 'red', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
-                                            reject
+                                            DisApprove
                                         </button>
                                     </div> : request.presidentApproval}</td>
-                                    {role === 'admin' && <td>
+                                    {role === 'admin' && <td style={{  padding: '3px' }}>
                                         <button onClick={() => handlePassData(request)}>Create Transaction</button>
                                     </td>}
                                 </tr>
@@ -404,32 +409,16 @@ function RequestItems() {
                             </tr>
                         </thead>
                         <tbody>
-                            {requesItems.map((request, index) => (
-                                <tr key={index} onClick={() => navigate('/request-full-details', { state: { request: request } })}>
+                            {requesItems ? requesItems.map((request, index) => (
+                                <tr style={{ padding: '20px' }} key={index} onClick={() => navigate('/request-full-details', { state: { request: request } })}>
                                     <td>{index + 1}</td>
                                     <td>{request.requestedBy}</td>
                                     <td>{request.department}</td>
                                     <td>{request.purpose}</td>
-                                    <td>{role === 'dean' ? <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                                        <button onClick={() => decisionButton(request._id, 'approved')} style={{ backgroundColor: 'green', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
-                                            approve
-                                        </button>
-
-                                        <button onClick={() => decisionButton(request._id, 'rejected')} style={{ backgroundColor: 'red', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
-                                            reject
-                                        </button>
-                                    </div> : request.deanApproval}</td>
-                                    <td>{role === 'president' ? <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                                        <button onClick={() => decisionButton(request._id, 'approved')} style={{ backgroundColor: 'green', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
-                                            approve
-                                        </button>
-
-                                        <button onClick={() => decisionButton(request._id, 'rejected')} style={{ backgroundColor: 'red', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
-                                            reject
-                                        </button>
-                                    </div> : request.presidentApproval}</td>
+                                    <td>{request.endorsedBy}</td>
+                                    <td>{request.presidentApproval}</td>
                                 </tr>
-                            ))}
+                            )) : ''}
                         </tbody>
                     </table> : ''}
 
@@ -523,7 +512,7 @@ function RequestItems() {
 
                     <div>
                         {quantity_and_materials.map((item, index) => (
-                            <div key={index} style={{ display: 'flex', marginBottom: '10px' }}>
+                            <div key={index} style={{ display: 'flex', marginBottom: '10px', justifyContent: 'center', alignItems: 'center' }}>
                                 <div>
                                     {/* <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
                                         Quantity:
@@ -539,6 +528,7 @@ function RequestItems() {
                                             border: "1px solid #ccc",
                                             borderRadius: "5px",
                                         }}
+                                        required
                                     />
                                 </div>
 
@@ -558,8 +548,11 @@ function RequestItems() {
                                             border: "1px solid #ccc",
                                             borderRadius: "5px",
                                         }}
+                                        required
                                     />
+
                                 </div>
+                                <MdDelete size={20} color='black' onClick={() => deleteField(index)} />
                             </div>
                         ))}
 
@@ -582,18 +575,21 @@ function RequestItems() {
                                 border: "1px solid #ccc",
                                 borderRadius: "5px",
                             }}
+                            required
                         />
                     </div>
 
                     <div>
                         <label htmlFor="to-location">To Location:</label><br />
-                        <input style={{
-                            width: "100%",
-                            padding: "10px",
-                            border: "1px solid #ccc",
-                            borderRadius: "5px",
-                            marginBottom: '10px'
-                        }} type="text" id="to-location" name="to-location" value={toLocation} onChange={(e) => setToLocation(e.target.value)} />
+                        <input
+                            required
+                            style={{
+                                width: "100%",
+                                padding: "10px",
+                                border: "1px solid #ccc",
+                                borderRadius: "5px",
+                                marginBottom: '10px'
+                            }} type="text" id="to-location" name="to-location" value={toLocation} onChange={(e) => setToLocation(e.target.value)} />
                     </div>
 
                     <button

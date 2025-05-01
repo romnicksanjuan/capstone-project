@@ -163,7 +163,7 @@ const DepartmentPage = () => {
                 <thead>
                     <tr style={{ backgroundColor: 'orange' }}>
                         {/* <th style={{ border: '1px solid #ccc', padding: '10px' }}>Serial No.</th> */}
-                        <th style={{ border: '1px solid #ccc', padding: '10px', textAlign: 'left', color: 'black' }}>Department Name</th>
+                        <th style={{ border: '1px solid #ccc', padding: '10px', textAlign: 'left', color: 'white' }}>Department Name</th>
                         <th style={{ border: '1px solid #ccc', padding: '10px' }}>Action</th>
                     </tr>
                 </thead>
@@ -179,7 +179,6 @@ const DepartmentPage = () => {
                     )) : ''}
                 </tbody>
             </table>
-
         </div>
     )
 }

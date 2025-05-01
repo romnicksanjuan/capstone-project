@@ -97,10 +97,10 @@ const fetchItems = async (req, res) => {
 
 const editITem = async (req, res) => {
     const { id } = req.params;
-    const { serialNumber, itemDesicription, brand, category, condition, location, status, accessory_type, quantity } = req.body;
+    const { serialNumber, itemDescription, brand, category, condition, location, status, accessory_type, quantity } = req.body;
 
 
-    // console.log(serialNumber, itemDesicription, brand, category, condition, location, status, accessory_type, quantity)
+    // console.log(serialNumber, itemDescription, brand, category, condition, location, status, accessory_type, quantity)
     // return
     try {
         const findItem = await Item.findById(id)
@@ -109,7 +109,7 @@ const editITem = async (req, res) => {
         if (findItem) {
             const s = quantity - findItem.quantity
             if (s > 0) {
-                const stock = new StockIn_Out({ date: new Date(), itemName: itemDesicription, action: 'Stock In', quantity: quantity - findItem.quantity })
+                const stock = new StockIn_Out({ date: new Date(), itemName: itemDescription, action: 'Stock In', quantity: quantity - findItem.quantity })
                 await stock.save()
             }
 
@@ -117,7 +117,7 @@ const editITem = async (req, res) => {
 
         const updatedItem = await Item.findByIdAndUpdate(
             id,
-            { serialNumber, itemDesicription, brand, category, condition, location, status, accessory_type, quantity },
+            { serialNumber, itemDescription, brand, category, condition, location, status, accessory_type, quantity },
             { new: true } // Return the updated item after the change
         );
 
