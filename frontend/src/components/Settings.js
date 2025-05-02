@@ -15,6 +15,12 @@ function Settings() {
 
     const [successMessage, setSuccessMessage] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
+
+    // successMessageChange
+    const [successMessageChange, setSuccessMessageChange] = useState('')
+    const [errorMessageChange, setErrorMessageChange] = useState('')
+    
+
     const [email, setEmail] = useState('')
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassowrd] = useState('')
@@ -177,12 +183,12 @@ function Settings() {
 
             if (data.success === false) {
                 console.log(data.message)
-                setErrorMessage(data.message)
-                setSuccessMessage('')
+                setErrorMessageChange(data.message)
+                setSuccessMessageChange('')
                 return
             }
-            setSuccessMessage(data.message)
-            setErrorMessage('')
+            setSuccessMessageChange(data.message)
+            setErrorMessageChange('')
             console.log(data)
         } catch (error) {
             console.log(error)
@@ -442,7 +448,7 @@ function Settings() {
                         />
                     </label>
 
-                    <label>
+                    {/* <label>
                         Department:
                         <input
                             type="text"
@@ -450,7 +456,7 @@ function Settings() {
                             onChange={(e) => setDepartment(e.target.value || '')}
                             style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
                         />
-                    </label>
+                    </label> */}
 
                     <label>
                         Designation:
@@ -598,14 +604,14 @@ function Settings() {
                                     </div> */}
 
 
-                                    <div style={{ display: 'flex', }}>
+                                    {/* <div style={{ display: 'flex', }}>
                                         <div style={{ width: '50%' }}>
                                             <h4 style={{ marginBottom: "10px", color: 'white' }}>Department:</h4>
                                         </div>
                                         <div style={{ width: '50%' }}>
                                             <p style={{ marginBottom: "10px", color: 'white' }}>{user.department}</p>
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                     <div style={{ display: 'flex', }}>
                                         <div style={{ width: '50%' }}>
@@ -652,8 +658,8 @@ function Settings() {
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'black', width: '100%', height: '100%' }}>
 
                                 <form onSubmit={handleChangePassword} style={{ padding: "20px", backgroundColor: 'orange', border: '1px solid black', width: '50%', borderRadius: '5px' }}>
-                                    {successMessage ? <p style={{ color: 'white', fontSize: '16px', backgroundColor: 'green', padding: "7px 5px", textAlign: 'center', borderRadius: '5px' }}>{successMessage}</p> : ''}
-                                    {errorMessage ? <p style={{ color: 'white', fontSize: '16px', backgroundColor: 'red', padding: "7px 5px", textAlign: 'center', borderRadius: '5px' }}>{errorMessage}</p> : ''}
+                                    {successMessageChange ? <p style={{ color: 'white', fontSize: '16px', backgroundColor: 'green', padding: "7px 5px", textAlign: 'center', borderRadius: '5px' }}>{successMessageChange}</p> : ''}
+                                    {errorMessageChange ? <p style={{ color: 'white', fontSize: '16px', backgroundColor: 'red', padding: "7px 5px", textAlign: 'center', borderRadius: '5px' }}>{errorMessage}</p> : ''}
                                     <h2 style={{ textAlign: 'center', color: "white" }}>Change Password</h2>
                                     <div style={{ marginBottom: '10px' }}>
                                         <label style={{ fontSize: '17px' }}>Email:</label><br />

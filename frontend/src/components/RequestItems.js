@@ -361,7 +361,7 @@ function RequestItems() {
                         </thead>
                         <tbody>
                             {requesItems.map((request, index) => (
-                                <tr style={{ cursor: 'pointer', padding: '20px' }}>
+                                <tr key={index} style={{ cursor: 'pointer', padding: '20px' }}>
                                     <td onClick={() => navigate('/request-full-details', { state: { request: request } })}>{index + 1}</td>
                                     <td onClick={() => navigate('/request-full-details', { state: { request: request } })}>{request.requestedBy}</td>
                                     <td onClick={() => navigate('/request-full-details', { state: { request: request } })}>{request.department}</td>
@@ -376,7 +376,7 @@ function RequestItems() {
                                         <button onClick={() => decisionButton(request._id, 'rejected')} style={{ backgroundColor: 'red', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
                                             Disaprove
                                         </button>
-                                    </div> : request.endorsedBy}</td>
+                                    </div> : request.deanApproval === 'pending' ? 'Pending' : request.deanApproval === 'rejected' ? 'Disapproved' : request.endorsedBy}</td>
                                     <td>{role === 'president' ? <div style={{ display: 'flex', justifyContent: 'space-around',  padding: '3px'}}>
                                         <button onClick={() => decisionButton(request._id, 'approved')} style={{ backgroundColor: 'green', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
                                             Approve
@@ -385,7 +385,7 @@ function RequestItems() {
                                         <button onClick={() => decisionButton(request._id, 'rejected')} style={{ backgroundColor: 'red', padding: '3px', color: 'white', border: 'none', cursor: 'pointer' }}>
                                             DisApprove
                                         </button>
-                                    </div> : request.presidentApproval}</td>
+                                    </div> : request.presidentApproval === 'rejected' ? 'Disapproved' : request.presidentApproval === 'approved' ? 'Approved' : request.deanApproval === 'rejected' ? 'Disapproved' : 'Pending' }</td>
                                     {role === 'admin' && <td style={{  padding: '3px' }}>
                                         <button onClick={() => handlePassData(request)}>Create Transaction</button>
                                     </td>}
@@ -415,8 +415,8 @@ function RequestItems() {
                                     <td>{request.requestedBy}</td>
                                     <td>{request.department}</td>
                                     <td>{request.purpose}</td>
-                                    <td>{request.endorsedBy}</td>
-                                    <td>{request.presidentApproval}</td>
+                                    <td>{request.deanApproval === 'pending' ? 'Pending' : request.deanApproval === 'rejected' ? 'Disapproved' : request.endorsedBy}</td>
+                                    <td>{ request.presidentApproval === 'rejected' ? 'Disapproved' : request.presidentApproval === 'approved' ? 'Approved' : request.deanApproval === 'rejected' ? 'Disapproved' : 'Pending'}</td>
                                 </tr>
                             )) : ''}
                         </tbody>

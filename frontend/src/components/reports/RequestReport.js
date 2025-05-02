@@ -97,7 +97,7 @@ const RequestReport = () => {
                 <td style={thTdStyle}>{item.date}</td>
                 <td style={thTdStyle}>{item.requestedBy}</td>
                 {/* <td style={thTdStyle}>{item.location}</td> */}
-                <td style={thTdStyle}>{item.presidentApproval}</td>
+                <td style={thTdStyle}>{item.presidentApproval === 'rejected' ? 'Disapproved' : item.presidentApproval === 'approved' ? 'Approved' : item.deanApproval === 'rejected' ? 'Disapproved' : 'Pending'}</td>
                 <td style={thTdStyle}>{item.purpose}</td>
               </tr>
             ))}
