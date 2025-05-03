@@ -13,7 +13,7 @@ const getDepartmentReport = async (req, res) => {
             }
         ])
 
-        // console.log('getUsage:', getUsage)
+        console.log('getUsage:', getUsage)
 
         if (getUsage.length > 0) {
             // console.log(getUsage.length)
@@ -28,7 +28,7 @@ const getDepartmentReport = async (req, res) => {
                 }
             }))
 
-            // console.log('result', result)
+            console.log('result', result)
             res.json(result) // ✅ Send the result to frontend
 
         }

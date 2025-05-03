@@ -38,6 +38,8 @@ const containerStyle = {
 const Damage_LostReport = () => {
   const contentRef = useRef()
   const [damageLost, setDamageLost] = useState([])
+   const [filteredData, setFilteredData] = useState([])
+      const [targetDate, setTargetDate] = useState('')
   useEffect(() => {
     const getDamageLost = async () => {
       try {
@@ -53,6 +55,23 @@ const Damage_LostReport = () => {
     getDamageLost()
   }, [])
 
+   useEffect(() => {
+        const getDataByDate = () => {
+          if (targetDate) {
+            const filteredItems = damageLost.filter(item => {
+              const itemDate = new Date(item.createdAt).toISOString().split('T')[0];
+              return itemDate === targetDate;
+            });
+    
+            setFilteredData(filteredItems);
+          } else {
+            setFilteredData(damageLost); // Show all if no date selected
+          }
+        };
+    
+        getDataByDate();
+      }, [targetDate, damageLost]);
+
   // printer
   const reactToPrintFn = useReactToPrint({
     documentTitle: `${new Date()}`,
@@ -64,6 +83,21 @@ const Damage_LostReport = () => {
         <h2 style={{ color: "orange", padding: '10px 0' }}>Damage/Lost Items Report</h2>
         <div style={{ marginRight: '10px' }}>
           <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={35} />
+        </div>
+
+        <div>
+          <input
+            type="date"
+            value={targetDate}
+            onChange={(e) => setTargetDate(e.target.value)}
+            style={{
+              padding: '8px 12px',
+              fontSize: '16px',
+              border: '1px solid #ccc',
+              borderRadius: '6px',
+              outline: 'none',
+            }}
+          />
         </div>
       </div>
 
@@ -85,7 +119,7 @@ const Damage_LostReport = () => {
           </thead>
 
           <tbody>
-            {damageLost.map((item, index) => (
+            {filteredData.map((item, index) => (
               <tr key={index}>
                 <td style={thTdStyle}>{item.itemDescription}</td>
                 <td style={thTdStyle}>{item.issue}</td>

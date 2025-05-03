@@ -19,6 +19,6 @@ const departmentUsageReportSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('DepartmentUsageReport', departmentUsageReportSchema);

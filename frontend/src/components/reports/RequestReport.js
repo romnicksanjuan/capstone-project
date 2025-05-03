@@ -38,6 +38,8 @@ const containerStyle = {
 const RequestReport = () => {
   const contentRef = useRef()
   const [requestReport, setRequestReport] = useState([])
+  const [filteredData, setFilteredData] = useState([])
+  const [targetDate, setTargetDate] = useState('')
   useEffect(() => {
     const getRequestSummary = async () => {
       try {
@@ -55,6 +57,23 @@ const RequestReport = () => {
     getRequestSummary()
   }, [])
 
+  useEffect(() => {
+    const getDataByDate = () => {
+      if (targetDate) {
+        const filteredItems = requestReport.filter(item => {
+          const itemDate = new Date(item.createdAt).toISOString().split('T')[0];
+          return itemDate === targetDate;
+        });
+
+        setFilteredData(filteredItems);
+      } else {
+        setFilteredData(requestReport); // Show all if no date selected
+      }
+    };
+
+    getDataByDate();
+  }, [targetDate, requestReport]);
+
   // printer
   const reactToPrintFn = useReactToPrint({
     documentTitle: `${new Date()}`,
@@ -66,6 +85,21 @@ const RequestReport = () => {
         <h2 style={{ color: "orange", padding: '10px 0' }}>Request Report</h2>
         <div style={{ marginRight: '10px' }}>
           <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={35} />
+        </div>
+
+        <div>
+          <input
+            type="date"
+            value={targetDate}
+            onChange={(e) => setTargetDate(e.target.value)}
+            style={{
+              padding: '8px 12px',
+              fontSize: '16px',
+              border: '1px solid #ccc',
+              borderRadius: '6px',
+              outline: 'none',
+            }}
+          />
         </div>
       </div>
 
@@ -92,7 +126,7 @@ const RequestReport = () => {
           </thead>
 
           <tbody>
-            {requestReport.map((item, index) => (
+            {filteredData.map((item, index) => (
               <tr key={index}>
                 <td style={thTdStyle}>{item.date}</td>
                 <td style={thTdStyle}>{item.requestedBy}</td>

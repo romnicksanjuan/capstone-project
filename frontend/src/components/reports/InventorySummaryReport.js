@@ -38,7 +38,11 @@ const containerStyle = {
 const InventorySummaryReport = () => {
   const contentRef = useRef()
 
+ 
+
   const [inventoryReport, setInventoryReport] = useState([])
+  const [filteredData, setFilteredData] = useState([])
+  const [targetDate, setTargetDate] = useState('')
   useEffect(() => {
     const getInventorySummary = async () => {
       try {
@@ -62,6 +66,27 @@ const InventorySummaryReport = () => {
     documentTitle: `${new Date()}`,
     contentRef: contentRef,
   });
+
+  useEffect(() => {
+    const getInventorySummaryWithDate = () => {
+      if (targetDate) {
+        const filteredItems = inventoryReport.filter(item => {
+          const itemDate = new Date(item.createdAt).toISOString().split('T')[0];
+          return itemDate === targetDate;
+        });
+
+        setFilteredData(filteredItems);
+      } else {
+        setFilteredData(inventoryReport); // Show all if no date selected
+      }
+    };
+
+    getInventorySummaryWithDate();
+  }, [targetDate, inventoryReport]);
+  
+
+  console.log(targetDate)
+
   return (
     <div style={containerStyle}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -69,6 +94,22 @@ const InventorySummaryReport = () => {
         <div style={{ marginRight: '10px' }}>
           <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={35} />
         </div>
+
+        <div>
+  <input
+    type="date"
+    value={targetDate}
+    onChange={(e) => setTargetDate(e.target.value)}
+    style={{
+      padding: '8px 12px',
+      fontSize: '16px',
+      border: '1px solid #ccc',
+      borderRadius: '6px',
+      outline: 'none',
+    }}
+  />
+</div>
+
       </div>
 
 
@@ -94,7 +135,7 @@ const InventorySummaryReport = () => {
           </thead>
 
           <tbody>
-            {inventoryReport.map((item, index) => (
+            {filteredData.map((item, index) => (
               <tr key={index}>
                 <td style={thTdStyle}>{item.itemDescription}</td>
                 <td style={thTdStyle}>{item.category}</td>

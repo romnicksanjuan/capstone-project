@@ -13,7 +13,9 @@ const headerStyle = {
 
 const StockIn_Out_Report = () => {
     const contentRef = useRef()
+    const [targetDate, setTargetDate] = useState('')
     const [stockIn_Out, setStockIn_Out] = useState([])
+    const [filteredData, setFilteredData] = useState([])
     useEffect(() => {
         const getStocks = async () => {
             try {
@@ -32,6 +34,23 @@ const StockIn_Out_Report = () => {
         getStocks()
     }, [])
 
+    useEffect(() => {
+        const getDataByDate = () => {
+            if (targetDate) {
+                const filteredItems = stockIn_Out.filter(item => {
+                    const itemDate = new Date(item.createdAt).toISOString().split('T')[0];
+                    return itemDate === targetDate;
+                });
+
+                setFilteredData(filteredItems);
+            } else {
+                setFilteredData(stockIn_Out); // Show all if no date selected
+            }
+        };
+
+        getDataByDate();
+    }, [targetDate, stockIn_Out]);
+
 
     // printer
     const reactToPrintFn = useReactToPrint({
@@ -46,6 +65,22 @@ const StockIn_Out_Report = () => {
                 <div style={{ marginRight: '10px' }}>
                     <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={35} />
                 </div>
+
+                <div>
+                    <input
+                        type="date"
+                        value={targetDate}
+                        onChange={(e) => setTargetDate(e.target.value)}
+                        style={{
+                            padding: '8px 12px',
+                            fontSize: '16px',
+                            border: '1px solid #ccc',
+                            borderRadius: '6px',
+                            outline: 'none',
+                        }}
+                    />
+                </div>
+
             </div>
 
             <div ref={contentRef}>
@@ -68,7 +103,7 @@ const StockIn_Out_Report = () => {
                     </thead>
 
                     <tbody>
-                        {stockIn_Out.map((stocks, index) => (
+                        {filteredData.map((stocks, index) => (
                             <tr key={index}>
                                 <td className={styles.thTdStyle}>{stocks.date}</td>
                                 <td className={styles.thTdStyle}>{stocks.itemName}</td>

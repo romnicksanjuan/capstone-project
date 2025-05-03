@@ -27,6 +27,6 @@ const stockTransactionSchema = new mongoose.Schema({
   //   default: '',
   //   trim: true,
   // },
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('StockTransaction', stockTransactionSchema);

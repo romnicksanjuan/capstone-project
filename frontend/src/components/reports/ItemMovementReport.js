@@ -37,6 +37,8 @@ const ItemMovementReport = () => {
   const contentRef = useRef()
 
   const [itemTransfer, setItemTransfer] = useState([])
+  const [filteredData, setFilteredData] = useState([])
+  const [targetDate, setTargetDate] = useState('')
   useEffect(() => {
     const getitemTransfer = async () => {
       try {
@@ -53,6 +55,24 @@ const ItemMovementReport = () => {
     getitemTransfer()
   }, [])
 
+
+  useEffect(() => {
+    const getDataByDate = () => {
+      if (targetDate) {
+        const filteredItems = itemTransfer.filter(item => {
+          const itemDate = new Date(item.createdAt).toISOString().split('T')[0];
+          return itemDate === targetDate;
+        });
+
+        setFilteredData(filteredItems);
+      } else {
+        setFilteredData(itemTransfer); // Show all if no date selected
+      }
+    };
+
+    getDataByDate();
+  }, [targetDate, itemTransfer]);
+
   // printer
   const reactToPrintFn = useReactToPrint({
     documentTitle: `${new Date()}`,
@@ -65,6 +85,22 @@ const ItemMovementReport = () => {
         <div style={{ marginRight: '10px' }}>
           <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={35} />
         </div>
+
+        <div>
+          <input
+            type="date"
+            value={targetDate}
+            onChange={(e) => setTargetDate(e.target.value)}
+            style={{
+              padding: '8px 12px',
+              fontSize: '16px',
+              border: '1px solid #ccc',
+              borderRadius: '6px',
+              outline: 'none',
+            }}
+          />
+        </div>
+
       </div>
 
       <div ref={contentRef}>
@@ -83,7 +119,7 @@ const ItemMovementReport = () => {
           </thead>
 
           <tbody>
-            {itemTransfer.map((item, index) => (
+            {filteredData.map((item, index) => (
               <tr key={index}>
                 <td style={thTdStyle}>{item.date}</td>
                 <td style={thTdStyle}>{item.item}</td>

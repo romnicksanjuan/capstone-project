@@ -37,6 +37,8 @@ const containerStyle = {
 const DepartmentUsageReport = () => {
   const contentRef = useRef()
   const [DepartmentUsageReport, setDepartmentUsageReport] = useState([])
+    const [filteredData, setFilteredData] = useState([])
+    const [targetDate, setTargetDate] = useState('')
   // console.log('test')
   useEffect(() => {
     const getreport = async () => {
@@ -57,6 +59,23 @@ const DepartmentUsageReport = () => {
     getreport()
   }, [])
 
+    useEffect(() => {
+      const getDataByDate = () => {
+        if (targetDate) {
+          const filteredItems = DepartmentUsageReport.filter(item => {
+            const itemDate = new Date(item?.createdAt).toISOString().split('T')[0];
+            return itemDate === targetDate;
+          });
+  
+          setFilteredData(filteredItems);
+        } else {
+          setFilteredData(DepartmentUsageReport); // Show all if no date selected
+        }
+      };
+  
+      getDataByDate();
+    }, [targetDate, DepartmentUsageReport]);
+
   // printer
   const reactToPrintFn = useReactToPrint({
     documentTitle: `${new Date()}`,
@@ -69,6 +88,21 @@ const DepartmentUsageReport = () => {
         <div style={{ marginRight: '10px' }}>
           <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={35} />
         </div>
+
+        {/* <div>
+          <input
+            type="date"
+            value={targetDate}
+            onChange={(e) => setTargetDate(e.target.value)}
+            style={{
+              padding: '8px 12px',
+              fontSize: '16px',
+              border: '1px solid #ccc',
+              borderRadius: '6px',
+              outline: 'none',
+            }}
+          />
+        </div> */}
       </div>
 
       <div ref={contentRef}>
