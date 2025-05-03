@@ -420,25 +420,24 @@ const requesterLogin = async (req, res) => {
     try {
         const findEmail = await User.findOne({ email })
 
-        if (findEmail.role !== 'requester') {
-            res.status(404).json({ success: false, message: "You are unable to login" })
-            return
-        }
-
         if (!findEmail) {
             res.status(404).json({ success: false, message: "Incorrect Email or Password" })
             return
         }
 
-        const findPassword = await User.findOne({ password })
 
-        if (!findPassword) {
+        if (findEmail.password !== password) {
+            // console.log(findEmail.password === password)
             res.status(404).json({ success: false, message: "Incorrect Email or Password" })
             return
         }
 
+        if (findEmail.role !== 'requester') {
+            res.status(404).json({ success: false, message: "You are unable to login" })
+            return
+        }
 
-        const payload = { id: findEmail._id, email: findPassword.email, role: findPassword.role }
+        const payload = { id: findEmail._id, email: findEmail.email, role: findEmail.role }
         const sercretKEy = "romnickPogi"
         const token = jwt.sign(payload, sercretKEy, { expiresIn: "10h" })
 

@@ -167,7 +167,7 @@ const totalItems = async (req, res) => {
 const searchItem = async (req, res) => {
     const { query } = req.query
 
-    const search = await Item.find({ itemDesicription: { $regex: query, $options: 'i' } })
+    const search = await Item.find({ itemDescription: { $regex: query, $options: 'i' } })
 
     console.log(search)
 

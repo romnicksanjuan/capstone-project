@@ -659,7 +659,7 @@ function Settings() {
 
                                 <form onSubmit={handleChangePassword} style={{ padding: "20px", backgroundColor: 'orange', border: '1px solid black', width: '50%', borderRadius: '5px' }}>
                                     {successMessageChange ? <p style={{ color: 'white', fontSize: '16px', backgroundColor: 'green', padding: "7px 5px", textAlign: 'center', borderRadius: '5px' }}>{successMessageChange}</p> : ''}
-                                    {errorMessageChange ? <p style={{ color: 'white', fontSize: '16px', backgroundColor: 'red', padding: "7px 5px", textAlign: 'center', borderRadius: '5px' }}>{errorMessage}</p> : ''}
+                                    {errorMessageChange ? <p style={{ color: 'white', fontSize: '16px', backgroundColor: 'red', padding: "7px 5px", textAlign: 'center', borderRadius: '5px' }}>{errorMessageChange}</p> : ''}
                                     <h2 style={{ textAlign: 'center', color: "white" }}>Change Password</h2>
                                     <div style={{ marginBottom: '10px' }}>
                                         <label style={{ fontSize: '17px' }}>Email:</label><br />
