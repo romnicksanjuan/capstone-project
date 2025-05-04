@@ -146,7 +146,7 @@ const Inventory = () => {
 
 
         const data = await response.json(); // Parse JSON response
-        console.log('items:',data.items)
+        console.log('items:', data.items)
         setItemLength(data.items.length)
         if (query === '') {
 
@@ -471,7 +471,7 @@ const Inventory = () => {
               </select>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', border:'2px solid gray', padding:"0 10px" }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', border: '2px solid gray', padding: "0 10px" }}>
               {itemLength}
             </div>
 
@@ -704,8 +704,16 @@ const Inventory = () => {
                 <td>{item.item.location}</td>
                 <td style={{ width: '10px' }}>
                   <div style={{ display: 'flex', justifyItems: 'center', alignItems: 'center', gap: '5px' }}>
+
+                    <div className={style.printView} ref={contentRef}>
+                      {[...Array(40)].map((_, i) => (
+                        <div className={style.qrBox} key={i}>
+                          <img src={item.qr_code_image.data} style={{ width: '50px', height: 'auto' }} />
+                        </div>
+                      ))}
+                    </div>
                     {/* Your content here */}
-                    <img ref={contentRef} src={item.qr_code_image.data} style={{ width: '50px', height: 'auto' }} onClick={() => showQRCode(item.qr_code_image.data)} />
+                    <img src={item.qr_code_image.data} style={{ width: '50px', height: 'auto' }} onClick={() => showQRCode(item.qr_code_image.data)} />
                     <RiPrinterFill onClick={() => reactToPrintFn()} color='black' size={24} />
                   </div>
                 </td>

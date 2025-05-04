@@ -88,7 +88,32 @@ form div label {
   display: none;
   /* Hide the header on the screen */
 }
+
+.qrBox {
+  display: none;
+ 
+}
+
+.printView {
+  display: none;
+}
+
 @media print {
+  .printView {
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr); /* 5 columns */
+    grid-template-rows: repeat(4, auto);   /* 4 rows */
+    gap: 10px;
+    padding: 20px;
+    page-break-inside: avoid;
+  }
+
+  .qrBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+  }
 
   .paper {
       width: 8.5in;
