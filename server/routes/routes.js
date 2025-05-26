@@ -9,7 +9,7 @@ const { createAdmin, loginAdmin, forgotPassword, logout, sendOtp, verifyOtp, cha
 // authehntication
 const { middleware } = require("../middleware/auth.js");
 const { submitRequest, displayRequested, approvalButton, decisionButton, requestCount, editStatus, getRequestSummaray } = require('../controllers/requestController.js');
-const { settings } = require('../controllers/settingsController.js');
+const { settings, exportData } = require('../controllers/settingsController.js');
 const { addStock, stockIn } = require('../controllers/stockIn_outController.js');
 const damage_lost = require('../model/damage_lost.js');
 const { damagLost, getDamageLost } = require('../controllers/damageLostController.js');
@@ -125,5 +125,8 @@ router.delete('/delete-department/:id', delDep)
 
 // display department usage report 
 router.get('/department-usage', getDepartmentReport)
+
+// download backup
+router.get('/download-backup', exportData)
 
 module.exports = router;
