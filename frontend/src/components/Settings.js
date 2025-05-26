@@ -19,7 +19,7 @@ function Settings() {
     // successMessageChange
     const [successMessageChange, setSuccessMessageChange] = useState('')
     const [errorMessageChange, setErrorMessageChange] = useState('')
-    
+
 
     const [email, setEmail] = useState('')
     const [oldPassword, setOldPassword] = useState('')
@@ -357,6 +357,16 @@ function Settings() {
         getDepartment()
     }, [])
 
+    // download backup
+    const handleDownload = () => {
+        const link = document.createElement('a');
+        link.href = `${DOMAIN}/download-backup`; // replace with your backend URL
+        link.setAttribute('download', 'backup-data.json');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     if (role === null) {
         return null
     }
@@ -364,11 +374,33 @@ function Settings() {
     return (
         <div style={{ display: 'flex' }}>
             <Navbar />
+
             <div className={styles.Dashboard}>
+            <h2 style={{ color: 'orange', textAlign: 'start', margin: "0 0 10px 0" }}>Settings</h2>
+                <button
+                    onClick={handleDownload}
+                    style={{
+                        padding: '10px 20px',
+                        backgroundColor: 'orange',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        fontSize: '16px',
+                        boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                        transition: 'background-color 0.3s ease',
+                        marginBottom:'5px'
+                    }}
+                    onMouseOver={e => e.target.style.backgroundColor = 'gray'}
+                    onMouseOut={e => e.target.style.backgroundColor = 'orange'}
+                >
+                    Download Backup Data
+                </button>
 
                 {/* {(role === 'admin' || role === 'dean' || role === 'president') ? <Topbar /> : ''} */}
 
-                <h2 style={{ color: 'orange', textAlign: 'start', margin: "0 0 10px 0" }}>Settings</h2>
+             
                 {isUpdate ? <form
                     onSubmit={handleSubmit}
 

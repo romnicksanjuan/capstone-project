@@ -118,7 +118,11 @@ const BorrowForm = ({ request }) => {
         setPMSNumber(PMSNumber.filter((_, i) => i !== index))
     }
 
-
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault(); // stops form from auto-submitting
+        }
+      };
     return (
         <form onSubmit={handleSubmit} style={{
             // position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', 
@@ -155,6 +159,7 @@ const BorrowForm = ({ request }) => {
                                     borderRadius: "5px",
                                 }}
                                 required
+                                onKeyDown={handleKeyDown} // <-- added here
                             />
                         </div>
 
